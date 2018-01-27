@@ -136,6 +136,7 @@ GameObject:
   - component: {fileID: 50016880511971394}
   - component: {fileID: 61085156689646732}
   - component: {fileID: 58501536711360566}
+  - component: {fileID: 114394731748786862}
   m_Layer: 0
   m_Name: zakasi
   m_TagString: Player
@@ -690,6 +691,22 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114394731748786862
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1431867114569130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52121b47a452546fb88cf2e9a9352f56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
+  repeatDamagePeriod: 2
+  ouchClips: []
+  hurtForce: 10
+  damageAmount: 10
 --- !u!114 &114461182527760692
 MonoBehaviour:
   m_ObjectHideFlags: 1
