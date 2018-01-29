@@ -329,7 +329,7 @@ GameObject:
   - component: {fileID: 4260636960267964}
   - component: {fileID: 212065909088290096}
   m_Layer: 0
-  m_Name: torso
+  m_Name: zakasi_graphics
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -397,7 +397,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1980473270399296}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.3328, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4857853734610750}
@@ -470,7 +470,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1500676766463244}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.1880002, y: -0.20200002, z: 1}
+  m_LocalPosition: {x: -0.137, y: -0.272, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4828046135538202}
@@ -720,13 +720,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   facingRight: 1
   jump: 0
+  z: 0
+  zspeed: 0.06
+  shadow: {fileID: 0}
+  shadowPrefab: {fileID: 1538513929114664, guid: bab8d973ab66fdd4598f9545233fdfa3,
+    type: 2}
   moveForce: 365
   maxSpeed: 8
   jumpClips: []
   jumpForce: 1000
-  taunts: []
-  tauntProbability: 50
-  tauntDelay: 1
 --- !u!212 &212041155554459154
 SpriteRenderer:
   m_ObjectHideFlags: 1

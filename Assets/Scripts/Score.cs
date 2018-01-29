@@ -1,13 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Score : MonoBehaviour
+public class HudControl : MonoBehaviour
 {
 	public int score = 0;					// The player's score.
 
 
 	private ZakasiControl zakasiControl;	// Reference to the player control script.
-	private int previousScore = 0;			// The score in the previous frame.
 
 
 	void Awake ()
@@ -22,13 +21,7 @@ public class Score : MonoBehaviour
 		// Set the score text.
 		GetComponent<GUIText>().text = "Score: " + score;
 
-		// If the score has changed...
-		if(previousScore != score)
-			// ... play a taunt.
-			zakasiControl.StartCoroutine(zakasiControl.Taunt());
-
 		// Set the previous score to this frame's score.
-		previousScore = score;
 	}
 
 }
