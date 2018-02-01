@@ -8,13 +8,14 @@ public class ZakasiControl : MonoBehaviour
 	[HideInInspector]
 	public bool jump = false;				// Condition for whether the player should jump.
 	public float z = 0;
-	public float zspeed = 0.06f;
+	public float zspeed = 0;
 
 	public GameObject shadow;
 	public GameObject shadowPrefab;
 
 	public float moveForce = 365f;			// Amount of force added to move the player left and right.
-	public float maxSpeed = 5f;				// The fastest the player can travel in the x axis.
+	public float maxSpeedX = 4f;				// The fastest the player can travel in the x axis.
+	public float maxSpeedY = 2f;				// The fastest the player can travel in the x axis.
 	public AudioClip[] jumpClips;			// Array of clips for when the player jumps.
 	public float jumpForce = 1000f;			// Amount of force added when the player jumps.
 
@@ -24,10 +25,8 @@ public class ZakasiControl : MonoBehaviour
 	private bool grounded = false;			// Whether or not the player is grounded.
 	private Animator anim;					// Reference to the player's animator component.
 
-	private float farBoundary = -1;
-	private float nearBoundary = 1;
+	private float frictionForce = 2f;
 
-	private float groundLevel = 0;
 
 
 
@@ -43,80 +42,72 @@ public class ZakasiControl : MonoBehaviour
 
 	void Update()
 	{
-		// The player is grounded if a linecast to the groundcheck position hits anything on the ground layer.
-		grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));  
-
-		// If the jump button is pressed and the player is grounded then the player should jump.
-		if(Input.GetButtonDown("Jump") && grounded)
-			jump = true;
-
-	}
-
-
-	void FixedUpdate ()
-	{
-		// Cache the horizontal input.
+		//main movement
 		float h = Input.GetAxis("Horizontal");
-		
+		float v = Input.GetAxis("Vertical");
 
-		// The Speed animator parameter is set to the absolute value of the horizontal input.
-		//anim.SetFloat("Speed", Mathf.Abs(h));
-
-		if(grounded){
-			float v = Input.GetAxis("Vertical");
-			if(v > 0){
-				z += zspeed;
-			}else if(v < 0){
-				z -= zspeed;
-			}
-			if(z > nearBoundary){
-				z = nearBoundary;
-			}
-			if(z < farBoundary){
-				z = farBoundary;
+		//friction effect
+		if(Mathf.Abs(GetComponent<Rigidbody2D>().velocity.x) > 0){
+			GetComponent<Rigidbody2D>().velocity = new Vector2((GetComponent<Rigidbody2D>().velocity.x - Mathf.Sign(GetComponent<Rigidbody2D>().velocity.x) * frictionForce), GetComponent<Rigidbody2D>().velocity.y);
+			if(Mathf.Abs(GetComponent<Rigidbody2D>().velocity.x) < frictionForce){
+				GetComponent<Rigidbody2D>().velocity = new Vector2(0, GetComponent<Rigidbody2D>().velocity.y);
 			}
 		}
-		GameObject.Find("zakasi_graphics").transform.position = new Vector3(transform.position.x, transform.position.y + 0.11f + z,0);
-		
+		if(Mathf.Abs(GetComponent<Rigidbody2D>().velocity.y) > 0){
+			GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, (GetComponent<Rigidbody2D>().velocity.y - Mathf.Sign(GetComponent<Rigidbody2D>().velocity.y) * frictionForce));
+			if(Mathf.Abs(GetComponent<Rigidbody2D>().velocity.y) < frictionForce){
+				GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x,0);
+			}
+		}
 
-
-
-		// If the player is changing direction (h has a different sign to velocity.x) or hasn't reached maxSpeed yet...
-		if(h * GetComponent<Rigidbody2D>().velocity.x < maxSpeed){
-			// ... add a force to the player.
+		// If the player is changing direction or hasn't reached maxSpeed yet add a force to the player.
+		if(h * GetComponent<Rigidbody2D>().velocity.x < maxSpeedX){
 			GetComponent<Rigidbody2D>().AddForce(Vector2.right * h * moveForce);
 		}
-			
-		// If the player's horizontal velocity is greater than the maxSpeed...
-		if(Mathf.Abs(GetComponent<Rigidbody2D>().velocity.x) > maxSpeed){
-			// ... set the player's velocity to the maxSpeed in the x axis.
-			GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Sign(GetComponent<Rigidbody2D>().velocity.x) * maxSpeed, GetComponent<Rigidbody2D>().velocity.y);
+		if(v * GetComponent<Rigidbody2D>().velocity.y < maxSpeedY){
+			GetComponent<Rigidbody2D>().AddForce(Vector2.up * v * moveForce);
 		}
 
-		// If the input is moving the player right and the player is facing left...
+		// If the player's velocity is greater than the maxSpeed set the player's velocity to the maxSpeed.
+		if(Mathf.Abs(GetComponent<Rigidbody2D>().velocity.x) > maxSpeedX){
+			GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Sign(GetComponent<Rigidbody2D>().velocity.x) * maxSpeedX, GetComponent<Rigidbody2D>().velocity.y);
+		}
+		if(Mathf.Abs(GetComponent<Rigidbody2D>().velocity.y) > maxSpeedY){
+			GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, Mathf.Sign(GetComponent<Rigidbody2D>().velocity.y) * maxSpeedY);
+		}
+
+
+		// Jump
+		if(!grounded){
+			zspeed -= 0.00098f;
+			z += zspeed;
+		}
+		if(z <= 0){
+			zspeed = 0;
+			z = 0;
+			grounded = true;
+		}
+
+		if(Input.GetButtonDown("Jump") && grounded){
+			zspeed = 0.07f;
+			grounded = false;
+		}
+
+
+
+		//update graphics
+		GameObject.Find("zakasi_graphics").transform.position = new Vector3(transform.position.x, transform.position.y + 0.11f + z,0);
+
+
+		// Flip Sprite
 		if(h > 0 && !facingRight)
-			// ... flip the player.
 			Flip();
-		// Otherwise if the input is moving the player left and the player is facing right...
 		else if(h < 0 && facingRight)
-			// ... flip the player.
 			Flip();
 
-		// If the player should jump...
-		if(jump)
-		{
-			// Set the Jump animator trigger parameter.
-			anim.SetTrigger("Jump");
-
-			// Add a vertical force to the player.
-			GetComponent<Rigidbody2D>().AddForce(new Vector2(0f, jumpForce));
-
-			// Make sure the player can't jump again until the jump conditions from Update are satisfied.
-			jump = false;
-		}
 	}
 	
-	
+	 
 	void Flip ()
 	{
 		// Switch the way the player is labelled as facing.
@@ -134,7 +125,7 @@ public class ZakasiControl : MonoBehaviour
 		SpriteRenderer sr = shadow.GetComponent<SpriteRenderer>();
 		sr.sprite = s.images[0];
 		s.root = this;
-		s.offset = new Vector3(0.1293f,0,0);
+		s.offset = new Vector3(0.1293f,-1.18f,0);
 		
 		//GameObject.Find("shadow").transform.position = new Vector3(transform.position.x + -0.2093f, -0.1328f + z, 0);
 

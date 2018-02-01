@@ -17,7 +17,7 @@ public class Shadow : MonoBehaviour
 	{
 		// Set the position to the player's position with the offset.
 		if(root != null){
-			transform.position = new Vector3(root.transform.position.x + offset.x, root.z, 0);
+			transform.position = new Vector3(root.transform.position.x + offset.x, root.transform.position.y + offset.y, 0);
 			transform.localScale = root.transform.localScale;
 		}
 	}
