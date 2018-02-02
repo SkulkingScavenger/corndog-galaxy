@@ -9,7 +9,7 @@ public class Control : MonoBehaviour
 
 	void Awake ()
 	{
-		createArea();
+		//createArea();
 	}
 
 	void Update ()

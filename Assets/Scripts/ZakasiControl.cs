@@ -3,30 +3,31 @@ using System.Collections;
 
 public class ZakasiControl : MonoBehaviour
 {
-	[HideInInspector]
-	public bool facingRight = true;			// For determining which way the player is currently facing.
-	[HideInInspector]
-	public bool jump = false;				// Condition for whether the player should jump.
-	public float z = 0;
-	public float zspeed = 0;
+	[HideInInspector]public bool facingRight = true;			// For determining which way the player is currently facing.
+	[HideInInspector]private Animator anim;		// Reference to the player's animator component.
 
-	public GameObject shadow;
-	public GameObject shadowPrefab;
-
-	public float moveForce = 365f;			// Amount of force added to move the player left and right.
-	public float maxSpeedX = 4f;				// The fastest the player can travel in the x axis.
-	public float maxSpeedY = 2f;				// The fastest the player can travel in the x axis.
-	public AudioClip[] jumpClips;			// Array of clips for when the player jumps.
-	public float jumpForce = 1000f;			// Amount of force added when the player jumps.
-
+	[HideInInspector]public GameObject shadow;
+	[HideInInspector]public GameObject shadowPrefab;
 	
-
-	private Transform groundCheck;			// A position marking where to check if the player is grounded.
-	private bool grounded = false;			// Whether or not the player is grounded.
-	private Animator anim;					// Reference to the player's animator component.
-
-	private float frictionForce = 2f;
-
+	//[HideInInspector]public AudioClip[] jumpClips;			// Array of clips for when the player jumps.
+	[HideInInspector]public float jumpForce = 1000f;			// Amount of force added when the player jumps.
+	[HideInInspector]private Transform groundCheck;			// A position marking where to check if the player is grounded.
+	[HideInInspector]private bool grounded = true;			// Whether or not the player is grounded.
+	[HideInInspector]public bool jump = false;				// Condition for whether the player should jump.
+	[HideInInspector]public float z = 0f;
+	[HideInInspector]public float zspeed = 0f;
+				
+	//[HideInInspector]public float moveForceX = 20f;		// Amount of force added to move the player left and right.
+	//[HideInInspector]public float moveForceY = 10f;		// Amount of force added to move the player left and right.
+	[HideInInspector]public float accelerationX = 100f;		// The fastest the player can travel in the x axis.
+	[HideInInspector]public float accelerationY = 50f;	// The fastest the player can travel in the x axis.
+	[HideInInspector]public float speedX = 0f;				// The fastest the player can travel in the x axis.
+	[HideInInspector]public float speedY = 0f;				// The fastest the player can travel in the x axis.
+	[HideInInspector]public float maxSpeedX = 2f;				// The fastest the player can travel in the x axis.
+	[HideInInspector]public float maxSpeedY = 1f;				// The fastest the player can travel in the x axis.
+	[HideInInspector]private float frictionForceX = 20f;
+	[HideInInspector]private float frictionForceY = 10f;
+	
 
 
 
@@ -43,10 +44,67 @@ public class ZakasiControl : MonoBehaviour
 	void Update()
 	{
 		//main movement
-		float h = Input.GetAxis("Horizontal");
-		float v = Input.GetAxis("Vertical");
+		float speedInitialX = speedX;
+		float speedInitialY = speedY;
+		float h = 0;
+		float v = 0;
+		float hInput = Input.GetAxis("Horizontal");
+		float vInput = Input.GetAxis("Vertical");
+
+		if(hInput != 0){
+			h = Mathf.Sign(hInput);
+		}
+		if(vInput != 0){
+			v = Mathf.Sign(vInput);
+		}
+
+		//acceleration/deceleration
+		if(h!=0){
+			//speedX += h * accelerationX * Time.deltaTime;
+			speedX = h * maxSpeedX;
+		}else{
+			speedX -=  Mathf.Sign(speedX) * frictionForceX * Time.deltaTime;
+			if(Mathf.Sign(speedX) != Mathf.Sign(speedInitialX)){
+				speedX = 0;
+			}
+		}
+		if(v!=0){
+			//speedY += v * accelerationY * Time.deltaTime;
+			speedY = v * maxSpeedY;
+		}else{
+			speedY -=  Mathf.Sign(speedY) * frictionForceY * Time.deltaTime;
+			if(Mathf.Sign(speedY) != Mathf.Sign(speedInitialY)){
+				speedY = 0;
+			}
+		}
+
+		//enforce min/max speeds
+		if(Mathf.Abs(speedX) > maxSpeedX){speedX = maxSpeedX * Mathf.Sign(speedX);}
+		if(Mathf.Abs(speedY) > maxSpeedY){speedY = maxSpeedY * Mathf.Sign(speedY);}
+
+		//apply motion
+		GetComponent<Rigidbody2D>().velocity = new Vector2(speedX,speedY);
+
+
+		/*
+		// If the player is changing direction or hasn't reached maxSpeed yet add a force to the player.
+		if(h * GetComponent<Rigidbody2D>().velocity.x < maxSpeedX){
+			GetComponent<Rigidbody2D>().AddForce(Vector2.right * h * moveForceX);
+		}
+		if(v * GetComponent<Rigidbody2D>().velocity.y < maxSpeedY){
+			GetComponent<Rigidbody2D>().AddForce(Vector2.up * v * moveForceY);
+		}
+
+		// If the player's velocity is greater than the maxSpeed set the player's velocity to the maxSpeed.
+		if(Mathf.Abs(GetComponent<Rigidbody2D>().velocity.x) > maxSpeedX){
+			GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Sign(GetComponent<Rigidbody2D>().velocity.x) * maxSpeedX, GetComponent<Rigidbody2D>().velocity.y);
+		}
+		if(Mathf.Abs(GetComponent<Rigidbody2D>().velocity.y) > maxSpeedY){
+			GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, Mathf.Sign(GetComponent<Rigidbody2D>().velocity.y) * maxSpeedY);
+		}
 
 		//friction effect
+
 		if(Mathf.Abs(GetComponent<Rigidbody2D>().velocity.x) > 0){
 			GetComponent<Rigidbody2D>().velocity = new Vector2((GetComponent<Rigidbody2D>().velocity.x - Mathf.Sign(GetComponent<Rigidbody2D>().velocity.x) * frictionForce), GetComponent<Rigidbody2D>().velocity.y);
 			if(Mathf.Abs(GetComponent<Rigidbody2D>().velocity.x) < frictionForce){
@@ -59,27 +117,14 @@ public class ZakasiControl : MonoBehaviour
 				GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x,0);
 			}
 		}
+		*/
+		
 
-		// If the player is changing direction or hasn't reached maxSpeed yet add a force to the player.
-		if(h * GetComponent<Rigidbody2D>().velocity.x < maxSpeedX){
-			GetComponent<Rigidbody2D>().AddForce(Vector2.right * h * moveForce);
-		}
-		if(v * GetComponent<Rigidbody2D>().velocity.y < maxSpeedY){
-			GetComponent<Rigidbody2D>().AddForce(Vector2.up * v * moveForce);
-		}
-
-		// If the player's velocity is greater than the maxSpeed set the player's velocity to the maxSpeed.
-		if(Mathf.Abs(GetComponent<Rigidbody2D>().velocity.x) > maxSpeedX){
-			GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Sign(GetComponent<Rigidbody2D>().velocity.x) * maxSpeedX, GetComponent<Rigidbody2D>().velocity.y);
-		}
-		if(Mathf.Abs(GetComponent<Rigidbody2D>().velocity.y) > maxSpeedY){
-			GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, Mathf.Sign(GetComponent<Rigidbody2D>().velocity.y) * maxSpeedY);
-		}
 
 
 		// Jump
 		if(!grounded){
-			zspeed -= 0.00098f;
+			zspeed -= 0.0008f;
 			z += zspeed;
 		}
 		if(z <= 0){
@@ -89,14 +134,14 @@ public class ZakasiControl : MonoBehaviour
 		}
 
 		if(Input.GetButtonDown("Jump") && grounded){
-			zspeed = 0.07f;
+			zspeed = 0.03f;
 			grounded = false;
 		}
 
 
 
 		//update graphics
-		GameObject.Find("zakasi_graphics").transform.position = new Vector3(transform.position.x, transform.position.y + 0.11f + z,0);
+		GameObject.Find("zakasi_graphics").transform.position = new Vector3(transform.position.x + 0.1f, transform.position.y + 0.55f + z,0);
 
 
 		// Flip Sprite
@@ -125,15 +170,9 @@ public class ZakasiControl : MonoBehaviour
 		SpriteRenderer sr = shadow.GetComponent<SpriteRenderer>();
 		sr.sprite = s.images[0];
 		s.root = this;
-		s.offset = new Vector3(0.1293f,-1.18f,0);
+		s.offset = new Vector3(0.16f,-0.1f,0);
 		
 		//GameObject.Find("shadow").transform.position = new Vector3(transform.position.x + -0.2093f, -0.1328f + z, 0);
 
 	}
 }
-//-8.168782		0.5335
-//-8.31			0.561
-
-//0.141218
-
-//3328

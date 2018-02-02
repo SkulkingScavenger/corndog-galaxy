@@ -17,6 +17,6 @@ public class FollowPlayer : MonoBehaviour
 	void Update ()
 	{
 		// Set the position to the player's position with the offset.
-		transform.position = player.position + offset;
+		transform.position = player.position + offset + new Vector3(0,player.GetComponent<ZakasiControl>().z,0);
 	}
 }
