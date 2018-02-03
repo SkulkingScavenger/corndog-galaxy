@@ -10,6 +10,7 @@ public class Control : MonoBehaviour
 	void Awake ()
 	{
 		//createArea();
+		Application.targetFrameRate = 60;
 	}
 
 	void Update ()

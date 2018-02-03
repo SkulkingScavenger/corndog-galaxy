@@ -44,6 +44,120 @@ public class ZakasiControl : MonoBehaviour
 	void Update()
 	{
 		//main movement
+		//WASDMovement();
+		
+		MouseMovement();
+
+
+
+		// Jump
+		if(!grounded){
+			zspeed -= 0.0008f;
+			z += zspeed;
+		}
+		if(z <= 0){
+			zspeed = 0;
+			z = 0;
+			grounded = true;
+		}
+
+		if(Input.GetButtonDown("Jump") && grounded){
+			zspeed = 0.03f;
+			grounded = false;
+		}
+
+
+
+		//update graphics
+		GameObject.Find("zakasi_graphics").transform.position = new Vector3(transform.position.x + 0.1f, transform.position.y + 0.55f + z,0);
+
+
+		// Flip Sprite
+		/*
+		if(h > 0 && !facingRight)
+			Flip();
+		else if(h < 0 && facingRight)
+			Flip();
+
+		*/
+
+	}
+	
+	 
+	void Flip ()
+	{
+		// Switch the way the player is labelled as facing.
+		facingRight = !facingRight;
+
+		// Multiply the player's x local scale by -1.
+		Vector3 theScale = transform.localScale;
+		theScale.x *= -1;
+		transform.localScale = theScale;
+	}
+
+	void SetShadow (){
+		shadow = Instantiate(shadowPrefab, transform.position, transform.rotation);
+		Shadow s = shadow.GetComponent<Shadow>();
+		SpriteRenderer sr = shadow.GetComponent<SpriteRenderer>();
+		sr.sprite = s.images[0];
+		s.root = this;
+		s.offset = new Vector3(0.16f,-0.1f,0);
+		
+		//GameObject.Find("shadow").transform.position = new Vector3(transform.position.x + -0.2093f, -0.1328f + z, 0);
+
+	}
+
+
+	void MouseMovement(){
+		float spd = 100f;
+		float speedInitialX = speedX;
+		float speedInitialY = speedY;
+		if(Input.GetAxis("MouseRight") != 0){
+			Vector3 mouseCoordinates = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+			Vector2 start = new Vector2(transform.position.x,transform.position.y);
+			Vector2 end = new Vector2(mouseCoordinates.x,mouseCoordinates.y);
+			float d = Vector2.Distance(start,end);
+			
+
+			if(d > 0.1){
+				float angle = Mathf.Asin((end.y-start.y)/d);
+				if (start.y <= end.y && start.x <= end.x){
+					//nothing
+				}else if (start.y <= end.y && start.x > end.x){
+					angle = Mathf.PI - angle; 
+				}else if (start.y > end.y && start.x > end.x){
+					angle = Mathf.PI - angle; 
+				}else if (start.y > end.y && start.x <= end.x){
+					angle = 2*Mathf.PI + angle; 
+				}
+
+				speedX = spd*Mathf.Cos(angle);
+				speedY = spd*Mathf.Sin(angle);
+				float damping = 1/((Mathf.Abs(speedY)/spd)+1); //vertical movement is twice as expensive
+				speedX = speedX * damping * Time.deltaTime;
+				speedY = speedY * damping * Time.deltaTime;
+				
+				//GetComponent<Rigidbody2D>().position = Vector2.MoveTowards(GetComponent<Rigidbody2D>().position,end,spd * damping * Time.deltaTime);
+			}
+		}else{
+			speedX -=  Mathf.Sign(speedX) * frictionForceX * Time.deltaTime;
+			if(Mathf.Sign(speedX) != Mathf.Sign(speedInitialX)){
+				speedX = 0;
+			}
+			speedY -=  Mathf.Sign(speedY) * frictionForceY * Time.deltaTime;
+			if(Mathf.Sign(speedY) != Mathf.Sign(speedInitialY)){
+				speedY = 0;
+			}
+		}
+		if(speedX!=0){
+			Vector3 theScale = transform.localScale;
+			theScale.x = Mathf.Sign(speedX);
+			transform.localScale = theScale;
+		}
+		GetComponent<Rigidbody2D>().velocity = new Vector2(speedX,speedY);
+	}
+
+	void WASDMovement(){
 		float speedInitialX = speedX;
 		float speedInitialY = speedY;
 		float h = 0;
@@ -118,61 +232,5 @@ public class ZakasiControl : MonoBehaviour
 			}
 		}
 		*/
-		
-
-
-
-		// Jump
-		if(!grounded){
-			zspeed -= 0.0008f;
-			z += zspeed;
-		}
-		if(z <= 0){
-			zspeed = 0;
-			z = 0;
-			grounded = true;
-		}
-
-		if(Input.GetButtonDown("Jump") && grounded){
-			zspeed = 0.03f;
-			grounded = false;
-		}
-
-
-
-		//update graphics
-		GameObject.Find("zakasi_graphics").transform.position = new Vector3(transform.position.x + 0.1f, transform.position.y + 0.55f + z,0);
-
-
-		// Flip Sprite
-		if(h > 0 && !facingRight)
-			Flip();
-		else if(h < 0 && facingRight)
-			Flip();
-
-	}
-	
-	 
-	void Flip ()
-	{
-		// Switch the way the player is labelled as facing.
-		facingRight = !facingRight;
-
-		// Multiply the player's x local scale by -1.
-		Vector3 theScale = transform.localScale;
-		theScale.x *= -1;
-		transform.localScale = theScale;
-	}
-
-	void SetShadow (){
-		shadow = Instantiate(shadowPrefab, transform.position, transform.rotation);
-		Shadow s = shadow.GetComponent<Shadow>();
-		SpriteRenderer sr = shadow.GetComponent<SpriteRenderer>();
-		sr.sprite = s.images[0];
-		s.root = this;
-		s.offset = new Vector3(0.16f,-0.1f,0);
-		
-		//GameObject.Find("shadow").transform.position = new Vector3(transform.position.x + -0.2093f, -0.1328f + z, 0);
-
 	}
 }
