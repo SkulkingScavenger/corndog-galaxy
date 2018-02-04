@@ -34,6 +34,7 @@ NOTE: The following instructions use terminal commands. If you're using a GUI cl
 `git add .` (don't forget the period and exact spacing. its git shorthand for 'all')<br>
 `git commit -m "a short description of what you changed"`<br>
 `git push`<br>
+Probably a message will come up and tell you to run a different version of push, just do whatever it says
 
 <b>If you already have the repository cloned:</b><br>
 1. pull down the latest version to avoid conflicts<br>
