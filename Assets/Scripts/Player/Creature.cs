@@ -96,15 +96,16 @@ public class Creature : MonoBehaviour{
 		act.name = "tentacle lash";
 		act.range = 2f;
 		act.damage = 4;
-		act.cooldownDuration = 2f;
-		act.attackDuration = 6f;
-		act.attackAnimation = "major_tentacle_r_attack";
+		act.windupDuration = 0.25f;
+		act.attackDuration = 0.25f;
+		act.cooldownDuration = 0.25f;
 		act.idleAnimation = "major_tentacle_r_idle";
+		act.windupAnimation = "major_tentacle_r_windup";
+		act.attackAnimation = "major_tentacle_r_attack";
 		organ.combatActions.Add(act);
 	
 		//create physical manifestation
 		GameObject limbObject = Instantiate(Resources.Load<GameObject>("Prefabs/Characters/MajorTentacleR"));
-		limbObject.GetComponent<CreatureLimbObject>().root = organ;
 		SpriteRenderer sr = limbObject.GetComponent<SpriteRenderer>();
 		limbObject.transform.parent = transform.Find("Display").transform;
 		sr.transform.position = new Vector3(transform.Find("Display").transform.position.x + 0.3593f,transform.Find("Display").transform.position.y + 0.8665f,0);
@@ -112,7 +113,6 @@ public class Creature : MonoBehaviour{
 
 		limbs.Add(organ);
 	}
-	 
 
 	void SetShadow(){
 		shadow = Instantiate(Resources.Load<GameObject>("Prefabs/Characters/Shadow"));
@@ -197,7 +197,6 @@ public class Creature : MonoBehaviour{
 			for(int i=0;i<stances[stanceId].componentList.Count;i++){
 				CombatStanceComponent component = stances[stanceId].componentList[i];
 				int actionIndex = 0;
-				Debug.Log(component);
 				if (component.limb.hitpoints > 0 && !component.limb.isParalyzed && component.limb.isReady){
 					if (Input.GetKey ("w")){
 						actionIndex = 1;
@@ -211,14 +210,17 @@ public class Creature : MonoBehaviour{
 					if(Input.GetAxis("Shift") != 0){
 						actionIndex += 5;
 					}
-					component.executeCombatAction(actionIndex);
+					CombatAction act = component.actions[actionIndex];
+					if(act != null){
+						StartCoroutine(component.limb.Attack(act));
+					}
 					attackSuccessful = true;
 				}
 			}
 		}
 		if(attackSuccessful){
-			isAttacking = true;
-			anim.Play("attack");
+			//isAttacking = true;
+			//anim.Play("attack");
 		}
 	}
 }

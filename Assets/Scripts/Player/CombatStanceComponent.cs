@@ -13,28 +13,6 @@ public class CombatStanceComponent{
 			actions[i] = null;
 		}
 	}
-
-	public CombatAction executeCombatAction(int index){
-		CombatAction act = actions[index];
-		Debug.Log(act);
-		if(act != null){
-			limb.isReady = false;
-			Animator anim = limb.obj.GetComponent<Animator>();
-			if(act.windupDuration > 0){
-				limb.isWindingUp = true;
-				anim.Play(act.windupAnimation);
-			}else if(act.attackDuration > 0){
-				limb.isAttacking = true;
-				anim.Play(act.attackAnimation);
-			}else if(act.backswingDuration > 0){
-				limb.isBackswinging = true;
-				anim.Play(act.backswingAnimation);
-			}else{
-				anim.Play(act.idleAnimation);
-			}
-		}
-		return act;
-	}
 }
 
 public class CombatAction{
