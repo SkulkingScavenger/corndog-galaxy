@@ -5,14 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - ground
-  - Crate
-  - Enemy
   - Wall
   - Obstacle
-  - Bullet
-  - BombPickup
-  - ExplosionFX
   - HealthBar
+  - Control
+  - Creature
   layers:
   - Default
   - TransparentFX
