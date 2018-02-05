@@ -2,8 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Creature : MonoBehaviour
-{
+public class Creature : MonoBehaviour{
 	public bool facingRight = true;			// For determining which way the player is currently facing.
 	private Animator anim;		// Reference to the player's animator component.
 
@@ -33,6 +32,8 @@ public class Creature : MonoBehaviour
 	public float maxSpeedY = 1f;				// The fastest the player can travel in the x axis.
 	private float frictionForceX = 20f;
 	private float frictionForceY = 10f;
+
+	public bool isAttacking = false;
 	
 	public float health = 100f;					// The player's health.
 	public float repeatDamagePeriod = 2f;		// How frequently the player can be damaged.
@@ -83,18 +84,32 @@ public class Creature : MonoBehaviour
 	}
 
 	void SetLimbs(){
-		GameObject limbObject = Instantiate(Resources.Load<GameObject>("Prefabs/Characters/MajorTentacleR"));
-		SpriteRenderer sr = limbObject.GetComponent<SpriteRenderer>();
-		limbObject.transform.parent = transform.Find("Display").transform;
-		sr.transform.position = new Vector3(transform.Find("Display").transform.position.x + 0.3593f,transform.Find("Display").transform.position.y + 0.8665f,0);
-		
 		CreatureLimb organ = new CreatureLimb();
 		organ.name = "Left Major Tentacle";
 		organ.root = this;
 		organ.offset = new Vector3(0.3593f,0.8665f,0);
 		organ.limbType = "tentacle";
+		organ.hitpoints = 4;
+		
+		//create combat action for the limb
+		CombatAction act = new CombatAction();
+		act.name = "tentacle lash";
+		act.range = 2f;
+		act.damage = 4;
+		act.cooldownDuration = 2f;
+		act.attackDuration = 6f;
+		act.attackAnimation = "major_tentacle_r_attack";
+		act.idleAnimation = "major_tentacle_r_idle";
+		organ.combatActions.Add(act);
 	
+		//create physical manifestation
+		GameObject limbObject = Instantiate(Resources.Load<GameObject>("Prefabs/Characters/MajorTentacleR"));
+		limbObject.GetComponent<CreatureLimbObject>().root = organ;
+		SpriteRenderer sr = limbObject.GetComponent<SpriteRenderer>();
+		limbObject.transform.parent = transform.Find("Display").transform;
+		sr.transform.position = new Vector3(transform.Find("Display").transform.position.x + 0.3593f,transform.Find("Display").transform.position.y + 0.8665f,0);
 		organ.obj = limbObject;
+
 		limbs.Add(organ);
 	}
 	 
@@ -118,6 +133,7 @@ public class Creature : MonoBehaviour
 	void SetStance(){
 		CombatStance stance1 = new CombatStance();
 		stance1.componentList.Add(new CombatStanceComponent(limbs[0]));
+		stance1.componentList[0].actions[0] = limbs[0].combatActions[0];
 		stances.Add(stance1);
 	}
 
@@ -170,27 +186,39 @@ public class Creature : MonoBehaviour
 	}
 
 	void CombatMain(){
-		if(Input.GetAxis("MouseRight") != 0){
+		if(Input.GetAxis("MouseLeft") != 0){
 			CombatAction();
 		}
 	}
 
 	void CombatAction(){
-		for(int i=0;i<stances[stanceId].componentList.Count;i++){
-			CombatStanceComponent component = stances[stanceId].componentList[i];
-			int actionIndex = 4;
-			// if (component.limb.hitpoints > 0 && component.limb.isParalyzed == false && component.limb.isReady){
-			// 	if (Input.GetKey ("w")){
-			// 		actionIndex = 0;
-			// 	}else if(Input.GetKey ("a")){
-			// 		actionIndex = 1;
-			// 	}else if(Input.GetKey ("s")){
-			// 		actionIndex = 2;
-			// 	}else if(Input.GetKey ("d")){
-			// 		actionIndex = 3;
-			// 	}
-			// 	component.action[actionIndex](Input.GetAxis("Shift") != 0);
-			// }
+		bool attackSuccessful = false;
+		if(stances[stanceId].componentList.Count > 0 && !isAttacking){
+			for(int i=0;i<stances[stanceId].componentList.Count;i++){
+				CombatStanceComponent component = stances[stanceId].componentList[i];
+				int actionIndex = 0;
+				Debug.Log(component);
+				if (component.limb.hitpoints > 0 && !component.limb.isParalyzed && component.limb.isReady){
+					if (Input.GetKey ("w")){
+						actionIndex = 1;
+					}else if(Input.GetKey ("a")){
+						actionIndex = 2;
+					}else if(Input.GetKey ("s")){
+						actionIndex = 3;
+					}else if(Input.GetKey ("d")){
+						actionIndex = 4;
+					}
+					if(Input.GetAxis("Shift") != 0){
+						actionIndex += 5;
+					}
+					component.executeCombatAction(actionIndex);
+					attackSuccessful = true;
+				}
+			}
+		}
+		if(attackSuccessful){
+			isAttacking = true;
+			anim.Play("attack");
 		}
 	}
 }

@@ -21,7 +21,7 @@ public class Score : MonoBehaviour
 	void Update ()
 	{
 		// Set the score text.
-		GetComponent<GUIText>().text = "Score: " + score;
+		GetComponent<GUIText>().text = "Score: " + player.score;
 
 		// Set the previous score to this frame's score.
 	}

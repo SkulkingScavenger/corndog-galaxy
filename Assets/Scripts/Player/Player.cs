@@ -8,6 +8,7 @@ public class Player{
 	public string interfaceMode = "combat";
 	private float startX = 4f;
 	private float startY = -0.5f;
+	public int score = 0;
 
 	public void init(){
 		creatureObj = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/Characters/Skirriashi"));

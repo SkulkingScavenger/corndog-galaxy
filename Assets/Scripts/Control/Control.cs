@@ -6,14 +6,14 @@ public class Control : MonoBehaviour{
 	public List<Player> players = new List<Player>();
 	public int currentPlayerId = 0;
 	public List<Area> areas = new List<Area>();
-	public GameObject camera;
+	public GameObject mainCamera;
 
 	void Awake ()
 	{
 		//createArea();
 		players.Add(new Player());
 		getPlayer(0).init();
-		camera = Instantiate(Resources.Load<GameObject>("Prefabs/mainCamera"));
+		mainCamera = Instantiate(Resources.Load<GameObject>("Prefabs/mainCamera"));
 		Application.targetFrameRate = 60;
 	}
 

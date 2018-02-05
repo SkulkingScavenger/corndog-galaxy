@@ -17,11 +17,29 @@ public class CreatureLimb : CreatureOrgan{
 	public string limbType;
 	public bool isParalyzed = false;
 	public bool isReady = true;
-	//public Action<bool>[] combatActions;
+	public bool isWindingUp = false;
+	public bool isAttacking = false;
+	public bool isBackswinging = false;
+	public List<CombatAction> combatActions = new List<CombatAction>();
 
 	public CreatureLimb(){
 		type = "limb";
 	}
 
 	
+}
+
+
+public static class LimbAttacks {
+	public static void attack(int id){
+		switch(id){
+			case 0: 
+				basicAttack();
+			break;
+		}
+	}
+
+	private static void basicAttack(){
+
+	}
 }
