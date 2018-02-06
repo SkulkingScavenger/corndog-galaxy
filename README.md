@@ -22,7 +22,7 @@ For loading assets, you just need **git**, a **github account** and **editing ri
 Then consult the following helpful guides:
  
 * <a href="https://github.com/SkulkingScavenger/the-cool-tapes-galaxy/wiki/Getting-and-Uploading-the-Project-Using-Git">Getting and Uploading the Project Using Git (guide for non-programmers)</a>
-* <dt><a href="https://github.com/SkulkingScavenger/the-cool-tapes-galaxy/wiki/Builing-and-Running-the-Game">Building and Running the Game</a></dt>
+* <dt><a href="https://github.com/SkulkingScavenger/the-cool-tapes-galaxy/wiki/Building-and-Running-the-Game">Building and Running the Game</a></dt>
 * <dt><a href="https://github.com/SkulkingScavenger/the-cool-tapes-galaxy/wiki/Loading-Sprites-and-Creating-Animations">Loading Sprites and Creating Animations</a></dt>
 
 
