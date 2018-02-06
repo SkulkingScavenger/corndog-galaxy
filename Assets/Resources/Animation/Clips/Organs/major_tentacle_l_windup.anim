@@ -20,11 +20,11 @@ AnimationClip:
   - curve:
     - time: 0
       value: {fileID: 21300000, guid: 486a70a7f8c8b7142b79b46e1e173c93, type: 3}
-    - time: 0.083333336
-      value: {fileID: 21300002, guid: 486a70a7f8c8b7142b79b46e1e173c93, type: 3}
-    - time: 0.16666667
-      value: {fileID: 21300004, guid: 486a70a7f8c8b7142b79b46e1e173c93, type: 3}
     - time: 0.25
+      value: {fileID: 21300002, guid: 486a70a7f8c8b7142b79b46e1e173c93, type: 3}
+    - time: 0.5
+      value: {fileID: 21300004, guid: 486a70a7f8c8b7142b79b46e1e173c93, type: 3}
+    - time: 1.0
       value: {fileID: 21300006, guid: 486a70a7f8c8b7142b79b46e1e173c93, type: 3}
     attribute: m_Sprite
     path: 
