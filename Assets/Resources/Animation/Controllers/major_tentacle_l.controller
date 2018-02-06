@@ -5,13 +5,13 @@ AnimatorController:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: major_tentacle_R_0
+  m_Name: major_tentacle_l
   serializedVersion: 5
   m_AnimatorParameters: []
   m_AnimatorLayers:
   - serializedVersion: 5
-    m_Name: Base Layer
-    m_StateMachine: {fileID: 1107722341346863976}
+    m_Name: New Layer
+    m_StateMachine: {fileID: 1107169995699244186}
     m_Mask: {fileID: 0}
     m_Motions: []
     m_Behaviours: []
@@ -21,13 +21,13 @@ AnimatorController:
     m_IKPass: 0
     m_SyncedLayerAffectsTiming: 0
     m_Controller: {fileID: 9100000}
---- !u!1102 &1102731155302317198
+--- !u!1102 &1102253119270802136
 AnimatorState:
   serializedVersion: 5
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: major_tentacle_r_attack
+  m_Name: major_tentacle_l_attack
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -40,19 +40,19 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: bff4a44cd27921f45bf866cfacffad2b, type: 2}
+  m_Motion: {fileID: 7400000, guid: 39530beff6da85a42bfab76793b78308, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!1102 &1102912541392572868
+--- !u!1102 &1102299361375578230
 AnimatorState:
   serializedVersion: 5
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: major_tentacle_r_windup
+  m_Name: major_tentacle_l_idle
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -65,19 +65,19 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: a5ed41849ba2d7c4081b3cdb06ce3e5e, type: 2}
+  m_Motion: {fileID: 7400000, guid: 3c4534f7b0f86e344b181053567d8da9, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!1102 &1102912990267672290
+--- !u!1102 &1102398960323725358
 AnimatorState:
   serializedVersion: 5
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: major_tentacle_r_idle
+  m_Name: major_tentacle_l_windup
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -90,36 +90,36 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 9abc0fb983bcd9c4faa17a55a61fd73d, type: 2}
+  m_Motion: {fileID: 7400000, guid: 8d13114a6dde4d242969394d3a24464b, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!1107 &1107722341346863976
+--- !u!1107 &1107169995699244186
 AnimatorStateMachine:
   serializedVersion: 5
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Base Layer
+  m_Name: New Layer
   m_ChildStates:
   - serializedVersion: 1
-    m_State: {fileID: 1102731155302317198}
-    m_Position: {x: 288, y: 240, z: 0}
+    m_State: {fileID: 1102398960323725358}
+    m_Position: {x: 36, y: 264, z: 0}
   - serializedVersion: 1
-    m_State: {fileID: 1102912990267672290}
-    m_Position: {x: 60, y: 168, z: 0}
+    m_State: {fileID: 1102299361375578230}
+    m_Position: {x: 36, y: 204, z: 0}
   - serializedVersion: 1
-    m_State: {fileID: 1102912541392572868}
-    m_Position: {x: 60, y: 240, z: 0}
+    m_State: {fileID: 1102253119270802136}
+    m_Position: {x: 36, y: 324, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
   m_AnyStatePosition: {x: 50, y: 20, z: 0}
-  m_EntryPosition: {x: 72, y: 108, z: 0}
-  m_ExitPosition: {x: 264, y: 24, z: 0}
+  m_EntryPosition: {x: 50, y: 120, z: 0}
+  m_ExitPosition: {x: 240, y: 24, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
-  m_DefaultState: {fileID: 1102912990267672290}
+  m_DefaultState: {fileID: 1102299361375578230}

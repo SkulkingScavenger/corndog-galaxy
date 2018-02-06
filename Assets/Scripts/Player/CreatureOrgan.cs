@@ -62,9 +62,7 @@ public class CreatureLimb : CreatureOrgan{
 
 	public void setAnimationSpeed(Animator anim, float duration){
 		if(duration > 0 && anim.GetCurrentAnimatorStateInfo(0).length > 0){
-			Debug.Log(anim.GetCurrentAnimatorStateInfo(0).length);
-			//anim.speed = duration/anim.GetCurrentAnimatorStateInfo(0).length;
-			anim.speed = 1 / duration;//anim.GetCurrentAnimatorStateInfo(0).length;
+			anim.speed = 1 / duration;
 		}else{
 			anim.speed = 1;
 		}

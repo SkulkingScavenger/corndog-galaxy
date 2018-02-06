@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class Creature : MonoBehaviour{
 	public bool facingRight = true;			// For determining which way the player is currently facing.
 	private Animator anim;		// Reference to the player's animator component.
+	public Transform display;
 
 	public GameObject shadow;
 	public int shadowIndex = 0;
@@ -42,6 +43,7 @@ public class Creature : MonoBehaviour{
 
 	void Awake(){
 		anim = GetComponent<Animator>();	
+		display = transform.Find("Display");
 	}
 
 	public void Init(){
@@ -62,7 +64,7 @@ public class Creature : MonoBehaviour{
 		}
 
 		//update graphics
-		GameObject.Find("Display").transform.position = new Vector3(transform.position.x + 0.1f, transform.position.y + 0.55f + z,0);
+		display.transform.position = new Vector3(transform.position.x + 0.1f, transform.position.y + 0.55f + z,0);
 	}
 
 	void Jump(){
@@ -84,15 +86,20 @@ public class Creature : MonoBehaviour{
 	}
 
 	void SetLimbs(){
-		CreatureLimb organ = new CreatureLimb();
-		organ.name = "Left Major Tentacle";
+		CreatureLimb organ;
+		CombatAction act;
+		GameObject limbObject;
+
+		organ = new CreatureLimb();
+		organ.name = "Right Major Tentacle";
 		organ.root = this;
-		organ.offset = new Vector3(0.3593f,0.8665f,0);
+		organ.offset = new Vector3(0.3593f,0.8665f,-1);
 		organ.limbType = "tentacle";
 		organ.hitpoints = 4;
 		
 		//create combat action for the limb
-		CombatAction act = new CombatAction();
+		
+		act = new CombatAction();
 		act.name = "tentacle lash";
 		act.range = 2f;
 		act.damage = 4;
@@ -105,10 +112,41 @@ public class Creature : MonoBehaviour{
 		organ.combatActions.Add(act);
 	
 		//create physical manifestation
-		GameObject limbObject = Instantiate(Resources.Load<GameObject>("Prefabs/Characters/MajorTentacleR"));
-		SpriteRenderer sr = limbObject.GetComponent<SpriteRenderer>();
+		limbObject = Instantiate(Resources.Load<GameObject>("Prefabs/Characters/LimbObject"));
 		limbObject.transform.parent = transform.Find("Display").transform;
-		sr.transform.position = new Vector3(transform.Find("Display").transform.position.x + 0.3593f,transform.Find("Display").transform.position.y + 0.8665f,0);
+		limbObject.GetComponent<SpriteRenderer>().transform.position = new Vector3(display.transform.position.x + 0.3593f,display.transform.position.y + 0.8665f,0);
+		limbObject.GetComponent<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animation/Controllers/major_tentacle_r");
+		organ.obj = limbObject;
+
+		limbs.Add(organ);
+
+
+		organ = new CreatureLimb();
+		organ.name = "Left Major Tentacle";
+		organ.root = this;
+		organ.offset = new Vector3(0.08609991f,0.9372001f,1);
+		organ.limbType = "tentacle";
+		organ.hitpoints = 4;
+		
+		//create combat action for the limb
+		
+		act = new CombatAction();
+		act.name = "tentacle lash";
+		act.range = 2f;
+		act.damage = 4;
+		act.windupDuration = 0.25f;
+		act.attackDuration = 0.25f;
+		act.cooldownDuration = 0.25f;
+		act.idleAnimation = "major_tentacle_l_idle";
+		act.windupAnimation = "major_tentacle_l_windup";
+		act.attackAnimation = "major_tentacle_l_attack";
+		organ.combatActions.Add(act);
+	
+		//create physical manifestation
+		limbObject = Instantiate(Resources.Load<GameObject>("Prefabs/Characters/LimbObject"));
+		limbObject.transform.parent = transform.Find("Display").transform;
+		limbObject.GetComponent<SpriteRenderer>().transform.position = new Vector3(display.transform.position.x + organ.offset.x,display.transform.position.y + organ.offset.y,0);
+		limbObject.GetComponent<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animation/Controllers/major_tentacle_l");
 		organ.obj = limbObject;
 
 		limbs.Add(organ);
@@ -132,8 +170,11 @@ public class Creature : MonoBehaviour{
 
 	void SetStance(){
 		CombatStance stance1 = new CombatStance();
-		stance1.componentList.Add(new CombatStanceComponent(limbs[0]));
-		stance1.componentList[0].actions[0] = limbs[0].combatActions[0];
+		for (int i=0;i<limbs.Count;i++){
+			stance1.componentList.Add(new CombatStanceComponent(limbs[i]));
+			stance1.componentList[i].actions[0] = limbs[i].combatActions[0];
+		}
+		
 		stances.Add(stance1);
 	}
 
