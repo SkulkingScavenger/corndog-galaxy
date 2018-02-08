@@ -19,6 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4526942110517142}
+  - component: {fileID: 114043442572282790}
   - component: {fileID: 114928879196921048}
   m_Layer: 0
   m_Name: Control
@@ -40,6 +41,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114043442572282790
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1799574621136634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf617076dce551d4488a390ea51db60f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114928879196921048
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -51,6 +63,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe3083ef49a214c4386a2ded49c1092c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  players: []
   currentPlayerId: 0
   areas: []
+  mainCamera: {fileID: 0}

@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4261513261125116}
   - component: {fileID: 212002043235156420}
   - component: {fileID: 95990538969560444}
+  - component: {fileID: 114316691388740766}
   m_Layer: 0
   m_Name: LimbObject
   m_TagString: Untagged
@@ -58,6 +59,17 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114316691388740766
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1849178586254060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34f91a50cba64d543b9a4666973328c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &212002043235156420
 SpriteRenderer:
   m_ObjectHideFlags: 1

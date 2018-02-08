@@ -16,15 +16,12 @@ public class Creature : MonoBehaviour{
 	public List<CreatureOrgan> organs = new List<CreatureOrgan>();
 	public List<CreatureLimb> limbs = new List<CreatureLimb>();
 	
-	//public AudioClip[] jumpClips;			// Array of clips for when the player jumps.
 	public float jumpForce = 0.03f;			// Amount of force added when the player jumps.
 	public float gravityForce = -0.0008f;			// Amount of force added when the player jumps.
 	private bool grounded = true;			// Whether or not the player is grounded.
 	public float z = 0f;
 	public float zspeed = 0f;
 				
-	//public float moveForceX = 20f;		// Amount of force added to move the player left and right.
-	//public float moveForceY = 10f;		// Amount of force added to move the player left and right.
 	public float accelerationX = 100f;		// The fastest the player can travel in the x axis.
 	public float accelerationY = 50f;	// The fastest the player can travel in the x axis.
 	public float speedX = 0f;				// The fastest the player can travel in the x axis.
@@ -42,7 +39,6 @@ public class Creature : MonoBehaviour{
 
 
 	void Awake(){
-		anim = GetComponent<Animator>();	
 		display = transform.Find("Display");
 	}
 
@@ -90,15 +86,21 @@ public class Creature : MonoBehaviour{
 		CombatAction act;
 		GameObject limbObject;
 
+
+
 		organ = new CreatureLimb();
-		organ.name = "Right Major Tentacle";
+		OrganPrototypes.Instance.LoadLimb(organ,0);
+		organ.hitpoints = 4;
+		OrganPrototypes.Instance.AttachLimb(this, organ, new Vector3(0.3593f,0.8665f,-0.001f));
+
+		organ = new CreatureLimb();
+		organ.name = "Right Major Tentacle Claw";
 		organ.root = this;
-		organ.offset = new Vector3(0.3593f,0.8665f,-0.001f);
+		organ.offset = new Vector3(0.6093f,0.8665f,-0.001f);
 		organ.limbType = "tentacle";
 		organ.hitpoints = 4;
-		
+
 		//create combat action for the limb
-		
 		act = new CombatAction();
 		act.name = "tentacle lash";
 		act.range = 2f;
@@ -106,19 +108,21 @@ public class Creature : MonoBehaviour{
 		act.windupDuration = 0.25f;
 		act.attackDuration = 0.25f;
 		act.cooldownDuration = 0.25f;
-		act.idleAnimation = "major_tentacle_r_idle";
-		act.windupAnimation = "major_tentacle_r_windup";
-		act.attackAnimation = "major_tentacle_r_attack";
+		act.idleAnimation = "major_tentacle_claw_r_idle";
+		act.windupAnimation = "major_tentacle_claw_r_windup";
+		act.attackAnimation = "major_tentacle_claw_r_attack";
 		organ.combatActions.Add(act);
 	
 		//create physical manifestation
 		limbObject = Instantiate(Resources.Load<GameObject>("Prefabs/Characters/LimbObject"));
 		limbObject.transform.parent = transform.Find("Display").transform;
-		limbObject.GetComponent<SpriteRenderer>().transform.position = new Vector3(display.transform.position.x + 0.3593f,display.transform.position.y + 0.8665f, organ.offset.z);
-		limbObject.GetComponent<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animation/Controllers/major_tentacle_r");
+		limbObject.GetComponent<CreatureLimbObject>().root = organ;
+		limbObject.GetComponent<SpriteRenderer>().transform.position = new Vector3(display.transform.position.x + organ.offset.x,display.transform.position.y + organ.offset.y, organ.offset.z);
+		limbObject.GetComponent<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animation/Controllers/major_tentacle_claw_r");
 		organ.obj = limbObject;
 
 		limbs.Add(organ);
+
 
 
 		organ = new CreatureLimb();
@@ -129,7 +133,6 @@ public class Creature : MonoBehaviour{
 		organ.hitpoints = 4;
 		
 		//create combat action for the limb
-		
 		act = new CombatAction();
 		act.name = "tentacle lash";
 		act.range = 2f;
@@ -145,6 +148,7 @@ public class Creature : MonoBehaviour{
 		//create physical manifestation
 		limbObject = Instantiate(Resources.Load<GameObject>("Prefabs/Characters/LimbObject"));
 		limbObject.transform.parent = transform.Find("Display").transform;
+		limbObject.GetComponent<CreatureLimbObject>().root = organ;
 		limbObject.GetComponent<SpriteRenderer>().transform.position = new Vector3(display.transform.position.x + organ.offset.x,display.transform.position.y + organ.offset.y, organ.offset.z);
 		limbObject.GetComponent<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animation/Controllers/major_tentacle_l");
 		organ.obj = limbObject;
