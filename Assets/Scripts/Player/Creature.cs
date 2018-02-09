@@ -83,6 +83,7 @@ public class Creature : MonoBehaviour{
 
 	void SetLimbs(){
 		CreatureLimb organ;
+		CreatureAppendage appendage;
 		CombatAction act;
 		GameObject limbObject;
 
@@ -93,16 +94,15 @@ public class Creature : MonoBehaviour{
 		organ.hitpoints = 4;
 		OrganPrototypes.Instance.AttachLimb(this, organ, new Vector3(0.3593f,0.8665f,-0.001f));
 
-		organ = new CreatureLimb();
-		organ.name = "Right Major Tentacle Claw";
-		organ.root = this;
-		organ.offset = new Vector3(0.6093f,0.8665f,-0.001f);
-		organ.limbType = "tentacle";
-		organ.hitpoints = 4;
+		appendage = new CreatureAppendage();
+		appendage.name = "Right Major Tentacle Claw";
+		appendage.root = this;
+		appendage.offset = limbs[0].appendageOffsets[0];
+		appendage.hitpoints = 2;
 
 		//create combat action for the limb
 		act = new CombatAction();
-		act.name = "tentacle lash";
+		act.name = "Claw Snap";
 		act.range = 2f;
 		act.damage = 4;
 		act.windupDuration = 0.25f;
@@ -111,17 +111,17 @@ public class Creature : MonoBehaviour{
 		act.idleAnimation = "major_tentacle_claw_r_idle";
 		act.windupAnimation = "major_tentacle_claw_r_windup";
 		act.attackAnimation = "major_tentacle_claw_r_attack";
-		organ.combatActions.Add(act);
+		appendage.combatActions.Add(act);
 	
 		//create physical manifestation
 		limbObject = Instantiate(Resources.Load<GameObject>("Prefabs/Characters/LimbObject"));
-		limbObject.transform.parent = transform.Find("Display").transform;
-		limbObject.GetComponent<CreatureLimbObject>().root = organ;
+		limbObject.transform.parent = limbs[0].obj.transform;
+		//limbObject.GetComponent<CreatureLimbObject>().root = organ;
 		limbObject.GetComponent<SpriteRenderer>().transform.position = new Vector3(display.transform.position.x + organ.offset.x,display.transform.position.y + organ.offset.y, organ.offset.z);
 		limbObject.GetComponent<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animation/Controllers/major_tentacle_claw_r");
-		organ.obj = limbObject;
+		appendage.obj = limbObject;
 
-		limbs.Add(organ);
+		limbs[0].appendage = appendage;
 
 
 

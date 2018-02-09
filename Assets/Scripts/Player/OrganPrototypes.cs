@@ -28,7 +28,7 @@ public  class OrganPrototypes : MonoBehaviour {
 		organ.name = "Right Major Tentacle";
 		organ.limbType = "tentacle";
 		organ.animationControllerName = "Animation/Controllers/major_tentacle_r";
-		organ.appendageOffsets.Add(new Vector3(0.2500003f,0f,0f));
+		organ.appendageOffsets.Add(new Vector3(0.25f,0f,0f));
 		organ.appendageOffsets.Add(new Vector3(-0.0312f,0.1876f,0f));
 		organ.appendageOffsets.Add(new Vector3(-0.1406f,-0.0781f,0f));
 		organ.appendageOffsets.Add(new Vector3(0.30465f,-0.28902f,0f));
@@ -60,6 +60,7 @@ public  class OrganPrototypes : MonoBehaviour {
 		organ.name = source.name;
 		organ.limbType = source.limbType;
 		organ.animationControllerName = source.animationControllerName;
+		organ.appendageOffsets = source.appendageOffsets;
 		
 		//create combat action for the limb
 		for(int i=0;i<source.combatActions.Count;i++){
