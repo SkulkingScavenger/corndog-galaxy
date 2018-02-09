@@ -11,10 +11,13 @@ public class Control : MonoBehaviour{
 	void Awake ()
 	{
 		//createArea();
+		Application.targetFrameRate = 60;
+	}
+
+	void Start(){
 		players.Add(new Player());
 		getPlayer(0).init();
 		mainCamera = Instantiate(Resources.Load<GameObject>("Prefabs/mainCamera"));
-		Application.targetFrameRate = 60;
 	}
 
 	void Update (){
