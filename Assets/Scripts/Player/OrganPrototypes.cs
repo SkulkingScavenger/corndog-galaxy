@@ -28,10 +28,10 @@ public  class OrganPrototypes : MonoBehaviour {
 		organ.name = "Right Major Tentacle";
 		organ.limbType = "tentacle";
 		organ.animationControllerName = "Animation/Controllers/major_tentacle_r";
-		organ.appendageOffsets.Add(new Vector3(0.25f,0f,0f));
-		organ.appendageOffsets.Add(new Vector3(-0.0312f,0.1876f,0f));
-		organ.appendageOffsets.Add(new Vector3(-0.1406f,-0.0781f,0f));
-		organ.appendageOffsets.Add(new Vector3(0.30465f,-0.28902f,0f));
+		organ.appendageOffsets.Add(new Vector3(0.515625f,-0.0390625f,0f));
+		organ.appendageOffsets.Add(new Vector3(0.234375f,0.1484375f,0f));
+		organ.appendageOffsets.Add(new Vector3(0.125f,-0.1171875f,0f));
+		organ.appendageOffsets.Add(new Vector3(0.5703125f,-0.328125f,0f));
 
 
 		act = new CombatAction();
@@ -50,6 +50,30 @@ public  class OrganPrototypes : MonoBehaviour {
 		limbPrototypes.Add(organ);
 
 		//Skirriashi Major Tentacle L
+		organ = new CreatureLimb();
+		organ.name = "Left Major Tentacle";
+		organ.limbType = "tentacle";
+		organ.animationControllerName = "Animation/Controllers/major_tentacle_l";
+		organ.appendageOffsets.Add(new Vector3(0.5703125f,-0.0078125f,0f));
+		organ.appendageOffsets.Add(new Vector3(0.390625f,0.15625f,0f));
+		organ.appendageOffsets.Add(new Vector3(0.25f,-0.078125f,0f));
+		organ.appendageOffsets.Add(new Vector3(0.5859375f,-0.3984375f,0f));
+
+
+		act = new CombatAction();
+		act.name = "tentacle lash";
+		act.range = 2f;
+		act.damage = 4;
+		act.windupDuration = 0.25f;
+		act.attackDuration = 0.25f;
+		act.cooldownDuration = 0.25f;
+		act.idleAnimation = "major_tentacle_l_idle";
+		act.windupAnimation = "major_tentacle_l_windup";
+		act.attackAnimation = "major_tentacle_l_attack";
+		act.backswingAnimation = "";
+		organ.combatActions.Add(act);
+
+		limbPrototypes.Add(organ);
 
 	}
 

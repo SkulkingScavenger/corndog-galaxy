@@ -93,6 +93,9 @@ public class CreatureLimb : CreatureOrgan{
 			case 2: animationName = act.attackAnimation; phaseDuration = act.attackDuration; break;
 			case 3: animationName = act.backswingAnimation; phaseDuration = act.backswingDuration; break;
 		}
+		if(name == "Left Major Tentacle"){
+			Debug.Log(animationName);
+		}
 		Animator anim = obj.GetComponent<Animator>();
 		anim.Play(animationName);
 		if(phaseDuration > 0 && anim.GetCurrentAnimatorStateInfo(0).length > 0){
