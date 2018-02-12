@@ -8,7 +8,7 @@ public class Creature : MonoBehaviour{
 	public Transform display;
 
 	public GameObject shadow;
-	public int shadowIndex = 0;
+	public int shadowIndex = 1;
 	public GameObject healthBar;
 	public Player player;
 	public int stanceId = 0;
@@ -22,14 +22,14 @@ public class Creature : MonoBehaviour{
 	public float z = 0f;
 	public float zspeed = 0f;
 				
-	public float accelerationX = 100f;		// The fastest the player can travel in the x axis.
-	public float accelerationY = 50f;	// The fastest the player can travel in the x axis.
-	public float speedX = 0f;				// The fastest the player can travel in the x axis.
-	public float speedY = 0f;				// The fastest the player can travel in the x axis.
-	public float maxSpeedX = 2f;				// The fastest the player can travel in the x axis.
-	public float maxSpeedY = 1f;				// The fastest the player can travel in the x axis.
-	private float frictionForceX = 20f;
-	private float frictionForceY = 10f;
+	public float accelerationX = 100f;		// rate of change per second in x velocity while moving
+	public float accelerationY = 50f;		// rate of change per second in Y velocity while moving
+	public float speedX = 0f;				// The current velocity in the x axis.
+	public float speedY = 0f;				// The current velocity in the y axis.
+	public float maxSpeedX = 3f;			// The fastest the player can travel in the x axis.
+	public float maxSpeedY = 1.5f;			// The fastest the player can travel in the x axis.
+	private float frictionForceX = 20f;		// rate of change per second in x velocity due to friction
+	private float frictionForceY = 10f;		// rate of change per second in y velocity due to friction
 
 	public bool isAttacking = false;
 	
@@ -54,12 +54,9 @@ public class Creature : MonoBehaviour{
 		MouseMovement();
 		Jump();
 
-		//action
 		if(player.interfaceMode == "combat"){
 			CombatMain();
 		}
-
-		//update graphics
 		display.transform.position = new Vector3(transform.position.x + 0.1f, transform.position.y + 0.55f + z,0);
 	}
 
@@ -157,45 +154,15 @@ public class Creature : MonoBehaviour{
 
 		organ.appendage = appendage;
 
-
-		// organ = new CreatureLimb();
-		// organ.name = "Left Major Tentacle";
-		// organ.root = this;
-		// organ.offset = new Vector3(0.08609991f,0.9372001f,0.001f);
-		// organ.limbType = "tentacle";
-		// organ.hitpoints = 4;
-		
-		// //create combat action for the limb
-		// act = new CombatAction();
-		// act.name = "tentacle lash";
-		// act.range = 2f;
-		// act.damage = 4;
-		// act.windupDuration = 0.25f;
-		// act.attackDuration = 0.25f;
-		// act.cooldownDuration = 0.25f;
-		// act.idleAnimation = "major_tentacle_l_idle";
-		// act.windupAnimation = "major_tentacle_l_windup";
-		// act.attackAnimation = "major_tentacle_l_attack";
-		// organ.combatActions.Add(act);
-	
-		// //create physical manifestation
-		// limbObject = Instantiate(Resources.Load<GameObject>("Prefabs/Characters/LimbObject"));
-		// limbObject.transform.parent = transform.Find("Display").transform;
-		// limbObject.GetComponent<CreatureLimbObject>().root = organ;
-		// limbObject.GetComponent<SpriteRenderer>().transform.position = new Vector3(display.transform.position.x + organ.offset.x,display.transform.position.y + organ.offset.y, organ.offset.z);
-		// limbObject.GetComponent<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animation/Controllers/major_tentacle_l");
-		// organ.obj = limbObject;
-
-		// limbs.Add(organ);
 	}
 
 	void SetShadow(){
 		shadow = Instantiate(Resources.Load<GameObject>("Prefabs/Characters/Shadow"));
 		Shadow s = shadow.GetComponent<Shadow>();
-		SpriteRenderer sr = shadow.GetComponent<SpriteRenderer>();
-		sr.sprite = s.images[shadowIndex];
+		shadow.GetComponent<SpriteRenderer>().sprite = shadow.GetComponent<Shadow>().images[shadowIndex];
 		s.root = this;
-		s.offset = new Vector3(0.16f,-0.1f,0);
+		//s.offset = new Vector3(0.16f,-0.1f,0);
+		s.offset = new Vector3(0.03f,-0.22f,2);
 	}
 
 	void SetHealthBar(){

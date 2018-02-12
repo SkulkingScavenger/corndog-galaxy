@@ -10,14 +10,14 @@ public class Shadow : MonoBehaviour
 
 	void Awake ()
 	{
-
+		images = Resources.LoadAll<Sprite>("Sprites/_Character/shadows");
 	}
 
 	void Update ()
 	{
 		// Set the position to the player's position with the offset.
 		if(root != null){
-			transform.position = new Vector3(root.transform.position.x + offset.x, root.transform.position.y + offset.y, 0);
+			transform.localPosition = new Vector3(root.transform.position.x + offset.x, root.transform.position.y + offset.y, offset.z);
 			transform.localScale = root.transform.localScale;
 		}
 	}

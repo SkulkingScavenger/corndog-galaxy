@@ -7,6 +7,7 @@ public class Control : MonoBehaviour{
 	public int currentPlayerId = 0;
 	public List<Area> areas = new List<Area>();
 	public GameObject mainCamera;
+	public GameObject mainCanvas;
 
 	void Awake ()
 	{
@@ -16,12 +17,25 @@ public class Control : MonoBehaviour{
 
 	void Start(){
 		players.Add(new Player());
-		getPlayer(0).init();
+		
+
 		mainCamera = Instantiate(Resources.Load<GameObject>("Prefabs/mainCamera"));
+		
+
+		mainCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Canvas"));
+		GameObject child = Instantiate(Resources.Load<GameObject>("Prefabs/UI/MainMenu"));
+		child.transform.SetParent(mainCanvas.transform,false);
 	}
 
 	void Update (){
 
+	}
+
+	public void StartGame(){
+		getPlayer(0).SpawnSkirriashi();
+		mainCamera.GetComponent<CameraObject>().root = getPlayer().creature.transform;
+		GameObject child = Instantiate(Resources.Load<GameObject>("Prefabs/UI/HudCombat"));
+		child.transform.SetParent(mainCanvas.transform,false);
 	}
 
 	public Player getPlayer(int id = -1){

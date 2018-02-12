@@ -10,7 +10,7 @@ public class Player{
 	private float startY = -0.5f;
 	public int score = 0;
 
-	public void init(){
+	public void SpawnSkirriashi(){
 		creatureObj = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/Characters/Skirriashi"));
 		creature = creatureObj.GetComponent<Creature>();
 		creature.player = this;
