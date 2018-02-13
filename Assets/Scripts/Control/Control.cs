@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -8,6 +9,7 @@ public class Control : MonoBehaviour{
 	public List<Area> areas = new List<Area>();
 	public GameObject mainCamera;
 	public GameObject mainCanvas;
+	public GameObject currentMenu;
 
 	void Awake ()
 	{
@@ -20,11 +22,11 @@ public class Control : MonoBehaviour{
 		
 
 		mainCamera = Instantiate(Resources.Load<GameObject>("Prefabs/mainCamera"));
-		
-
 		mainCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Canvas"));
-		GameObject child = Instantiate(Resources.Load<GameObject>("Prefabs/UI/MainMenu"));
-		child.transform.SetParent(mainCanvas.transform,false);
+		currentMenu = Instantiate(Resources.Load<GameObject>("Prefabs/UI/MainMenu"));
+		currentMenu.transform.Find("Panel").transform.Find("Button").GetComponent<Button>().onClick.AddListener(delegate { StartGame(); });
+		currentMenu.transform.SetParent(mainCanvas.transform,false);
+		//StartGame();
 	}
 
 	void Update (){
@@ -34,8 +36,9 @@ public class Control : MonoBehaviour{
 	public void StartGame(){
 		getPlayer(0).SpawnSkirriashi();
 		mainCamera.GetComponent<CameraObject>().root = getPlayer().creature.transform;
-		GameObject child = Instantiate(Resources.Load<GameObject>("Prefabs/UI/HudCombat"));
-		child.transform.SetParent(mainCanvas.transform,false);
+		Destroy(currentMenu);
+		currentMenu = Instantiate(Resources.Load<GameObject>("Prefabs/UI/HudCombat"));
+		currentMenu.transform.SetParent(mainCanvas.transform,false);
 	}
 
 	public Player getPlayer(int id = -1){
