@@ -23,8 +23,10 @@ GameObject:
   - component: {fileID: 95521581757002112}
   - component: {fileID: 50566137674318252}
   - component: {fileID: 61628801218117932}
+  - component: {fileID: 114377477871911524}
+  - component: {fileID: 114118087221738052}
   m_Layer: 0
-  m_Name: Skirriashi
+  m_Name: Creature
   m_TagString: Creature
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -135,6 +137,59 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114118087221738052
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1053507032415954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 2
+  m_SendInterval: 0.1
+  m_SyncRotationAxis: 3
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_VelocityThreshold: 0.0001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
+--- !u!114 &114377477871911524
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1053507032415954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 49
+    i1: 16
+    i2: 126
+    i3: 185
+    i4: 230
+    i5: 158
+    i6: 154
+    i7: 52
+    i8: 171
+    i9: 37
+    i10: 202
+    i11: 13
+    i12: 99
+    i13: 239
+    i14: 165
+    i15: 32
+  m_ServerOnly: 1
+  m_LocalPlayerAuthority: 0
 --- !u!114 &114905172115706488
 MonoBehaviour:
   m_ObjectHideFlags: 1

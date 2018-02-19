@@ -1,17 +1,18 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Creature : MonoBehaviour{
-	public bool facingRight = true;			// For determining which way the player is currently facing.
+public class Creature : NetworkBehaviour{
+	[SyncVar] public bool facingRight = true;			// For determining which way the player is currently facing.
 	private Animator anim;		// Reference to the player's animator component.
 	public Transform display;
 
 	public GameObject shadow;
 	public int shadowIndex = 1;
 	public GameObject healthBar;
-	public Player player;
-	public int stanceId = 0;
+	public CreatureControl control;
+	[SyncVar] public int stanceId = 0;
 	public List<CombatStance> stances = new List<CombatStance>();
 	public List<CreatureOrgan> organs = new List<CreatureOrgan>();
 	public List<CreatureLimb> limbs = new List<CreatureLimb>();
@@ -19,7 +20,7 @@ public class Creature : MonoBehaviour{
 	public float jumpForce = 0.03f;			// Amount of force added when the player jumps.
 	public float gravityForce = -0.0008f;			// Amount of force added when the player jumps.
 	private bool grounded = true;			// Whether or not the player is grounded.
-	public float z = 0f;
+	[SyncVar] public float z = 0f;
 	public float zspeed = 0f;
 				
 	public float accelerationX = 100f;		// rate of change per second in x velocity while moving
@@ -31,15 +32,20 @@ public class Creature : MonoBehaviour{
 	private float frictionForceX = 20f;		// rate of change per second in x velocity due to friction
 	private float frictionForceY = 10f;		// rate of change per second in y velocity due to friction
 
-	public bool isAttacking = false;
+	[SyncVar] public bool isAttacking = false;
 	
-	public float health = 100f;					// The player's health.
+	[SyncVar] public float health = 100f;					// The player's health.
 	public float repeatDamagePeriod = 2f;		// How frequently the player can be damaged.
+
+	public int playerId;
 
 
 
 	void Awake(){
 		display = transform.Find("Display");
+		if(isLocalPlayer){
+			//mainCamera.GetComponent<CameraObject>().root = getPlayer().creatureObj.transform;
+		}
 	}
 
 	public void Init(){
@@ -54,7 +60,7 @@ public class Creature : MonoBehaviour{
 		MouseMovement();
 		Jump();
 
-		if(player.interfaceMode == "combat"){
+		if(control.interfaceMode == "combat"){
 			CombatMain();
 		}
 		display.transform.position = new Vector3(transform.position.x + 0.1f, transform.position.y + 0.55f + z,0);
@@ -71,7 +77,7 @@ public class Creature : MonoBehaviour{
 			grounded = true;
 		}
 
-		if(Input.GetButtonDown("Jump") && grounded){
+		if(control.jump && grounded){
 			zspeed = jumpForce;
 			grounded = false;
 		}
@@ -187,10 +193,9 @@ public class Creature : MonoBehaviour{
 		float spd = 100f;
 		float speedInitialX = speedX;
 		float speedInitialY = speedY;
-		if(Input.GetAxis("MouseRight") != 0){
-			Vector3 mouseCoordinates = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+		if(control.moveCommand){
 			Vector2 start = new Vector2(transform.position.x,transform.position.y);
-			Vector2 end = new Vector2(mouseCoordinates.x,mouseCoordinates.y);
+			Vector2 end = new Vector2(control.commandX,control.commandY);
 			float d = Vector2.Distance(start,end);
 			
 
@@ -231,7 +236,7 @@ public class Creature : MonoBehaviour{
 	}
 
 	void CombatMain(){
-		if(Input.GetAxis("MouseLeft") != 0){
+		if(control.attackCommand){
 			CombatAction();
 		}
 	}
@@ -243,16 +248,13 @@ public class Creature : MonoBehaviour{
 				CombatStanceComponent component = stances[stanceId].componentList[i];
 				int actionIndex = 0;
 				if (component.limb.hitpoints > 0 && !component.limb.isParalyzed && component.limb.isReady){
-					if (Input.GetKey ("w")){
-						actionIndex = 1;
-					}else if(Input.GetKey ("a")){
-						actionIndex = 2;
-					}else if(Input.GetKey ("s")){
-						actionIndex = 3;
-					}else if(Input.GetKey ("d")){
-						actionIndex = 4;
+					for(int j=0;j<4;j++){
+						if(control.actionModifier[j]){
+							actionIndex = j+1;
+							break;
+						}
 					}
-					if(Input.GetAxis("Shift") != 0){
+					if(control.shift){
 						actionIndex += 5;
 					}
 					CombatAction act = component.actions[actionIndex];

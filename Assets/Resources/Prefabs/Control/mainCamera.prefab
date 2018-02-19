@@ -115,3 +115,5 @@ MonoBehaviour:
   yMargin: 1
   xSmooth: 8
   ySmooth: 8
+  speed: 0
+  root: {fileID: 0}
