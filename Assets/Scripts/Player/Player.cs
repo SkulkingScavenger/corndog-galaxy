@@ -6,24 +6,29 @@ using UnityEngine;
 public class Player : NetworkBehaviour{
 	public GameObject creatureObj;
 	public Control mainControl;
-	public Creature creature;
+	public SimpleCreature creature;
 	[SyncVar] public string interfaceMode = "combat";
 	[SyncVar] public float startX = 4f;
 	[SyncVar] public float startY = -0.5f;
 	[SyncVar] public int score = 0;
 	public CreatureControl inputControl;
+	[SyncVar] public bool initialized = false;
 
 	// Use this for initialization
 	void Awake () {
 		inputControl = GetComponent<CreatureControl>();
 		mainControl = GameObject.FindGameObjectWithTag("Control").GetComponent<Control>();
-		mainControl.players.Add(this);
+		mainControl.AddPlayer(this);
+		DontDestroyOnLoad(transform.gameObject);
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if (!isLocalPlayer){
 			return;
+		}
+		if(!initialized){
+			Init();
 		}
 
 		inputControl.moveCommand = Input.GetAxis("MouseRight") != 0;
@@ -32,6 +37,7 @@ public class Player : NetworkBehaviour{
 		inputControl.commandX = Camera.main.ScreenToWorldPoint(Input.mousePosition).x;
 		inputControl.commandY = Camera.main.ScreenToWorldPoint(Input.mousePosition).y;
 
+		inputControl.ManageArrays();
 		inputControl.actionModifier[0] = Input.GetKey ("w");
 		inputControl.actionModifier[1] = Input.GetKey ("a");
 		inputControl.actionModifier[2] = Input.GetKey ("s");
@@ -47,13 +53,19 @@ public class Player : NetworkBehaviour{
 		inputControl.jump = Input.GetButtonDown("Jump");
 	}
 
+	public void Init(){
+		CmdSpawn();
+		initialized = true;
+	}
 
-	public void SpawnCreature(){
+	[Command] public void CmdSpawn(){
+		Debug.Log("Huffi");
+		inputControl = GetComponent<CreatureControl>();
 		creatureObj = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/Characters/SimpleCreature"));
-		creature = creatureObj.GetComponent<Creature>();
+		creature = creatureObj.GetComponent<SimpleCreature>();
 		creature.control = inputControl;
+
 		creatureObj.transform.position = new Vector3(startX,startY,0); 
-		creature.Init();
 		NetworkServer.Spawn(creatureObj);
 	}
 

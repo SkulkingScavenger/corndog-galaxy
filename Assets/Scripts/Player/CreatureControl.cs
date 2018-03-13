@@ -1,3 +1,4 @@
+using UnityEngine;
 using UnityEngine.Networking;
 
 public class CreatureControl : NetworkBehaviour {
@@ -15,10 +16,12 @@ public class CreatureControl : NetworkBehaviour {
 	[SyncVar] public bool ctrl = false;
 	[SyncVar] public bool jump = false;
 
-	public void awake(){
-		for(int i=0;i<4;i++){
-			actionModifier.Add(false);
-			stanceModifier.Add(false);
+	public void ManageArrays(){
+		if(actionModifier.Count == 0){
+			for(int i=0;i<4;i++){
+				actionModifier.Add(false);
+				stanceModifier.Add(false);
+			}
 		}
 	}
 }

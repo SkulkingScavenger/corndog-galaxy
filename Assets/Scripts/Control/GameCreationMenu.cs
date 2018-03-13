@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
-using UnityEngine.SceneManagement;
+using UnityEngine.Networking;
 
 public class GameCreationMenu : MonoBehaviour {
 
@@ -32,12 +32,12 @@ public class GameCreationMenu : MonoBehaviour {
 		transform.Find("NavigationPanel").transform.Find("Button1").GetComponent<Button>().interactable = false;
 
 		transform.Find("ServerSettingsPanel").transform.localPosition = new Vector3(832f, -64f, 0);
-		transform.Find("GalaxySettingsPanel").transform.localPosition = new Vector3(192, -64f, 0);
+		transform.Find("GalaxySettingsPanel").transform.localPosition = new Vector3(-192, -64f, 0);
 
 	}
 
 	public void StartServer(){
-		SceneManager.LoadScene("Level");
+		GameObject.FindGameObjectWithTag("Control").GetComponent<Control>().StartGame();
 	}
 
 	public void ReturnToTitle(){
@@ -62,19 +62,5 @@ public class GameCreationMenu : MonoBehaviour {
 	public void SaveGalaxySettings(){
 		//TODO, write to file
 	}
-
-	public void ManualOverride(){
-		transform.Find("ServerSettingsPanel").transform.Find("PossessionRulesDropdown").GetComponent<Dropdown>().Select();
-		Debug.Log("araf");
-		//StartCoroutine( Wait());
-		
-	}
-
-	public IEnumerator Wait(){
-		yield return new WaitForSeconds(1f);
-		Debug.Log("snaraf");
-		transform.Find("ServerSettingsPanel").transform.Find("AfkBehaviourDropdown").GetComponent<Dropdown>().enabled = true;
-	}
-
 
 }

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 Organ Presets
 */
 
-public  class OrganPrototypes : MonoBehaviour {
+public class OrganPrototypes : MonoBehaviour {
 	public List<CreatureLimb> limbPrototypes = new List<CreatureLimb>();
 	
 	public static OrganPrototypes Instance { get; private set; }
@@ -17,7 +17,7 @@ public  class OrganPrototypes : MonoBehaviour {
 			Destroy(gameObject);
 		}
 		Instance = this;
-		DontDestroyOnLoad(gameObject);
+		DontDestroyOnLoad(transform.gameObject);
 
 
 		CreatureLimb organ;

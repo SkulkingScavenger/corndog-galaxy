@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -13,20 +14,25 @@ public class Control : NetworkBehaviour{
 	public NetworkManager networkControl;
 	public GameObject currentMenu;
 
-	void Awake ()
-	{
+	public static Control Instance { get; private set; }
+
+	void Awake (){
+		//ensure uniqueness
+		if(Instance != null && Instance != this){
+			Destroy(gameObject);
+		}
+		Instance = this;
+		DontDestroyOnLoad(transform.gameObject);
+
 		//createArea();
 		Application.targetFrameRate = 60;
-		networkControl = GameObject.FindGameObjectWithTag("NetworkControl").GetComponent<NetworkManager>();
-		mainCamera = Instantiate(Resources.Load<GameObject>("Prefabs/Control/mainCamera"));
-		mainCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Canvas"));
+		// networkControl = GameObject.FindGameObjectWithTag("NetworkControl").GetComponent<NetworkManager>();
+		// mainCamera = Instantiate(Resources.Load<GameObject>("Prefabs/Control/mainCamera"));
+		// mainCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Canvas"));
+
 	}
 
 	void Start(){
-		
-		currentMenu = Instantiate(Resources.Load<GameObject>("Prefabs/UI/MainMenu"));
-		currentMenu.transform.Find("Panel").transform.Find("Button").GetComponent<Button>().onClick.AddListener(delegate { StartGame(); });
-		currentMenu.transform.SetParent(mainCanvas.transform,false);
 
 	}
 
@@ -35,24 +41,44 @@ public class Control : NetworkBehaviour{
 	}
 
 	public void StartGame(){
-		Player p;
-		if(isServer){
-			for(int i=0;i<players.Count;i++){
-				p = getPlayer(i);
-				p.creatureObj = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/Characters/Creature"));
-				p.creature = p.creatureObj.GetComponent<Creature>();
-				p.creature.control = p.inputControl;
-				p.creatureObj.transform.position = new Vector3(p.startX,p.startY,0); 
-				p.creature.Init();
-				NetworkServer.Spawn(p.creatureObj);
-			}
-			
-			
+		StartCoroutine(StartGameAsync("Level"));
+	}
+
+	public void EnterGame(){
+		StartCoroutine(EnterGameAsync("Level"));
+	}
+
+	private IEnumerator StartGameAsync(string sceneName){
+		AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
+		while (!asyncLoad.isDone){
+			yield return null;
 		}
-		Destroy(currentMenu);
-		currentMenu = Instantiate(Resources.Load<GameObject>("Prefabs/UI/HudCombat"));
-		currentMenu.transform.SetParent(mainCanvas.transform,false);
-		
+		GameObject networkObj = Instantiate(Resources.Load<GameObject>("Prefabs/Control/networkManager"));
+		networkControl = networkObj.GetComponent<NetworkManager>();
+		networkControl.StartHost();
+		mainCamera = Instantiate(Resources.Load<GameObject>("Prefabs/Control/mainCamera"));
+		mainCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Canvas"));
+
+		// }
+		// Destroy(currentMenu);
+		// currentMenu = Instantiate(Resources.Load<GameObject>("Prefabs/UI/HudCombat"));
+		// currentMenu.transform.SetParent(mainCanvas.transform,false);
+	}
+
+	private IEnumerator EnterGameAsync(string sceneName){
+		AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
+		while (!asyncLoad.isDone){
+			yield return null;
+		}
+		GameObject networkObj = Instantiate(Resources.Load<GameObject>("Prefabs/Control/networkManager"));
+		networkControl = networkObj.GetComponent<NetworkManager>();
+		networkControl.StartClient();
+		mainCamera = Instantiate(Resources.Load<GameObject>("Prefabs/Control/mainCamera"));
+		mainCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Canvas"));
+	}
+
+	public void AddPlayer(Player p){
+		players.Add(p);
 	}
 
 	public Player getPlayer(int id = -1){

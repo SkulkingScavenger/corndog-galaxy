@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 114928879196921048}
   m_Layer: 0
   m_Name: Control
-  m_TagString: Untagged
+  m_TagString: Control
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -51,8 +51,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe3083ef49a214c4386a2ded49c1092c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  players: []
   currentPlayerId: 0
   areas: []
   mainCamera: {fileID: 0}
   mainCanvas: {fileID: 0}
+  networkControl: {fileID: 0}
   currentMenu: {fileID: 0}
