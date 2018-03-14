@@ -78,10 +78,11 @@ MonoBehaviour:
   mainControl: {fileID: 0}
   creature: {fileID: 0}
   interfaceMode: combat
-  startX: 4
-  startY: -0.5
+  startX: 0
+  startY: 0
   score: 0
   inputControl: {fileID: 0}
+  initialized: 0
 --- !u!114 &114450584003344114
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -98,8 +99,6 @@ MonoBehaviour:
   attackCommand: 0
   commandX: 0
   commandY: 0
-  actionModifier: 00000000
-  stanceModifier: 00000000
   shift: 0
   ctrl: 0
   jump: 0

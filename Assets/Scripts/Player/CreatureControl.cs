@@ -2,26 +2,56 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 public class CreatureControl : NetworkBehaviour {
-	[SyncVar] public string interfaceMode = "combat";
-	[SyncVar] public bool moveCommand = false;
-	[SyncVar] public bool attackCommand = false;
+	public string interfaceMode = "combat";
+	public bool moveCommand = false;
+	public bool attackCommand = false;
 
-	[SyncVar] public float commandX = 0;
-	[SyncVar] public float commandY = 0;
+	public float commandX = 0;
+	public float commandY = 0;
 
-	public SyncListBool actionModifier = new SyncListBool();
-	public SyncListBool stanceModifier = new SyncListBool();
+	public bool[] actionModifier = {false,false,false,false};
+	public bool[] stanceModifier = {false,false,false,false};
 
-	[SyncVar] public bool shift = false;
-	[SyncVar] public bool ctrl = false;
-	[SyncVar] public bool jump = false;
+	public bool shift = false;
+	public bool ctrl = false;
+	public bool jump = false;
 
-	public void ManageArrays(){
-		if(actionModifier.Count == 0){
-			for(int i=0;i<4;i++){
-				actionModifier.Add(false);
-				stanceModifier.Add(false);
-			}
+	public void Sync(){
+		if(isServer){
+			RpcSync(interfaceMode,moveCommand,attackCommand,commandX,commandY,actionModifier,stanceModifier,shift,ctrl,jump);
+		}else{
+			CmdSync(interfaceMode,moveCommand,attackCommand,commandX,commandY,actionModifier,stanceModifier,shift,ctrl,jump);
 		}
 	}
+
+	[Command] public void CmdSync(string im, bool mc, bool ac, float cx, float cy, bool[] am, bool[] sm, bool shi, bool ctr, bool jum){
+		interfaceMode = im;
+		moveCommand = mc;
+		attackCommand = ac;
+
+		commandX = cx;
+		commandY = cy;
+
+		actionModifier = am;
+		stanceModifier = sm;
+
+		shift = shi;
+		ctrl = ctr;
+		jump = jum;
+	}
+	[ClientRpc] public void RpcSync(string im, bool mc, bool ac, float cx, float cy, bool[] am, bool[] sm, bool shi, bool ctr, bool jum){
+		interfaceMode = im;
+		moveCommand = mc;
+		attackCommand = ac;
+
+		commandX = cx;
+		commandY = cy;
+
+		actionModifier = am;
+		stanceModifier = sm;
+
+		shift = shi;
+		ctrl = ctr;
+		jump = jum;
+	}	
 }

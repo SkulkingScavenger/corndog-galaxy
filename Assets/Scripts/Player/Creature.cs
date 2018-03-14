@@ -4,6 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Creature : NetworkBehaviour{
+	public CreatureControl control = null;
+	[SyncVar] public uint controlID = 0;
 	[SyncVar] public bool facingRight = true;			// For determining which way the player is currently facing.
 	private Animator anim;		// Reference to the player's animator component.
 	public Transform display;
@@ -11,7 +13,6 @@ public class Creature : NetworkBehaviour{
 	public GameObject shadow;
 	public int shadowIndex = 1;
 	public GameObject healthBar;
-	public CreatureControl control;
 	[SyncVar] public int stanceId = 0;
 	public List<CombatStance> stances = new List<CombatStance>();
 	public List<CreatureOrgan> organs = new List<CreatureOrgan>();
@@ -46,6 +47,7 @@ public class Creature : NetworkBehaviour{
 		if(isLocalPlayer){
 			//mainCamera.GetComponent<CameraObject>().root = getPlayer().creatureObj.transform;
 		}
+		Init();
 	}
 
 	public void Init(){
@@ -57,6 +59,10 @@ public class Creature : NetworkBehaviour{
 
 
 	void Update(){
+		if(control == null){
+			control = ClientScene.FindLocalObject(new NetworkInstanceId(controlID)).GetComponent<CreatureControl>();
+			return;
+		}
 		MouseMovement();
 		Jump();
 

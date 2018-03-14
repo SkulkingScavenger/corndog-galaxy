@@ -5,11 +5,12 @@ using System.Collections.Generic;
 
 public class SimpleCreature : NetworkBehaviour{
 	public CreatureControl control = null;
-
+	[SyncVar] public uint controlID = 0;
+	
+	[SyncVar] public float speedX = 0f;				// The current velocity in the x axis.
+	[SyncVar] public float speedY = 0f;				// The current velocity in the y axis.
 	public float accelerationX = 100f;		// rate of change per second in x velocity while moving
 	public float accelerationY = 50f;		// rate of change per second in Y velocity while moving
-	public float speedX = 0f;				// The current velocity in the x axis.
-	public float speedY = 0f;				// The current velocity in the y axis.
 	public float maxSpeedX = 3f;			// The fastest the player can travel in the x axis.
 	public float maxSpeedY = 1.5f;			// The fastest the player can travel in the x axis.
 	private float frictionForceX = 20f;		// rate of change per second in x velocity due to friction
@@ -17,6 +18,7 @@ public class SimpleCreature : NetworkBehaviour{
 
 	public void Update(){
 		if(control == null){
+			control = ClientScene.FindLocalObject(new NetworkInstanceId(controlID)).GetComponent<CreatureControl>();
 			return;
 		}
 		Movement();

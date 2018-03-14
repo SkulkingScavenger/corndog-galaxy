@@ -9,7 +9,6 @@ public class Control : NetworkBehaviour{
 	public List<Player> players = new List<Player>();
 	public int currentPlayerId = 0;
 	public List<Area> areas = new List<Area>();
-	public GameObject mainCamera;
 	public GameObject mainCanvas;
 	public NetworkManager networkControl;
 	public GameObject currentMenu;
@@ -26,10 +25,6 @@ public class Control : NetworkBehaviour{
 
 		//createArea();
 		Application.targetFrameRate = 60;
-		// networkControl = GameObject.FindGameObjectWithTag("NetworkControl").GetComponent<NetworkManager>();
-		// mainCamera = Instantiate(Resources.Load<GameObject>("Prefabs/Control/mainCamera"));
-		// mainCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Canvas"));
-
 	}
 
 	void Start(){
@@ -41,40 +36,16 @@ public class Control : NetworkBehaviour{
 	}
 
 	public void StartGame(){
-		StartCoroutine(StartGameAsync("Level"));
+		GameObject networkObj = GameObject.FindGameObjectWithTag("NetworkControl");
+		networkControl = networkObj.GetComponent<NetworkControl>();
+		networkControl.StartHost();
+
 	}
 
 	public void EnterGame(){
-		StartCoroutine(EnterGameAsync("Level"));
-	}
-
-	private IEnumerator StartGameAsync(string sceneName){
-		AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
-		while (!asyncLoad.isDone){
-			yield return null;
-		}
-		GameObject networkObj = Instantiate(Resources.Load<GameObject>("Prefabs/Control/networkManager"));
-		networkControl = networkObj.GetComponent<NetworkManager>();
-		networkControl.StartHost();
-		mainCamera = Instantiate(Resources.Load<GameObject>("Prefabs/Control/mainCamera"));
-		mainCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Canvas"));
-
-		// }
-		// Destroy(currentMenu);
-		// currentMenu = Instantiate(Resources.Load<GameObject>("Prefabs/UI/HudCombat"));
-		// currentMenu.transform.SetParent(mainCanvas.transform,false);
-	}
-
-	private IEnumerator EnterGameAsync(string sceneName){
-		AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
-		while (!asyncLoad.isDone){
-			yield return null;
-		}
-		GameObject networkObj = Instantiate(Resources.Load<GameObject>("Prefabs/Control/networkManager"));
-		networkControl = networkObj.GetComponent<NetworkManager>();
+		GameObject networkObj = GameObject.FindGameObjectWithTag("NetworkControl");
+		networkControl = networkObj.GetComponent<NetworkControl>();
 		networkControl.StartClient();
-		mainCamera = Instantiate(Resources.Load<GameObject>("Prefabs/Control/mainCamera"));
-		mainCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Canvas"));
 	}
 
 	public void AddPlayer(Player p){

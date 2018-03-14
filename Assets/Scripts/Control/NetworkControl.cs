@@ -9,6 +9,7 @@ public class NetworkControl : NetworkManager {
 	// Use this for initialization
 	void Awake () {
 		mainControl = GameObject.FindGameObjectWithTag("Control").GetComponent<Control>();
+		DontDestroyOnLoad(transform.gameObject);
 	}
 	
 	// Update is called once per frame
@@ -16,11 +17,13 @@ public class NetworkControl : NetworkManager {
 		
 	}
 
-	// public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
-	// {
-	// 	Debug.Log("whoop");
-	// 	GameObject player = (GameObject)Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
-	// 	NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
-	// 	player.GetComponent<Player>().Init();
-	// }
+
+
+	public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId){
+		GameObject player = (GameObject)Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+		NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
+		player.GetComponent<Player>().Init();
+	}
+
+	
 }
