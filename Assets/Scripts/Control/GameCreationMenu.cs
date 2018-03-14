@@ -3,9 +3,16 @@ using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.Networking;
 
-public class GameCreationMenu : MonoBehaviour {
+public class GameCreationMenu : NetworkBehaviour {
+
+	InputField PortInput;
+	Toggle DedicatedServerToggle;
 
 	public void Awake(){
+
+		PortInput = transform.Find("ServerSettingsPanel").transform.Find("PortInput").GetComponent<InputField>();
+		DedicatedServerToggle = transform.Find("ServerSettingsPanel").transform.Find("DedicatedServerToggle").GetComponent<Toggle>();
+
 		transform.Find("NavigationPanel").transform.Find("Button0").GetComponent<Button>().onClick.AddListener(delegate { OpenServerSettingsPanel(); });
 		transform.Find("NavigationPanel").transform.Find("Button1").GetComponent<Button>().onClick.AddListener(delegate { OpenGalaxySettingsPanel(); });
 		transform.Find("NavigationPanel").transform.Find("Button2").GetComponent<Button>().onClick.AddListener(delegate { StartServer(); });
@@ -37,14 +44,19 @@ public class GameCreationMenu : MonoBehaviour {
 	}
 
 	public void StartServer(){
-		GameObject.FindGameObjectWithTag("Control").GetComponent<Control>().StartGame();
+		Control ctrl = GameObject.FindGameObjectWithTag("Control").GetComponent<Control>();
+		NetworkControl netCtrl = GameObject.FindGameObjectWithTag("NetworkControl").GetComponent<NetworkControl>();
+		netCtrl.networkAddress = Network.player.ipAddress;
+		netCtrl.networkPort = int.Parse(PortInput.text);
+		ctrl.isDedicatedServer = DedicatedServerToggle.isOn;
+		ctrl.StartGame();
 	}
 
 	public void ReturnToTitle(){
 		Transform mainCanvas = transform.parent;
 		GameObject currentMenu = Instantiate(Resources.Load<GameObject>("Prefabs/UI/TitleMenu"));
 		currentMenu.transform.SetParent(mainCanvas,false);
-		Destroy(this);
+		Destroy(transform.gameObject);
 	}
 
 	public void LoadServerSettings(){

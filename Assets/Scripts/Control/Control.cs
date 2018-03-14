@@ -12,6 +12,7 @@ public class Control : NetworkBehaviour{
 	public GameObject mainCanvas;
 	public NetworkManager networkControl;
 	public GameObject currentMenu;
+	public bool isDedicatedServer = false;
 
 	public static Control Instance { get; private set; }
 

@@ -98,74 +98,22 @@ public class Creature : NetworkBehaviour{
 
 
 		//Right Major Tentacle
-		organ = new CreatureLimb();
-		OrganPrototypes.Instance.LoadLimb(organ,0);
+		organ = OrganPrototypes.Instance.LoadLimb(0);
 		organ.hitpoints = 4;
 		OrganPrototypes.Instance.AttachLimb(this, organ, new Vector3(0.3593f,0.8665f,-0.001f));
 
-		appendage = new CreatureAppendage();
-		appendage.name = "Right Major Tentacle Claw";
-		appendage.root = this;
-		appendage.offset = organ.appendageOffsets[0];
+		appendage = OrganPrototypes.Instance.LoadAppendage(0);
 		appendage.hitpoints = 2;
-
-		//create combat action for the limb
-		act = new CombatAction();
-		act.name = "Claw Snap";
-		act.range = 2f;
-		act.damage = 4;
-		act.windupDuration = 0.25f;
-		act.attackDuration = 0.25f;
-		act.cooldownDuration = 0.25f;
-		act.idleAnimation = "major_tentacle_claw_r_idle";
-		act.windupAnimation = "major_tentacle_claw_r_windup";
-		act.attackAnimation = "major_tentacle_claw_r_attack";
-		appendage.combatActions.Add(act);
-	
-		//create physical manifestation
-		limbObject = Instantiate(Resources.Load<GameObject>("Prefabs/Characters/LimbObject"));
-		limbObject.transform.parent = organ.obj.transform;
-		limbObject.GetComponent<SpriteRenderer>().transform.position = new Vector3(display.transform.position.x + organ.offset.x,display.transform.position.y + organ.offset.y, organ.offset.z);
-		limbObject.GetComponent<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animation/Controllers/major_tentacle_claw_r");
-		appendage.obj = limbObject;
-
-		organ.appendage = appendage;
-
+		OrganPrototypes.Instance.AttachAppendage(organ, appendage);
 
 		//Left Major Tentacle
-		organ = new CreatureLimb();
-		OrganPrototypes.Instance.LoadLimb(organ,1);
+		organ = OrganPrototypes.Instance.LoadLimb(1);
 		organ.hitpoints = 4;
 		OrganPrototypes.Instance.AttachLimb(this, organ, new Vector3(0.08609991f,0.9372001f,0.001f));
 
-		appendage = new CreatureAppendage();
-		appendage.name = "Left Major Tentacle Claw";
-		appendage.root = this;
-		appendage.offset = organ.appendageOffsets[0];
+		appendage = OrganPrototypes.Instance.LoadAppendage(1);
 		appendage.hitpoints = 2;
-
-		//create combat action for the limb
-		act = new CombatAction();
-		act.name = "Claw Snap";
-		act.range = 2f;
-		act.damage = 4;
-		act.windupDuration = 0.25f;
-		act.attackDuration = 0.25f;
-		act.cooldownDuration = 0.25f;
-		act.idleAnimation = "major_tentacle_claw_l_idle";
-		act.windupAnimation = "major_tentacle_claw_l_windup";
-		act.attackAnimation = "major_tentacle_claw_l_attack";
-		appendage.combatActions.Add(act);
-	
-		//create physical manifestation
-		limbObject = Instantiate(Resources.Load<GameObject>("Prefabs/Characters/LimbObject"));
-		limbObject.transform.parent = organ.obj.transform;
-		limbObject.GetComponent<SpriteRenderer>().transform.position = new Vector3(display.transform.position.x + organ.offset.x,display.transform.position.y + organ.offset.y, organ.offset.z);
-		limbObject.GetComponent<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animation/Controllers/major_tentacle_claw_l");
-		appendage.obj = limbObject;
-
-		organ.appendage = appendage;
-
+		OrganPrototypes.Instance.AttachAppendage(organ, appendage);
 	}
 
 	void SetShadow(){
