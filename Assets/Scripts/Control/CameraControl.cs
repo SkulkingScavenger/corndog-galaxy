@@ -1,43 +1,31 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
+using UnityEngine;
 
-public class CameraObject : MonoBehaviour 
-{
+public class CameraControl : MonoBehaviour {
 	public float xMargin = 1f;		// Distance in the x axis the player can move before the camera follows.
 	public float yMargin = 1f;		// Distance in the y axis the player can move before the camera follows.
 	public float xSmooth = 80f;		// How smoothly the camera catches up with it's target movement in the x axis.
 	public float ySmooth = 80f;		// How smoothly the camera catches up with it's target movement in the y axis.
 
 	public float speed;
-    private float avg;
-    private float lastframe = 0f;
-    private float currentframe = 0f;
-    private float myDelta = 0f;
+	private float avg;
+	private float lastframe = 0f;
+	private float currentframe = 0f;
+	private float myDelta = 0f;
 
 	public Transform root = null;		// Reference to the player's transform.
 
 
-	void Awake ()
-	{
+	void Awake (){
 
 	}
 
-
-	bool CheckXMargin()
-	{
-		// Returns true if the distance between the camera and the player in the x axis is greater than the x margin.
-		return Mathf.Abs(transform.position.x - root.position.x) > xMargin;
-	}
-
-
-
-	void Update ()
-	{
+	void Update (){
 		//calc my delta time
-        currentframe = Time.realtimeSinceStartup;
-        myDelta = currentframe - lastframe;
-        lastframe = currentframe; 
-		
+		currentframe = Time.realtimeSinceStartup;
+		myDelta = currentframe - lastframe;
+		lastframe = currentframe; 
 	}
 
 	void LateUpdate(){
@@ -49,10 +37,13 @@ public class CameraObject : MonoBehaviour
 			transform.position = new Vector3(0, 0, transform.position.z);
 		}
 	}
+
+	private bool CheckXMargin(){
+		// Returns true if the distance between the camera and the player in the x axis is greater than the x margin.
+		return Mathf.Abs(transform.position.x - root.position.x) > xMargin;
+	}
 	
-	
-	void TrackPlayer ()
-	{
+	private void TrackPlayer (){
 		// By default the target x and y coordinates of the camera are it's current x and y coordinates.
 		float targetX = transform.position.x;
 		float targetY = 0;

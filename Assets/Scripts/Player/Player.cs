@@ -26,7 +26,7 @@ public class Player : NetworkBehaviour{
 	public override void OnStartLocalPlayer(){
 		mainCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Canvas"));
 		mainCamera = Instantiate(Resources.Load<GameObject>("Prefabs/Control/mainCamera"));
-		mainCamera.GetComponent<CameraObject>().root = transform;
+		mainCamera.GetComponent<CameraControl>().root = transform;
 	}
 	
 	// Update is called once per frame
