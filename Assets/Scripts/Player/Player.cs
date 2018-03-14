@@ -19,7 +19,7 @@ public class Player : NetworkBehaviour{
 	void Awake() {
 		inputControl = GetComponent<CreatureControl>();
 		mainControl = GameObject.FindGameObjectWithTag("Control").GetComponent<Control>();
-		mainControl.AddPlayer(this);
+		mainControl.players.Add(this);
 		DontDestroyOnLoad(transform.gameObject);
 	}
 
