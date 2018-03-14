@@ -1,21 +1,70 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
 using System.Collections.Generic;
+using UnityEngine;
 
-public class Player{
+public class Player : NetworkBehaviour{
 	public GameObject creatureObj;
-	public Creature creature;
-	public string interfaceMode = "combat";
-	private float startX = 4f;
-	private float startY = -0.5f;
-	public int score = 0;
+	public Control mainControl;
+	public GameObject mainCanvas;
+	public GameObject mainCamera;
+	public Creature creature = null;
+	[SyncVar] public string interfaceMode = "combat";
+	[SyncVar] public float startX = 4f;
+	[SyncVar] public float startY = -0.5f;
+	[SyncVar] public int score = 0;
+	public CreatureControl inputControl;
 
-	public void SpawnSkirriashi(){
-		creatureObj = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/Characters/Skirriashi"));
+	// Use this for initialization
+	void Awake() {
+		inputControl = GetComponent<CreatureControl>();
+		mainControl = GameObject.FindGameObjectWithTag("Control").GetComponent<Control>();
+		mainControl.AddPlayer(this);
+		DontDestroyOnLoad(transform.gameObject);
+	}
+
+	public override void OnStartLocalPlayer(){
+		mainCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Canvas"));
+		mainCamera = Instantiate(Resources.Load<GameObject>("Prefabs/Control/mainCamera"));
+		mainCamera.GetComponent<CameraObject>().root = transform;
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		if (!isLocalPlayer){
+			return;
+		}
+		if(creature!= null){
+			transform.position = creature.transform.position;
+		}
+		inputControl.moveCommand = Input.GetAxis("MouseRight") != 0;
+		inputControl.attackCommand = Input.GetAxis("MouseLeft") != 0;
+
+		inputControl.commandX = mainCamera.GetComponent<Camera>().ScreenToWorldPoint(Input.mousePosition).x;
+		inputControl.commandY = mainCamera.GetComponent<Camera>().ScreenToWorldPoint(Input.mousePosition).y;
+
+		inputControl.actionModifier[0] = Input.GetKey ("w");
+		inputControl.actionModifier[1] = Input.GetKey ("a");
+		inputControl.actionModifier[2] = Input.GetKey ("s");
+		inputControl.actionModifier[3] = Input.GetKey ("d");
+
+		inputControl.stanceModifier[0] = Input.GetKey ("1");
+		inputControl.stanceModifier[1] = Input.GetKey ("2");
+		inputControl.stanceModifier[2] = Input.GetKey ("3");
+		inputControl.stanceModifier[3] = Input.GetKey ("4");
+
+		inputControl.shift = Input.GetAxis("Shift") != 0;
+		inputControl.ctrl = false;
+		inputControl.jump = Input.GetButtonDown("Jump");
+		inputControl.Sync();
+	}
+
+	public void Init(){
+		creatureObj = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/Characters/Creature"), Vector3.zero, Quaternion.identity);
 		creature = creatureObj.GetComponent<Creature>();
-		creature.player = this;
+		creature.controlID = GetComponent<NetworkIdentity>().netId.Value;
 		creatureObj.transform.position = new Vector3(startX,startY,0); 
-		creature.Init();
+		NetworkServer.Spawn(creatureObj);
 	}
 
 }

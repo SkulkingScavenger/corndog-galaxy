@@ -1,32 +1,35 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Control : MonoBehaviour{
+public class Control : NetworkBehaviour{
 	public List<Player> players = new List<Player>();
 	public int currentPlayerId = 0;
 	public List<Area> areas = new List<Area>();
-	public GameObject mainCamera;
 	public GameObject mainCanvas;
+	public NetworkManager networkControl;
 	public GameObject currentMenu;
+	public bool isDedicatedServer = false;
 
-	void Awake ()
-	{
+	public static Control Instance { get; private set; }
+
+	void Awake (){
+		//ensure uniqueness
+		if(Instance != null && Instance != this){
+			Destroy(gameObject);
+		}
+		Instance = this;
+		DontDestroyOnLoad(transform.gameObject);
+
 		//createArea();
 		Application.targetFrameRate = 60;
 	}
 
 	void Start(){
-		players.Add(new Player());
-		
 
-		mainCamera = Instantiate(Resources.Load<GameObject>("Prefabs/mainCamera"));
-		mainCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Canvas"));
-		currentMenu = Instantiate(Resources.Load<GameObject>("Prefabs/UI/MainMenu"));
-		currentMenu.transform.Find("Panel").transform.Find("Button").GetComponent<Button>().onClick.AddListener(delegate { StartGame(); });
-		currentMenu.transform.SetParent(mainCanvas.transform,false);
-		//StartGame();
 	}
 
 	void Update (){
@@ -34,11 +37,20 @@ public class Control : MonoBehaviour{
 	}
 
 	public void StartGame(){
-		getPlayer(0).SpawnSkirriashi();
-		mainCamera.GetComponent<CameraObject>().root = getPlayer().creature.transform;
-		Destroy(currentMenu);
-		currentMenu = Instantiate(Resources.Load<GameObject>("Prefabs/UI/HudCombat"));
-		currentMenu.transform.SetParent(mainCanvas.transform,false);
+		GameObject networkObj = GameObject.FindGameObjectWithTag("NetworkControl");
+		networkControl = networkObj.GetComponent<NetworkControl>();
+		networkControl.StartHost();
+
+	}
+
+	public void EnterGame(){
+		GameObject networkObj = GameObject.FindGameObjectWithTag("NetworkControl");
+		networkControl = networkObj.GetComponent<NetworkControl>();
+		networkControl.StartClient();
+	}
+
+	public void AddPlayer(Player p){
+		players.Add(p);
 	}
 
 	public Player getPlayer(int id = -1){

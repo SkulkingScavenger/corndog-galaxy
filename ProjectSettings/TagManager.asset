@@ -10,6 +10,8 @@ TagManager:
   - HealthBar
   - Control
   - Creature
+  - NetworkControl
+  - ResourceControl
   layers:
   - Default
   - TransparentFX
@@ -44,9 +46,6 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Default
-    uniqueID: 0
-    locked: 0
   - name: Parallax
     uniqueID: 1160247933
     locked: 0
@@ -63,5 +62,5 @@ TagManager:
     uniqueID: 149272721
     locked: 0
   - name: Default
-    uniqueID: 3363470833
+    uniqueID: 0
     locked: 0
