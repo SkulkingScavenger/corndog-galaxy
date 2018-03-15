@@ -20,9 +20,7 @@ public class OrganPrototypes : MonoBehaviour {
 		Instance = this;
 		DontDestroyOnLoad(transform.gameObject);
 
-		RegisterLimbs();
-		RegisterAppendages();
-
+		RegisterOrgans();
 	}
 
 	public CreatureLimb LoadLimb(int index){
@@ -105,107 +103,127 @@ public class OrganPrototypes : MonoBehaviour {
 		organ.appendage = appendage;
 	}
 
-	private void RegisterLimbs(){
-		CreatureLimb organ;
-		CombatAction act;
-
-		//Skirriashi Major Tentacle R
-		organ = new CreatureLimb();
-		organ.name = "Right Major Tentacle";
-		organ.limbType = "tentacle";
-		organ.animationControllerName = "Animation/Controllers/major_tentacle_r";
-		organ.appendageOffsets.Add(new Vector3(0.515625f,-0.0390625f,0f));
-		organ.appendageOffsets.Add(new Vector3(0.234375f,0.1484375f,0f));
-		organ.appendageOffsets.Add(new Vector3(0.125f,-0.1171875f,0f));
-		organ.appendageOffsets.Add(new Vector3(0.5703125f,-0.328125f,0f));
-
-
-		act = new CombatAction();
-		act.name = "tentacle lash";
-		act.range = 2f;
-		act.damage = 4;
-		act.windupDuration = 0.25f;
-		act.attackDuration = 0.25f;
-		act.cooldownDuration = 0.25f;
-		act.idleAnimation = "major_tentacle_r_idle";
-		act.windupAnimation = "major_tentacle_r_windup";
-		act.attackAnimation = "major_tentacle_r_attack";
-		act.backswingAnimation = "";
-		organ.combatActions.Add(act);
-
-		limbPrototypes.Add(organ);
-
-		//Skirriashi Major Tentacle L
-		organ = new CreatureLimb();
-		organ.name = "Left Major Tentacle";
-		organ.limbType = "tentacle";
-		organ.animationControllerName = "Animation/Controllers/major_tentacle_l";
-		organ.appendageOffsets.Add(new Vector3(0.5703125f,-0.0078125f,0f));
-		organ.appendageOffsets.Add(new Vector3(0.390625f,0.15625f,0f));
-		organ.appendageOffsets.Add(new Vector3(0.25f,-0.078125f,0f));
-		organ.appendageOffsets.Add(new Vector3(0.5859375f,-0.3984375f,0f));
-
-
-		act = new CombatAction();
-		act.name = "tentacle lash";
-		act.range = 2f;
-		act.damage = 4;
-		act.windupDuration = 0.25f;
-		act.attackDuration = 0.25f;
-		act.cooldownDuration = 0.25f;
-		act.idleAnimation = "major_tentacle_l_idle";
-		act.windupAnimation = "major_tentacle_l_windup";
-		act.attackAnimation = "major_tentacle_l_attack";
-		act.backswingAnimation = "";
-		organ.combatActions.Add(act);
-
-		limbPrototypes.Add(organ);
+	private void RegisterOrgans(){
+		TextAsset file = Resources.Load("Text/OrganList") as TextAsset;
+		string text = file.text;
+		string node;
+		int i=0;
+		while(i < text.Length){
+			node = getNextNode(text, ref i);
+			switch(node){
+			case "OrganLimbNode":
+				readOrganLimbNode(text,ref i);
+				break;
+			case "OrganAppendageNode":
+				readOrganAppendageNode(text,ref i);
+				break;
+			default:
+				break;
+			}
+		}
 	}
 
-	private void RegisterAppendages(){
-		CreatureAppendage appendage;
-		CombatAction act;
-
-		//Right Major Tentacle Claw
-		appendage = new CreatureAppendage();
-
-		appendage.name = "Right Major Tentacle Claw";
-		appendage.animationControllerName = "Animation/Controllers/major_tentacle_claw_r";
-
-		act = new CombatAction();
-		act.name = "Claw Snap";
-		act.range = 2f;
-		act.damage = 4;
-		act.windupDuration = 0.25f;
-		act.attackDuration = 0.25f;
-		act.cooldownDuration = 0.25f;
-		act.idleAnimation = "major_tentacle_claw_r_idle";
-		act.windupAnimation = "major_tentacle_claw_r_windup";
-		act.attackAnimation = "major_tentacle_claw_r_attack";
-		appendage.combatActions.Add(act);
-
-		appendagePrototypes.Add(appendage);
-
-		//Left Major Tentacle Claw
-		appendage = new CreatureAppendage();
-		
-		appendage.name = "Left Major Tentacle Claw";
-		appendage.animationControllerName = "Animation/Controllers/major_tentacle_claw_l";
-
-		act = new CombatAction();
-		act.name = "Claw Snap";
-		act.range = 2f;
-		act.damage = 4;
-		act.windupDuration = 0.25f;
-		act.attackDuration = 0.25f;
-		act.cooldownDuration = 0.25f;
-		act.idleAnimation = "major_tentacle_claw_l_idle";
-		act.windupAnimation = "major_tentacle_claw_l_windup";
-		act.attackAnimation = "major_tentacle_claw_l_attack";
-		appendage.combatActions.Add(act);
-
-		appendagePrototypes.Add(appendage);
-
+	private bool isWhiteSpace(char c){
+		return c == ' ' || c == '	' || c == '\n' || c == '\r';
 	}
 
+	private string getNextNode(string text,ref int i){
+		string buffer = "";
+		while(text[i] != '<'){
+			i++;
+		}
+		i++;
+		while(!isWhiteSpace(text[i]) && text[i]!='>'){
+			buffer = buffer + text[i];
+			i++;
+		}
+		i++;
+		return buffer;
+	}
+
+	private string getNextAttribute(string text,ref int i){
+		//string key = "";
+		string attributeValue = "";
+		while(text[i]!='"' && text[i]!='/'){
+			i++;
+		}
+		if(text[i] == '"'){
+			i++;
+			while(text[i]!='"'){
+				attributeValue = attributeValue + text[i];
+				i++;
+			}
+			i++;
+		}else{
+			i+=2;
+		}
+		return attributeValue;
+	}
+
+	private void readOrganLimbNode(string text,ref int i){
+		string node;
+		CreatureLimb limb = new CreatureLimb();
+		//Get Tags
+		limb.name = getNextAttribute(text,ref i);
+		limb.limbType = getNextAttribute(text,ref i);
+		limb.animationControllerName = getNextAttribute(text,ref i);
+		//Get Subnodes
+		node = getNextNode(text, ref i);
+		while(node != "/OrganLimbNode"){
+			switch(node){
+			case "OffsetNode":
+				limb.appendageOffsets.Add(readOffsetNode(text, ref i));
+				break;
+			case "ActionNode":
+				limb.combatActions.Add(readActionNode(text, ref i));
+				break;
+			}
+			node = getNextNode(text, ref i);
+		}
+		limbPrototypes.Add(limb);
+	}
+
+	private void readOrganAppendageNode(string text,ref int i){
+		string node;
+		CreatureAppendage appendage = new CreatureAppendage();
+		//Get Tags
+		appendage.name = getNextAttribute(text,ref i);
+		appendage.animationControllerName = getNextAttribute(text,ref i);
+		//Get Subnodes
+		node = getNextNode(text, ref i);
+		while(node != "/OrganAppendageNode"){
+			switch(node){
+			case "ActionNode":
+				appendage.combatActions.Add(readActionNode(text, ref i));
+				break;
+			}
+			node = getNextNode(text, ref i);
+		}
+		appendagePrototypes.Add(appendage);
+	}
+
+	private Vector3 readOffsetNode(string text, ref int i){
+		float x;
+		float y; 
+		float z;
+		x = float.Parse(getNextAttribute(text,ref i));
+		y = float.Parse(getNextAttribute(text,ref i));
+		z = float.Parse(getNextAttribute(text,ref i));
+		return new Vector3(x,y,z);
+	}
+
+	private CombatAction readActionNode(string text, ref int i){
+		CombatAction act = new CombatAction();
+		act.name = getNextAttribute(text,ref i);
+		act.range = float.Parse(getNextAttribute(text,ref i));
+		act.damage = int.Parse(getNextAttribute(text,ref i));
+		act.windupDuration = float.Parse(getNextAttribute(text,ref i));
+		act.attackDuration = float.Parse(getNextAttribute(text,ref i));
+		act.cooldownDuration = float.Parse(getNextAttribute(text,ref i));
+		act.idleAnimation = getNextAttribute(text,ref i);
+		act.windupAnimation = getNextAttribute(text,ref i);
+		act.attackAnimation = getNextAttribute(text,ref i);
+		act.backswingAnimation = getNextAttribute(text,ref i);
+		return act;
+	}
 }
