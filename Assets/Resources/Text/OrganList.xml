@@ -1,0 +1,112 @@
+<OrganLimbNode
+	name = "Right Major Tentacle"
+	limbType = "tentacle"
+	animationControllerName = "Animation/Controllers/major_tentacle_r"
+>
+	<OffsetNode
+		x="0.515625"
+		y="-0.0390625"
+		z="0"
+	/>
+	<OffsetNode
+		x="0.234375"
+		y="0.1484375"
+		z="0"
+	/>
+	<OffsetNode
+		x="0.125"
+		y="-0.1171875"
+		z="0"
+	/>
+	<OffsetNode
+		x="0.5703125"
+		y="-0.328125"
+		z="0"
+	/>
+	<ActionNode
+		name = "tentacle lash"
+		range = "2"
+		damage = "4"
+		windupDuration = "0.25"
+		attackDuration = "0.25"
+		cooldownDuration = "0.25"
+		idleAnimation = "major_tentacle_r_idle"
+		windupAnimation = "major_tentacle_r_windup"
+		attackAnimation = "major_tentacle_r_attack"
+		backswingAnimation = ""
+	/>
+</OrganLimbNode>
+
+
+<OrganLimbNode
+	name = "Left Major Tentacle"
+	limbType = "tentacle"
+	animationControllerName = "Animation/Controllers/major_tentacle_l"
+>
+	<OffsetNode
+		x="0.5703125"
+		y="-0.0078125"
+		z="0"
+	/>
+	<OffsetNode
+		x="0.390625"
+		y="0.15625"
+		z="0"
+	/>
+	<OffsetNode
+		x="0.25"
+		y="-0.078125"
+		z="0"
+	/>
+	<OffsetNode
+		x="0.5859375"
+		y="-0.3984375"
+		z="0"
+	/>
+	<ActionNode
+		name = "tentacle lash"
+		range = "2"
+		damage = "4"
+		windupDuration = "0.25"
+		attackDuration = "0.25"
+		cooldownDuration = "0.25"
+		idleAnimation = "major_tentacle_l_idle"
+		windupAnimation = "major_tentacle_l_windup"
+		attackAnimation = "major_tentacle_l_attack"
+		backswingAnimation = ""
+	/>
+</OrganLimbNode>
+
+<OrganAppendageNode
+	name = "Right Major Tentacle Claw"
+	animationControllerName = "Animation/Controllers/major_tentacle_claw_r"
+>
+	<ActionNode
+		name = "Claw Snap"
+		range = "2"
+		damage = "4"
+		windupDuration = "0.25"
+		attackDuration = "0.25"
+		cooldownDuration = "0.25"
+		idleAnimation = "major_tentacle_claw_r_idle"
+		windupAnimation = "major_tentacle_claw_r_windup"
+		attackAnimation = "major_tentacle_claw_r_attack"
+	/>
+</OrganAppendageNode>
+
+<OrganAppendageNode
+	name = "Left Major Tentacle Claw"
+	animationControllerName = "Animation/Controllers/major_tentacle_claw_l"
+>
+	<ActionNode
+		name = "Claw Snap"
+		range = "2"
+		damage = "4"
+		windupDuration = "0.25"
+		attackDuration = "0.25"
+		cooldownDuration = "0.25"
+		idleAnimation = "major_tentacle_claw_l_idle"
+		windupAnimation = "major_tentacle_claw_l_windup"
+		attackAnimation = "major_tentacle_claw_l_attack"
+	/>
+</OrganAppendageNode>

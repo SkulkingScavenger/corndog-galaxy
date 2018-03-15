@@ -93,9 +93,6 @@ public class Creature : NetworkBehaviour{
 	void SetLimbs(){
 		CreatureLimb organ;
 		CreatureAppendage appendage;
-		CombatAction act;
-		GameObject limbObject;
-
 
 		//Right Major Tentacle
 		organ = OrganPrototypes.Instance.LoadLimb(0);

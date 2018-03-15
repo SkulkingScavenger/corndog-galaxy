@@ -19,14 +19,14 @@ public class Player : NetworkBehaviour{
 	void Awake() {
 		inputControl = GetComponent<CreatureControl>();
 		mainControl = GameObject.FindGameObjectWithTag("Control").GetComponent<Control>();
-		mainControl.AddPlayer(this);
+		mainControl.players.Add(this);
 		DontDestroyOnLoad(transform.gameObject);
 	}
 
 	public override void OnStartLocalPlayer(){
 		mainCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Canvas"));
 		mainCamera = Instantiate(Resources.Load<GameObject>("Prefabs/Control/mainCamera"));
-		mainCamera.GetComponent<CameraObject>().root = transform;
+		mainCamera.GetComponent<CameraControl>().root = transform;
 	}
 	
 	// Update is called once per frame

@@ -24,7 +24,6 @@ public class Control : NetworkBehaviour{
 		Instance = this;
 		DontDestroyOnLoad(transform.gameObject);
 
-		//createArea();
 		Application.targetFrameRate = 60;
 	}
 
@@ -49,13 +48,25 @@ public class Control : NetworkBehaviour{
 		networkControl.StartClient();
 	}
 
-	public void AddPlayer(Player p){
-		players.Add(p);
-	}
-
 	public Player getPlayer(int id = -1){
-		if(id==-1){id = currentPlayerId;}
-		return players[id];
+		Player p;
+		int i;
+		if(id < 0){
+			for(i=0;i<players.Count;i++){
+				p = players[i];
+				if(p.GetComponent<NetworkIdentity>().isLocalPlayer){
+					return p;
+				}
+			}
+		}else{
+			for(i=0;i<players.Count;i++){
+				p = players[i];
+				if(p.GetComponent<NetworkIdentity>().netId.Value == (uint) (int) id){
+					return p;
+				}
+			}
+		}
+		return null;
 	}
 
 	private void createArea(){
