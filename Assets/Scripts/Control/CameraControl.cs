@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using UnityEngine;
 
 public class CameraControl : MonoBehaviour {
 	public float xMargin = 1f;		// Distance in the x axis the player can move before the camera follows.
