@@ -8,6 +8,7 @@ Organ Presets
 */
 
 public class OrganPrototypes : MonoBehaviour {
+	public List<CreatureBodySegment> segmentPrototypes = new List<CreatureBodySegment>();
 	public List<CreatureLimb> limbPrototypes = new List<CreatureLimb>();
 	public List<CreatureAppendage> appendagePrototypes = new List<CreatureAppendage>();
 	
@@ -23,6 +24,41 @@ public class OrganPrototypes : MonoBehaviour {
 		RegisterOrgans();
 	}
 
+	public CreatureBodySegment LoadSegment(int index){
+		CreatureBodySegment segment = new CreatureBodySegment();
+		CreatureBodySegment source = segmentPrototypes[index];
+
+		segment.name = source.name;
+		segment.segmentType = source.segmentType;
+		segment.animationControllerName = source.animationControllerName;
+		segment.animations = source.animations;
+		segment.segmentOffsets = source.segmentOffsets;
+		
+		return segment;
+	}
+
+	public void AttachSegment(Creature root, CreatureBodySegment segment, Vector3 offset){
+		Transform parentTransform;
+		GameObject obj;
+		parentTransform = root.display;
+		obj = Instantiate(Resources.Load<GameObject>("Prefabs/Characters/LimbObject"));
+		obj.transform.parent = parentTransform.transform;
+		segment.basePosition = offset;
+		obj.GetComponent<CreatureLimbObject>().rootSegment = segment;
+		obj.GetComponent<SpriteRenderer>().transform.localPosition = segment.basePosition;
+		obj.GetComponent<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>(segment.animationControllerName);
+		if(root.segments.Count > 0){
+			CreatureBodySegment previous = root.segments[root.segments.Count -1];
+			obj.transform.parent = previous.obj.transform;
+			segment.previousSegment = previous;
+			previous.nextSegment = segment;
+			segment.basePosition = obj.transform.localPosition;
+		}
+		segment.obj = obj;
+		segment.root = root;
+		root.segments.Add(segment);
+	}
+
 	public CreatureLimb LoadLimb(int index){
 		CreatureLimb organ = new CreatureLimb();
 		CreatureLimb source = limbPrototypes[index];
@@ -32,6 +68,7 @@ public class OrganPrototypes : MonoBehaviour {
 		organ.limbType = source.limbType;
 		organ.animationControllerName = source.animationControllerName;
 		organ.appendageOffsets = source.appendageOffsets;
+		organ.animations = source.animations;
 		
 		//create combat action for the limb
 		for(int i=0;i<source.combatActions.Count;i++){
@@ -42,7 +79,6 @@ public class OrganPrototypes : MonoBehaviour {
 			act.windupDuration = source.combatActions[i].windupDuration;
 			act.attackDuration = source.combatActions[i].attackDuration;
 			act.cooldownDuration = source.combatActions[i].cooldownDuration;
-			act.idleAnimation = source.combatActions[i].idleAnimation;
 			act.windupAnimation = source.combatActions[i].windupAnimation;
 			act.attackAnimation = source.combatActions[i].attackAnimation;
 			act.backswingAnimation = source.combatActions[i].backswingAnimation;
@@ -51,16 +87,17 @@ public class OrganPrototypes : MonoBehaviour {
 		return organ;
 	}
 
-	public void AttachLimb(Creature root, CreatureLimb organ, Vector3 offset){
-		organ.root = root;
-		organ.offset = offset;
+	public void AttachLimb(CreatureBodySegment segment, CreatureLimb limb, Vector3 offset){
+		Transform display = segment.root.display;
+		limb.offset = offset;
 		GameObject limbObject = Instantiate(Resources.Load<GameObject>("Prefabs/Characters/LimbObject"));
-		limbObject.transform.parent = root.transform.Find("Display").transform;
-		limbObject.GetComponent<CreatureLimbObject>().root = organ;
-		limbObject.GetComponent<SpriteRenderer>().transform.position = new Vector3(root.display.transform.position.x + offset.x, root.display.transform.position.y + offset.y, offset.z);
-		limbObject.GetComponent<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>(organ.animationControllerName);
-		organ.obj = limbObject;
-		root.limbs.Add(organ);
+		limbObject.transform.parent = segment.obj.transform;
+		limbObject.GetComponent<CreatureLimbObject>().root = limb;
+		limbObject.GetComponent<SpriteRenderer>().transform.localPosition = offset;
+		limbObject.GetComponent<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>(limb.animationControllerName);
+		limb.obj = limbObject;
+		limb.root = segment.root;
+		segment.limbs.Add(limb);
 	}
 
 	public CreatureAppendage LoadAppendage(int index){
@@ -70,6 +107,7 @@ public class OrganPrototypes : MonoBehaviour {
 
 		appendage.name = source.name;
 		appendage.animationControllerName = source.animationControllerName;
+		appendage.animations = source.animations;
 		
 		
 		//create combat action for the limb
@@ -81,7 +119,6 @@ public class OrganPrototypes : MonoBehaviour {
 			act.windupDuration = source.combatActions[i].windupDuration;
 			act.attackDuration = source.combatActions[i].attackDuration;
 			act.cooldownDuration = source.combatActions[i].cooldownDuration;
-			act.idleAnimation = source.combatActions[i].idleAnimation;
 			act.windupAnimation = source.combatActions[i].windupAnimation;
 			act.attackAnimation = source.combatActions[i].attackAnimation;
 			act.backswingAnimation = source.combatActions[i].backswingAnimation;
@@ -111,6 +148,9 @@ public class OrganPrototypes : MonoBehaviour {
 		while(i < text.Length){
 			node = getNextNode(text, ref i);
 			switch(node){
+			case "OrganSegmentNode":
+				readOrganSegmentNode(text,ref i);
+				break;
 			case "OrganLimbNode":
 				readOrganLimbNode(text,ref i);
 				break;
@@ -160,6 +200,29 @@ public class OrganPrototypes : MonoBehaviour {
 		return attributeValue;
 	}
 
+	private void readOrganSegmentNode(string text,ref int i){
+		string node;
+		CreatureBodySegment segment = new CreatureBodySegment();
+		//Get Tags
+		segment.name = getNextAttribute(text,ref i);
+		segment.segmentType = getNextAttribute(text,ref i);
+		segment.animationControllerName = getNextAttribute(text,ref i);
+		//Get Subnodes
+		node = getNextNode(text, ref i);
+		while(node != "/OrganSegmentNode"){
+			switch(node){
+			case "OffsetNode":
+				segment.segmentOffsets.Add(readOffsetNode(text, ref i));
+				break;
+			case "AnimationNode":
+				segment.animations.Add(readAnimationNode(text, ref i));
+				break;
+			}
+			node = getNextNode(text, ref i);
+		}
+		segmentPrototypes.Add(segment);
+	}
+
 	private void readOrganLimbNode(string text,ref int i){
 		string node;
 		CreatureLimb limb = new CreatureLimb();
@@ -173,6 +236,9 @@ public class OrganPrototypes : MonoBehaviour {
 			switch(node){
 			case "OffsetNode":
 				limb.appendageOffsets.Add(readOffsetNode(text, ref i));
+				break;
+			case "AnimationNode":
+				limb.animations.Add(readAnimationNode(text, ref i));
 				break;
 			case "ActionNode":
 				limb.combatActions.Add(readActionNode(text, ref i));
@@ -193,6 +259,9 @@ public class OrganPrototypes : MonoBehaviour {
 		node = getNextNode(text, ref i);
 		while(node != "/OrganAppendageNode"){
 			switch(node){
+			case "AnimationNode":
+				appendage.animations.Add(readAnimationNode(text, ref i));
+				break;
 			case "ActionNode":
 				appendage.combatActions.Add(readActionNode(text, ref i));
 				break;
@@ -206,10 +275,30 @@ public class OrganPrototypes : MonoBehaviour {
 		float x;
 		float y; 
 		float z;
-		x = float.Parse(getNextAttribute(text,ref i));
-		y = float.Parse(getNextAttribute(text,ref i));
+		x = float.Parse(getNextAttribute(text,ref i))/128;
+		y = float.Parse(getNextAttribute(text,ref i))/128;
 		z = float.Parse(getNextAttribute(text,ref i));
 		return new Vector3(x,y,z);
+	}
+
+	private OrganAnimation readAnimationNode(string text, ref int i){
+		string node;
+		OrganAnimation anim = new OrganAnimation();
+		anim.name = getNextAttribute(text,ref i);
+		node = getNextNode(text, ref i);
+		while(node != "/AnimationNode"){
+			switch(node){
+			case "TagNode":
+				anim.tags.Add(readTagNode(text, ref i));
+				break;
+			}
+			node = getNextNode(text, ref i);
+		}
+		return anim;
+	}
+
+	private string readTagNode(string text, ref int i){
+		return getNextAttribute(text,ref i);
 	}
 
 	private CombatAction readActionNode(string text, ref int i){
@@ -220,7 +309,6 @@ public class OrganPrototypes : MonoBehaviour {
 		act.windupDuration = float.Parse(getNextAttribute(text,ref i));
 		act.attackDuration = float.Parse(getNextAttribute(text,ref i));
 		act.cooldownDuration = float.Parse(getNextAttribute(text,ref i));
-		act.idleAnimation = getNextAttribute(text,ref i);
 		act.windupAnimation = getNextAttribute(text,ref i);
 		act.attackAnimation = getNextAttribute(text,ref i);
 		act.backswingAnimation = getNextAttribute(text,ref i);

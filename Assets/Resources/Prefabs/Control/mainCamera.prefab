@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 9200000}
   - component: {fileID: 12400000}
   - component: {fileID: 8100000}
-  - component: {fileID: 114109920739406354}
+  - component: {fileID: 114911035336891708}
   m_Layer: 0
   m_Name: mainCamera
   m_TagString: MainCamera
@@ -64,6 +64,7 @@ Camera:
   m_TargetEye: 3
   m_HDR: 0
   m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
@@ -100,7 +101,7 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 100000}
   m_IsPrefabParent: 1
---- !u!114 &114109920739406354
+--- !u!114 &114911035336891708
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -108,12 +109,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5f480babb39904439b144c83709679f, type: 3}
+  m_Script: {fileID: 11500000, guid: 48f1b64f79adae6438491748c54f1d69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   xMargin: 1
   yMargin: 1
-  xSmooth: 8
-  ySmooth: 8
+  xSmooth: 80
+  ySmooth: 80
   speed: 0
   root: {fileID: 0}

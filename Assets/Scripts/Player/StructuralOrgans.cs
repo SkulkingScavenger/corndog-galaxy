@@ -4,9 +4,16 @@ using System.Collections.Generic;
 
 public class CreatureBodySegment : CreatureOrgan{
 	public List<CreatureLimb> limbs = new List<CreatureLimb>();
+	public string segmentType = "";
+	public Vector3 basePosition = new Vector3(0f,0f,0f);
+	public List<Vector3> segmentOffsets = new List<Vector3>();
 	public CreatureBodySegment previousSegment = null;
 	public CreatureBodySegment nextSegment = null;
 
+
+	public void AnimationEventCallback(int id){
+		obj.transform.localPosition = segmentOffsets[id] + basePosition;
+	}
 }
 
 
@@ -14,17 +21,15 @@ public class CreatureBodySegment : CreatureOrgan{
 public class CreatureAppendage : CreatureOrgan{
 	public List<CreatureLimb> limbs = new List<CreatureLimb>();
 	public List<CombatAction> combatActions = new List<CombatAction>();
-	public int prototypeIndex;
-	public string animationControllerName = "";
 
-	public void PlayAnimation(CombatAction act, int animPhase){
-		string animationName = act.idleAnimation;
+	public void PlayAttackAnimation(CombatAction act, int animPhase){
+		string animationName = GetAnimationByTag("idle");
 		float phaseDuration = -1;
 		switch(animPhase){
-			case 0: animationName = combatActions[0].idleAnimation; phaseDuration = -1; break;
-			case 1: animationName = combatActions[0].windupAnimation; phaseDuration = act.windupDuration; break;
-			case 2: animationName = combatActions[0].attackAnimation; phaseDuration = act.attackDuration; break;
-			case 3: animationName = combatActions[0].backswingAnimation; phaseDuration = act.backswingDuration; break;
+			case 0: animationName = GetAnimationByTag("idle"); phaseDuration = -1; break;
+			case 1: animationName = GetAnimationByTag("windup"); phaseDuration = act.windupDuration; break;
+			case 2: animationName = GetAnimationByTag("attack"); phaseDuration = act.attackDuration; break;
+			case 3: animationName = GetAnimationByTag("backswing"); phaseDuration = act.backswingDuration; break;
 		}
 		Animator anim = obj.GetComponent<Animator>();
 		anim.Play(animationName);
@@ -45,9 +50,7 @@ public class CreatureLimb : CreatureOrgan{
 	public bool isAttacking = false;
 	public bool isBackswinging = false;
 	public short phase = 0;
-	public string animationControllerName = "";
 	public List<CombatAction> combatActions = new List<CombatAction>();
-	public int prototypeIndex;
 	public CreatureAppendage appendage;
 	public List<Vector3> appendageOffsets = new List<Vector3>();
 
@@ -61,37 +64,37 @@ public class CreatureLimb : CreatureOrgan{
 		if(act.windupDuration > 0 && phase < 1){
 			isWindingUp = true;
 			phase = 1;
-			PlayAnimation(act,phase);
+			PlayAttackAnimation(act,phase);
 			yield return new WaitForSeconds(act.windupDuration);
 			root.StartCoroutine(Attack(act));
 		}else if(act.attackDuration > 0 && phase < 2){
 			isAttacking = true;
 			phase = 2;
-			PlayAnimation(act,phase);
+			PlayAttackAnimation(act,phase);
 			yield return new WaitForSeconds(act.attackDuration);
 			root.StartCoroutine(Attack(act));
 		}else if(act.backswingDuration > 0 && phase < 3){
 			phase = 3;
 			isBackswinging = true;
-			PlayAnimation(act,phase);
+			PlayAttackAnimation(act,phase);
 			yield return new WaitForSeconds(act.backswingDuration);
 			root.StartCoroutine(Attack(act));
 		}else{
 			phase = 0;
-			PlayAnimation(act,phase);
+			PlayAttackAnimation(act,phase);
 			yield return new WaitForSeconds(act.cooldownDuration);
 			isReady = true;
 		}
 	}
 
-	public void PlayAnimation(CombatAction act, int animPhase){
-		string animationName = act.idleAnimation;
+	public void PlayAttackAnimation(CombatAction act, int animPhase){
+		string animationName = GetAnimationByTag("idle");
 		float phaseDuration = -1;
 		switch(animPhase){
-			case 0: animationName = act.idleAnimation; phaseDuration = -1; break;
-			case 1: animationName = act.windupAnimation; phaseDuration = act.windupDuration; break;
-			case 2: animationName = act.attackAnimation; phaseDuration = act.attackDuration; break;
-			case 3: animationName = act.backswingAnimation; phaseDuration = act.backswingDuration; break;
+			case 0: animationName = GetAnimationByTag("idle"); phaseDuration = -1; break;
+			case 1: animationName = GetAnimationByTag("windup"); phaseDuration = act.windupDuration; break;
+			case 2: animationName = GetAnimationByTag("attack"); phaseDuration = act.attackDuration; break;
+			case 3: animationName = GetAnimationByTag("backswing"); phaseDuration = act.backswingDuration; break;
 		}
 		Animator anim = obj.GetComponent<Animator>();
 		anim.Play(animationName);
@@ -102,7 +105,7 @@ public class CreatureLimb : CreatureOrgan{
 		}
 
 		if(appendage != null){
-			appendage.PlayAnimation(act,animPhase);
+			appendage.PlayAttackAnimation(act,animPhase);
 		}
 	}
 

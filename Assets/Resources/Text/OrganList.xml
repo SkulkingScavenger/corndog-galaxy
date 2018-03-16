@@ -1,26 +1,91 @@
+<OrganSegmentNode
+	name = "Skirriashi Abdomen"
+	segmentType = "abdomen"
+	animationControllerName = "Animation/Controllers/skirriashi_abdomen"
+>
+	<AnimationNode name="skirriashi_abdomen_idle">
+		<TagNode value="idle"/>
+	</AnimationNode>
+	<AnimationNode name="skirriashi_abdomen_run">
+		<TagNode value="run"/>
+	</AnimationNode>
+	<OffsetNode
+		x="0"
+		y="0"
+		z="0"
+	/>
+	<OffsetNode
+		x="0"
+		y="-1"
+		z="0"
+	/>
+	<OffsetNode
+		x="0"
+		y="0"
+		z="0"
+	/>
+</OrganSegmentNode>
+
+<OrganSegmentNode
+	name = "Skirriashi Thorax"
+	segmentType = "thorax"
+	animationControllerName = "Animation/Controllers/skirriashi_thorax"
+>
+	<AnimationNode name="skirriashi_thorax_idle">
+		<TagNode value="idle"/>
+	</AnimationNode>
+	<AnimationNode name="skirriashi_thorax_run">
+		<TagNode value="run"/>
+	</AnimationNode>
+	<OffsetNode
+		x="0"
+		y="0"
+		z="0"
+	/>
+	<OffsetNode
+		x="0"
+		y="-2"
+		z="0"
+	/>
+	<OffsetNode
+		x="8"
+		y="-3"
+		z="0"
+	/>
+</OrganSegmentNode>
+
 <OrganLimbNode
 	name = "Right Major Tentacle"
 	limbType = "tentacle"
 	animationControllerName = "Animation/Controllers/major_tentacle_r"
 >
+	<AnimationNode name="major_tentacle_r_idle">
+		<TagNode value="idle"/>
+	</AnimationNode>
+	<AnimationNode name="major_tentacle_r_attack">
+		<TagNode value="attack"/>
+	</AnimationNode>
+	<AnimationNode name="major_tentacle_r_windup">
+		<TagNode value="windup"/>
+	</AnimationNode>
 	<OffsetNode
-		x="0.515625"
-		y="-0.0390625"
+		x="66"
+		y="-5"
 		z="0"
 	/>
 	<OffsetNode
-		x="0.234375"
-		y="0.1484375"
+		x="30"
+		y="19"
 		z="0"
 	/>
 	<OffsetNode
-		x="0.125"
-		y="-0.1171875"
+		x="16"
+		y="-15"
 		z="0"
 	/>
 	<OffsetNode
-		x="0.5703125"
-		y="-0.328125"
+		x="73"
+		y="-42"
 		z="0"
 	/>
 	<ActionNode
@@ -30,9 +95,8 @@
 		windupDuration = "0.25"
 		attackDuration = "0.25"
 		cooldownDuration = "0.25"
-		idleAnimation = "major_tentacle_r_idle"
-		windupAnimation = "major_tentacle_r_windup"
-		attackAnimation = "major_tentacle_r_attack"
+		windupAnimation = "windup"
+		attackAnimation = "attack"
 		backswingAnimation = ""
 	/>
 </OrganLimbNode>
@@ -43,24 +107,33 @@
 	limbType = "tentacle"
 	animationControllerName = "Animation/Controllers/major_tentacle_l"
 >
+	<AnimationNode name="major_tentacle_l_idle">
+		<TagNode value="idle"/>
+	</AnimationNode>
+	<AnimationNode name="major_tentacle_l_attack">
+		<TagNode value="attack"/>
+	</AnimationNode>
+	<AnimationNode name="major_tentacle_l_windup">
+		<TagNode value="windup"/>
+	</AnimationNode>
 	<OffsetNode
-		x="0.5703125"
-		y="-0.0078125"
+		x="73"
+		y="-1"
 		z="0"
 	/>
 	<OffsetNode
-		x="0.390625"
-		y="0.15625"
+		x="50"
+		y="20"
 		z="0"
 	/>
 	<OffsetNode
-		x="0.25"
-		y="-0.078125"
+		x="32"
+		y="-10"
 		z="0"
 	/>
 	<OffsetNode
-		x="0.5859375"
-		y="-0.3984375"
+		x="75"
+		y="-51"
 		z="0"
 	/>
 	<ActionNode
@@ -70,9 +143,138 @@
 		windupDuration = "0.25"
 		attackDuration = "0.25"
 		cooldownDuration = "0.25"
-		idleAnimation = "major_tentacle_l_idle"
-		windupAnimation = "major_tentacle_l_windup"
-		attackAnimation = "major_tentacle_l_attack"
+		windupAnimation = "windup"
+		attackAnimation = "attack"
+		backswingAnimation = ""
+	/>
+</OrganLimbNode>
+
+<OrganLimbNode
+	name = "Right Skirriashi Leg"
+	limbType = "leg"
+	animationControllerName = "Animation/Controllers/skirriashi_leg_r"
+>
+	<AnimationNode name="skirriashi_leg_r_idle">
+		<TagNode value="idle"/>
+	</AnimationNode>
+	<AnimationNode name="skirriashi_leg_r_run">
+		<TagNode value="run"/>
+	</AnimationNode>
+	<OffsetNode
+		x="66"
+		y="-5"
+		z="0"
+	/>
+	<OffsetNode
+		x="30"
+		y="19"
+		z="0"
+	/>
+	<OffsetNode
+		x="16"
+		y="-15"
+		z="0"
+	/>
+	<OffsetNode
+		x="73"
+		y="-42"
+		z="0"
+	/>
+</OrganLimbNode>
+
+
+<OrganLimbNode
+	name = "Left Skirriashi Leg"
+	limbType = "leg"
+	animationControllerName = "Animation/Controllers/skirriashi_leg_l"
+>
+	<AnimationNode name="skirriashi_leg_l_idle">
+		<TagNode value="idle"/>
+	</AnimationNode>
+	<AnimationNode name="skirriashi_leg_l_run">
+		<TagNode value="run"/>
+	</AnimationNode>
+	<OffsetNode
+		x="66"
+		y="-5"
+		z="0"
+	/>
+	<OffsetNode
+		x="30"
+		y="19"
+		z="0"
+	/>
+	<OffsetNode
+		x="16"
+		y="-15"
+		z="0"
+	/>
+	<OffsetNode
+		x="73"
+		y="-42"
+		z="0"
+	/>
+</OrganLimbNode>
+
+<OrganLimbNode
+	name = "Skirriashi Neck"
+	limbType = "neck"
+	animationControllerName = "Animation/Controllers/skirriashi_neck"
+>
+	<AnimationNode name="skirriashi_neck_idle_1">
+		<TagNode value="idle-1"/>
+	</AnimationNode>
+	<AnimationNode name="skirriashi_neck_idle_2">
+		<TagNode value="idle-2"/>
+	</AnimationNode>
+	<AnimationNode name="skirriashi_neck_run">
+		<TagNode value="run"/>
+	</AnimationNode>
+	<AnimationNode name="skirriashi_neck_windup">
+		<TagNode value="windup"/>
+	</AnimationNode>
+	<AnimationNode name="skirriashi_neck_attack">
+		<TagNode value="attack"/>
+	</AnimationNode>
+	<OffsetNode
+		x="0"
+		y="0"
+		z="-0.00001"
+	/>
+	<OffsetNode
+		x="0"
+		y="-1"
+		z="-0.00001"
+	/>
+	<OffsetNode
+		x="0"
+		y="1"
+		z="-0.00001"
+	/>
+	<OffsetNode
+		x="-10"
+		y="4"
+		z="-0.00001"
+	/>
+	<OffsetNode
+		x="-12"
+		y="4"
+		z="-0.00001"
+	/>
+	<OffsetNode
+		x="40"
+		y="0"
+		z="-0.00001"
+	/>
+	<ActionNode
+		name = "Extend Neck"
+		range = "2"
+		damage = "1"
+		windupDuration = "0.25"
+		attackDuration = "0.25"
+		cooldownDuration = "0.25"
+		windupAnimation = "windup"
+		attackAnimation = "attack"
 		backswingAnimation = ""
 	/>
 </OrganLimbNode>
@@ -81,6 +283,15 @@
 	name = "Right Major Tentacle Claw"
 	animationControllerName = "Animation/Controllers/major_tentacle_claw_r"
 >
+	<AnimationNode name="major_tentacle_claw_r_idle">
+		<TagNode value="idle"/>
+	</AnimationNode>
+	<AnimationNode name="major_tentacle_claw_r_windup">
+		<TagNode value="windup"/>
+	</AnimationNode>
+	<AnimationNode name="major_tentacle_claw_r_attack">
+		<TagNode value="attack"/>
+	</AnimationNode>
 	<ActionNode
 		name = "Claw Snap"
 		range = "2"
@@ -88,9 +299,9 @@
 		windupDuration = "0.25"
 		attackDuration = "0.25"
 		cooldownDuration = "0.25"
-		idleAnimation = "major_tentacle_claw_r_idle"
-		windupAnimation = "major_tentacle_claw_r_windup"
-		attackAnimation = "major_tentacle_claw_r_attack"
+		windupAnimation = "windup"
+		attackAnimation = "attack"
+		backswingAnimation = ""
 	/>
 </OrganAppendageNode>
 
@@ -98,6 +309,15 @@
 	name = "Left Major Tentacle Claw"
 	animationControllerName = "Animation/Controllers/major_tentacle_claw_l"
 >
+	<AnimationNode name="major_tentacle_claw_l_idle">
+		<TagNode value="idle"/>
+	</AnimationNode>
+	<AnimationNode name="major_tentacle_claw_l_windup">
+		<TagNode value="windup"/>
+	</AnimationNode>
+	<AnimationNode name="major_tentacle_claw_l_attack">
+		<TagNode value="attack"/>
+	</AnimationNode>
 	<ActionNode
 		name = "Claw Snap"
 		range = "2"
@@ -105,8 +325,34 @@
 		windupDuration = "0.25"
 		attackDuration = "0.25"
 		cooldownDuration = "0.25"
-		idleAnimation = "major_tentacle_claw_l_idle"
-		windupAnimation = "major_tentacle_claw_l_windup"
-		attackAnimation = "major_tentacle_claw_l_attack"
+		windupAnimation = "windup"
+		attackAnimation = "attack"
+		backswingAnimation = ""
+	/>
+</OrganAppendageNode>
+
+<OrganAppendageNode
+	name = "Skirriashi Head"
+	animationControllerName = "Animation/Controllers/skirriashi_head"
+>
+	<AnimationNode name="skirriashi_head_idle">
+		<TagNode value="idle"/>
+	</AnimationNode>
+	<AnimationNode name="skirriashi_head_idle">
+		<TagNode value="windup"/>
+	</AnimationNode>
+	<AnimationNode name="skirriashi_head_attack">
+		<TagNode value="attack"/>
+	</AnimationNode>
+	<ActionNode
+		name = "Bite"
+		range = "2"
+		damage = "4"
+		windupDuration = "0.25"
+		attackDuration = "0.25"
+		cooldownDuration = "0.25"
+		windupAnimation = "windup"
+		attackAnimation = "attack"
+		backswingAnimation = ""
 	/>
 </OrganAppendageNode>

@@ -16,7 +16,7 @@ public class Creature : NetworkBehaviour{
 	[SyncVar] public int stanceId = 0;
 	public List<CombatStance> stances = new List<CombatStance>();
 	public List<CreatureOrgan> organs = new List<CreatureOrgan>();
-	public List<CreatureLimb> limbs = new List<CreatureLimb>();
+	public List<CreatureBodySegment> segments = new List<CreatureBodySegment>();
 	
 	public float jumpForce = 0.03f;			// Amount of force added when the player jumps.
 	public float gravityForce = -0.0008f;			// Amount of force added when the player jumps.
@@ -91,26 +91,57 @@ public class Creature : NetworkBehaviour{
 	}
 
 	void SetLimbs(){
-		CreatureLimb organ;
+		CreatureBodySegment segment;
+		CreatureLimb limb;
 		CreatureAppendage appendage;
+		//Abdomen
+		segment = OrganPrototypes.Instance.LoadSegment(0);
+		segment.hitpoints = 20;
+		OrganPrototypes.Instance.AttachSegment(this, segment, new Vector3(-12f/128f,21f/128f,0f));
+
+		//Right Leg
+		limb = OrganPrototypes.Instance.LoadLimb(2);
+		limb.hitpoints = 4;
+		OrganPrototypes.Instance.AttachLimb(segment, limb, new Vector3(-9f/128f,-66f/128f,-0.001f));
+
+		//Left Leg
+		limb = OrganPrototypes.Instance.LoadLimb(3);
+		limb.hitpoints = 4;
+		OrganPrototypes.Instance.AttachLimb(segment, limb, new Vector3(-9f/128f,-66f/128f,0.001f));
+
+		//Thorax
+		segment = OrganPrototypes.Instance.LoadSegment(1);
+		segment.hitpoints = 30;
+		OrganPrototypes.Instance.AttachSegment(this, segment, new Vector3(-12f/128f,21f/128f,-0.0001f));
 
 		//Right Major Tentacle
-		organ = OrganPrototypes.Instance.LoadLimb(0);
-		organ.hitpoints = 4;
-		OrganPrototypes.Instance.AttachLimb(this, organ, new Vector3(0.3593f,0.8665f,-0.001f));
+		limb = OrganPrototypes.Instance.LoadLimb(0);
+		limb.hitpoints = 4;
+		OrganPrototypes.Instance.AttachLimb(segment, limb, new Vector3(58f/128f,90f/128f,-0.001f));
 
 		appendage = OrganPrototypes.Instance.LoadAppendage(0);
 		appendage.hitpoints = 2;
-		OrganPrototypes.Instance.AttachAppendage(organ, appendage);
+		OrganPrototypes.Instance.AttachAppendage(limb, appendage);
 
 		//Left Major Tentacle
-		organ = OrganPrototypes.Instance.LoadLimb(1);
-		organ.hitpoints = 4;
-		OrganPrototypes.Instance.AttachLimb(this, organ, new Vector3(0.08609991f,0.9372001f,0.001f));
+		limb = OrganPrototypes.Instance.LoadLimb(1);
+		limb.hitpoints = 4;
+		OrganPrototypes.Instance.AttachLimb(segment, limb, new Vector3(23f/128f,99f/128f,0.001f));
 
 		appendage = OrganPrototypes.Instance.LoadAppendage(1);
 		appendage.hitpoints = 2;
-		OrganPrototypes.Instance.AttachAppendage(organ, appendage);
+		OrganPrototypes.Instance.AttachAppendage(limb, appendage);
+
+		//Head
+		limb = OrganPrototypes.Instance.LoadLimb(4);
+		limb.hitpoints = 10;
+		OrganPrototypes.Instance.AttachLimb(segment, limb, new Vector3(87f/128f,34f/128f,0.0000f));
+
+		appendage = OrganPrototypes.Instance.LoadAppendage(2);
+		appendage.hitpoints = 2;
+		OrganPrototypes.Instance.AttachAppendage(limb, appendage);
+
+
 	}
 
 	void SetShadow(){
@@ -130,10 +161,20 @@ public class Creature : NetworkBehaviour{
 	}
 
 	void SetStance(){
+		CreatureBodySegment segment;
+		CreatureLimb limb;
 		CombatStance stance1 = new CombatStance();
-		for (int i=0;i<limbs.Count;i++){
-			stance1.componentList.Add(new CombatStanceComponent(limbs[i]));
-			stance1.componentList[i].actions[0] = limbs[i].combatActions[0];
+		CombatStanceComponent comp;
+		for (int i=0;i<segments.Count;i++){
+			segment = segments[i];
+			for(int j=0;j<segment.limbs.Count;j++){
+				limb = segment.limbs[j];
+				if(limb.combatActions.Count > 0){
+					comp = new CombatStanceComponent(limb);
+					comp.actions[0] = limb.combatActions[0];
+					stance1.componentList.Add(comp);
+				}
+			}
 		}
 		
 		stances.Add(stance1);
@@ -145,6 +186,14 @@ public class Creature : NetworkBehaviour{
 		float speedInitialX = speedX;
 		float speedInitialY = speedY;
 		if(control.moveCommand){
+			for(int i=0; i<segments.Count;i++){
+				segments[i].PlayAnimation("run");
+				for(int j=0;j<segments[i].limbs.Count;j++){
+					if(segments[i].limbs[j].isReady){
+						segments[i].limbs[j].PlayAnimation("run");
+					}
+				}
+			}
 			Vector2 start = new Vector2(transform.position.x,transform.position.y);
 			Vector2 end = new Vector2(control.commandX,control.commandY);
 			float d = Vector2.Distance(start,end);
@@ -169,6 +218,14 @@ public class Creature : NetworkBehaviour{
 				speedY = speedY * damping * Time.deltaTime;
 			}
 		}else{
+			for(int i=0; i<segments.Count;i++){
+				segments[i].PlayAnimation("idle");
+				for(int j=0;j<segments[i].limbs.Count;j++){
+					if(segments[i].limbs[j].isReady){
+						segments[i].limbs[j].PlayAnimation("idle");
+					}
+				}
+			}
 			speedX -=  Mathf.Sign(speedX) * frictionForceX * Time.deltaTime;
 			if(Mathf.Sign(speedX) != Mathf.Sign(speedInitialX)){
 				speedX = 0;

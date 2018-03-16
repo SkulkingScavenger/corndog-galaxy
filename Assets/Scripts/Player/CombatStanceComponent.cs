@@ -26,5 +26,4 @@ public class CombatAction{
 	public string attackAnimation = "";
 	public string backswingAnimation = "";
 	public string windupAnimation = "";
-	public string idleAnimation = "";
 }
