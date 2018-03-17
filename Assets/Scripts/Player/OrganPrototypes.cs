@@ -88,7 +88,6 @@ public class OrganPrototypes : MonoBehaviour {
 	}
 
 	public void AttachLimb(CreatureBodySegment segment, CreatureLimb limb, Vector3 offset){
-		Transform display = segment.root.display;
 		limb.offset = offset;
 		GameObject limbObject = Instantiate(Resources.Load<GameObject>("Prefabs/Characters/LimbObject"));
 		limbObject.transform.parent = segment.obj.transform;
