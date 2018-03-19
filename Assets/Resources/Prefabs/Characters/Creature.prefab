@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 61628801218117932}
   - component: {fileID: 114377477871911524}
   - component: {fileID: 114118087221738052}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Creature
   m_TagString: Creature
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4188392946869612}
   - component: {fileID: 212676611193370934}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Display
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -201,6 +201,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 997d01d4216f87446899264b29891648, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerId: 0
   control: {fileID: 0}
   controlID: 0
   facingRight: 1
@@ -222,7 +223,9 @@ MonoBehaviour:
   isAttacking: 0
   health: 100
   repeatDamagePeriod: 2
-  playerId: 0
+  isInteracting: 0
+  interactionInstallation: {fileID: 0}
+  contactedInstallation: {fileID: 0}
 --- !u!212 &212676611193370934
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -255,7 +258,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1783731295
-  m_SortingLayer: -3
+  m_SortingLayer: -4
   m_SortingOrder: 0
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

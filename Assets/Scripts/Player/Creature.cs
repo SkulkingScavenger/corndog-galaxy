@@ -4,26 +4,31 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Creature : NetworkBehaviour{
+	
+	//Control
+	public int playerId;
 	public CreatureControl control = null;
 	[SyncVar] public uint controlID = 0;
+
+	//Display
 	[SyncVar] public bool facingRight = true;			// For determining which way the player is currently facing.
 	private Animator anim;		// Reference to the player's animator component.
 	public Transform display;
-
 	public GameObject shadow;
 	public int shadowIndex = 1;
 	public GameObject healthBar;
 	[SyncVar] public int stanceId = 0;
-	public List<CombatStance> stances = new List<CombatStance>();
+
+	//Biology
 	public List<CreatureOrgan> organs = new List<CreatureOrgan>();
 	public List<CreatureBodySegment> segments = new List<CreatureBodySegment>();
 	
+	//Movement
 	public float jumpForce = 0.03f;			// Amount of force added when the player jumps.
-	public float gravityForce = -0.0008f;			// Amount of force added when the player jumps.
+	public float gravityForce = -0.0008f;	// Amount of force added when the player is in the air.
 	private bool grounded = true;			// Whether or not the player is grounded.
 	[SyncVar] public float z = 0f;
 	public float zspeed = 0f;
-				
 	public float accelerationX = 100f;		// rate of change per second in x velocity while moving
 	public float accelerationY = 50f;		// rate of change per second in Y velocity while moving
 	public float speedX = 0f;				// The current velocity in the x axis.
@@ -33,13 +38,16 @@ public class Creature : NetworkBehaviour{
 	private float frictionForceX = 20f;		// rate of change per second in x velocity due to friction
 	private float frictionForceY = 10f;		// rate of change per second in y velocity due to friction
 
+	//Combat
+	public List<CombatStance> stances = new List<CombatStance>();
 	[SyncVar] public bool isAttacking = false;
-	
 	[SyncVar] public float health = 100f;					// The player's health.
 	public float repeatDamagePeriod = 2f;		// How frequently the player can be damaged.
 
-	public int playerId;
-
+	//Interactions
+	public bool isInteracting = false;
+	public InteractiveInstallation interactionInstallation = null;
+	public GameObject contactedInstallation = null;
 
 
 	void Awake(){
@@ -66,9 +74,15 @@ public class Creature : NetworkBehaviour{
 		MouseMovement();
 		Jump();
 
-		if(control.interfaceMode == "combat"){
+		switch(control.interfaceMode){
+		case "combat":
 			CombatMain();
+			break;
+		case "exploration":
+			ExplorationMain();
+			break;
 		}
+
 		display.transform.position = new Vector3(transform.position.x + 0.1f, transform.position.y + 0.55f + z,0);
 	}
 
@@ -90,6 +104,21 @@ public class Creature : NetworkBehaviour{
 
 	}
 
+	void OnTriggerEnter2D(Collider2D other){
+		Debug.Log(other.name);
+		if(other.gameObject.GetComponent("InteractiveInstallation") != null){
+			contactedInstallation = other.gameObject;
+		}
+	}
+
+	void OnTriggerExit2D(Collider2D other){
+		if(other.gameObject.GetComponent("InteractiveInstallation") != null && contactedInstallation != null){
+			if(other.gameObject.GetInstanceID() == contactedInstallation.gameObject.GetInstanceID()){
+				contactedInstallation = null;
+			}
+		}
+	}
+
 	void SetLimbs(){
 		CreatureBodySegment segment;
 		CreatureLimb limb;
@@ -108,6 +137,11 @@ public class Creature : NetworkBehaviour{
 		limb = OrganPrototypes.Instance.LoadLimb(3);
 		limb.hitpoints = 4;
 		OrganPrototypes.Instance.AttachLimb(segment, limb, new Vector3(-9f/128f,-66f/128f,0.001f));
+
+		//Left Leg
+		limb = OrganPrototypes.Instance.LoadLimb(5);
+		limb.hitpoints = 4;
+		OrganPrototypes.Instance.AttachLimb(segment, limb, new Vector3(-111f/128f,-95f/128f,0.001f));
 
 		//Thorax
 		segment = OrganPrototypes.Instance.LoadSegment(1);
@@ -241,6 +275,14 @@ public class Creature : NetworkBehaviour{
 			transform.localScale = theScale;
 		}
 		GetComponent<Rigidbody2D>().velocity = new Vector2(speedX,speedY);
+	}
+
+	void ExplorationMain(){
+		if(control.shift){
+			if(contactedInstallation != null){
+				contactedInstallation.GetComponent<InteractiveInstallation>().Interact(this);
+			}
+		}
 	}
 
 	void CombatMain(){

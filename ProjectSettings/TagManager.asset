@@ -21,11 +21,11 @@ TagManager:
   - UI
   - 
   - 
-  - Bombs
+  - Walls
   - Player
-  - Enemies
-  - Pickups
-  - Ground
+  - Creatures
+  - InterfaceOverlay
+  - 
   - 
   - 
   - 
@@ -60,6 +60,9 @@ TagManager:
     locked: 0
   - name: UI
     uniqueID: 149272721
+    locked: 0
+  - name: InterfaceOverlay
+    uniqueID: 3475529815
     locked: 0
   - name: Default
     uniqueID: 0

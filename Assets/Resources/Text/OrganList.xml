@@ -218,7 +218,7 @@
 
 <OrganLimbNode
 	name = "Skirriashi Neck"
-	limbType = "neck"
+	limbType = "segmented"
 	animationControllerName = "Animation/Controllers/skirriashi_neck"
 >
 	<AnimationNode name="skirriashi_neck_idle_1">
@@ -276,6 +276,39 @@
 		windupAnimation = "windup"
 		attackAnimation = "attack"
 		backswingAnimation = ""
+	/>
+</OrganLimbNode>
+
+<OrganLimbNode
+	name = "Skirriashi Tail"
+	limbType = "segmented"
+	animationControllerName = "Animation/Controllers/skirriashi_tail"
+>
+	<AnimationNode name="skirriashi_tail_idle">
+		<TagNode value="idle"/>
+	</AnimationNode>
+	<AnimationNode name="skirriashi_tail_run">
+		<TagNode value="run"/>
+	</AnimationNode>
+	<OffsetNode
+		x="66"
+		y="-5"
+		z="0"
+	/>
+	<OffsetNode
+		x="30"
+		y="19"
+		z="0"
+	/>
+	<OffsetNode
+		x="16"
+		y="-15"
+		z="0"
+	/>
+	<OffsetNode
+		x="73"
+		y="-42"
+		z="0"
 	/>
 </OrganLimbNode>
 

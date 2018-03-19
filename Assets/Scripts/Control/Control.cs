@@ -48,7 +48,7 @@ public class Control : NetworkBehaviour{
 		networkControl.StartClient();
 	}
 
-	public Player getPlayer(int id = -1){
+	public Player GetPlayer(int id = -1){
 		Player p;
 		int i;
 		if(id < 0){

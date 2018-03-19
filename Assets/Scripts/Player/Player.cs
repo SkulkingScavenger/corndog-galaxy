@@ -7,6 +7,7 @@ public class Player : NetworkBehaviour{
 	public GameObject creatureObj;
 	public Control mainControl;
 	public GameObject mainCanvas;
+	public GameObject headsUpDisplay;
 	public GameObject mainCamera;
 	public Creature creature = null;
 	[SyncVar] public string interfaceMode = "combat";
@@ -18,6 +19,7 @@ public class Player : NetworkBehaviour{
 	// Use this for initialization
 	void Awake() {
 		inputControl = GetComponent<CreatureControl>();
+		inputControl.isPlayerControlled = true;
 		mainControl = GameObject.FindGameObjectWithTag("Control").GetComponent<Control>();
 		mainControl.players.Add(this);
 		DontDestroyOnLoad(transform.gameObject);
@@ -25,6 +27,9 @@ public class Player : NetworkBehaviour{
 
 	public override void OnStartLocalPlayer(){
 		mainCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Canvas"));
+		headsUpDisplay = Instantiate(Resources.Load<GameObject>("Prefabs/UI/HudCombat"));
+		headsUpDisplay.transform.SetParent(mainCanvas.transform,false);
+
 		mainCamera = Instantiate(Resources.Load<GameObject>("Prefabs/Control/mainCamera"));
 		mainCamera.GetComponent<CameraControl>().root = transform;
 	}
@@ -37,6 +42,9 @@ public class Player : NetworkBehaviour{
 		if(creature!= null){
 			transform.position = creature.transform.position;
 		}
+
+		inputControl.interfaceMode = interfaceMode;
+
 		inputControl.moveCommand = Input.GetAxis("MouseRight") != 0;
 		inputControl.attackCommand = Input.GetAxis("MouseLeft") != 0;
 
@@ -65,6 +73,24 @@ public class Player : NetworkBehaviour{
 		creature.controlID = GetComponent<NetworkIdentity>().netId.Value;
 		creatureObj.transform.position = new Vector3(startX,startY,0); 
 		NetworkServer.Spawn(creatureObj);
+	}
+
+
+	public void SetInterfaceMode(string mode){
+		Destroy(headsUpDisplay.gameObject);
+		switch(mode){
+		case "combat":
+			headsUpDisplay = Instantiate(Resources.Load<GameObject>("Prefabs/UI/HudCombat"));
+			break;
+		case "industry":
+
+			break;
+		case "exploration":
+			headsUpDisplay = Instantiate(Resources.Load<GameObject>("Prefabs/UI/HudExploration"));
+			break;
+		}
+		interfaceMode = mode;
+		headsUpDisplay.transform.SetParent(mainCanvas.transform,false);
 	}
 
 }
