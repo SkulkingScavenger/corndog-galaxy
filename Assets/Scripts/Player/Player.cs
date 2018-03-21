@@ -62,7 +62,7 @@ public class Player : NetworkBehaviour{
 		inputControl.stanceModifier[3] = Input.GetKey ("4");
 
 		inputControl.shift = Input.GetAxis("Shift") != 0;
-		inputControl.ctrl = false;
+		inputControl.ctrl = Input.GetAxis("Ctrl") != 0;
 		inputControl.jump = Input.GetButtonDown("Jump");
 		inputControl.Sync();
 	}

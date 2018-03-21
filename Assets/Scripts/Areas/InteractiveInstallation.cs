@@ -23,16 +23,24 @@ public class InteractiveInstallation : NetworkBehaviour{
 	public void Update(){
 		//check if installation is destroyed
 		//check if user is still alive;
+		//check if should close
+		if(inUse){
+			if(interfaceOverlay == null){
+				CloseInteration();
+			}
+		}
 	}
 
 	public void Interact(Creature interactor){
-		user = interactor;
-		inUse = true;
-		user.isInteracting = true;
-		user.interactionInstallation = this;
-		if(user.control.isPlayerControlled){
-			if(user.control.gameObject.GetComponent<NetworkIdentity>().isLocalPlayer){
-				interfaceOverlay = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/InterfaceOverlays/"+interfaceOverlayName), Vector3.zero, Quaternion.identity);
+		if(!inUse){
+			user = interactor;
+			inUse = true;
+			user.isInteracting = true;
+			user.interactionInstallation = this;
+			if(user.control.isPlayerControlled){
+				if(user.control.gameObject.GetComponent<NetworkIdentity>().isLocalPlayer){
+					interfaceOverlay = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/InterfaceOverlays/"+interfaceOverlayName), Vector3.zero, Quaternion.identity);
+				}
 			}
 		}
 	}

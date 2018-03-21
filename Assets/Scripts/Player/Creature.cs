@@ -68,6 +68,7 @@ public class Creature : NetworkBehaviour{
 
 	void Update(){
 		if(control == null){
+			if(isInteracting){return;}
 			control = ClientScene.FindLocalObject(new NetworkInstanceId(controlID)).GetComponent<CreatureControl>();
 			return;
 		}
