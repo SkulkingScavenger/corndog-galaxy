@@ -22,7 +22,11 @@ public class HudExploration : MonoBehaviour {
 	public void Update(){
 		if(player.creature != null){
 			if(player.creature.contactedInstallation != null){
-					detailsBox.text = "Press Shift to use the " + player.creature.contactedInstallation.GetComponent<InteractiveInstallation>().name;
+					if(player.creature.interactionInstallation != null){
+						detailsBox.text = "Press Ctrl to stop using the " + player.creature.interactionInstallation.GetComponent<InteractiveInstallation>().name;
+					}else{
+						detailsBox.text = "Press Shift to use the " + player.creature.contactedInstallation.GetComponent<InteractiveInstallation>().name;
+					}
 				}else{
 					detailsBox.text = "All Systems Stable";
 				}
@@ -37,6 +41,6 @@ public class HudExploration : MonoBehaviour {
 	}
 
 	public void SetInterfaceModeCombat(){
-		player.SetInterfaceMode("exploration");
+		player.SetInterfaceMode("combat");
 	}
 }

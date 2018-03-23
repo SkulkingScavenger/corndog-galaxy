@@ -73,6 +73,7 @@ public class OrganPrototypes : MonoBehaviour {
 		//create combat action for the limb
 		for(int i=0;i<source.combatActions.Count;i++){
 			act = new CombatAction();
+			act.limb = organ;
 			act.name = source.combatActions[i].name;
 			act.range = source.combatActions[i].range;
 			act.damage = source.combatActions[i].damage;
@@ -133,6 +134,9 @@ public class OrganPrototypes : MonoBehaviour {
 		obj.transform.parent = organ.obj.transform;
 		obj.GetComponent<SpriteRenderer>().transform.position = new Vector3(display.transform.position.x + organ.offset.x, display.transform.position.y + organ.offset.y, organ.offset.z);
 		obj.GetComponent<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>(appendage.animationControllerName);
+		for(int i=0;i<appendage.combatActions.Count;i++){
+			appendage.combatActions[i].limb = organ;
+		}
 		appendage.obj = obj;
 		appendage.root = organ.root;
 		appendage.offset = organ.appendageOffsets[0];

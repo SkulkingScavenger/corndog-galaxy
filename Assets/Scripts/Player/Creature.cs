@@ -134,12 +134,16 @@ public class Creature : NetworkBehaviour{
 		limb.hitpoints = 4;
 		OrganPrototypes.Instance.AttachLimb(segment, limb, new Vector3(-9f/128f,-66f/128f,-0.001f));
 
+		appendage = OrganPrototypes.Instance.LoadAppendage(3);
+		appendage.hitpoints = 4;
+		OrganPrototypes.Instance.AttachAppendage(limb, appendage);
+
 		//Left Leg
 		limb = OrganPrototypes.Instance.LoadLimb(3);
 		limb.hitpoints = 4;
 		OrganPrototypes.Instance.AttachLimb(segment, limb, new Vector3(-9f/128f,-66f/128f,0.001f));
 
-		//Left Leg
+		//Tail
 		limb = OrganPrototypes.Instance.LoadLimb(5);
 		limb.hitpoints = 4;
 		OrganPrototypes.Instance.AttachLimb(segment, limb, new Vector3(-111f/128f,-95f/128f,0.001f));
@@ -196,21 +200,17 @@ public class Creature : NetworkBehaviour{
 	}
 
 	void SetStance(){
-		CreatureBodySegment segment;
-		CreatureLimb limb;
+		CombatMoveSet cms;
 		CombatStance stance1 = new CombatStance();
-		CombatStanceComponent comp;
-		for (int i=0;i<segments.Count;i++){
-			segment = segments[i];
-			for(int j=0;j<segment.limbs.Count;j++){
-				limb = segment.limbs[j];
-				if(limb.combatActions.Count > 0){
-					comp = new CombatStanceComponent(limb);
-					comp.actions[0] = limb.combatActions[0];
-					stance1.componentList.Add(comp);
-				}
-			}
-		}
+
+		cms = new CombatMoveSet();
+		cms.moves.Add(segments[1].limbs[0].combatActions[0]);//right major tentacle
+		cms.moves.Add(segments[1].limbs[1].combatActions[0]);//left major tentacle
+		stance1.combatMoveSets[0] = cms;
+		
+		cms = new CombatMoveSet();
+		cms.moves.Add(segments[1].limbs[2].combatActions[0]);//bite
+		stance1.combatMoveSets[1] = cms;
 		
 		stances.Add(stance1);
 	}
@@ -226,6 +226,9 @@ public class Creature : NetworkBehaviour{
 				for(int j=0;j<segments[i].limbs.Count;j++){
 					if(segments[i].limbs[j].isReady){
 						segments[i].limbs[j].PlayAnimation("run");
+						if(segments[i].limbs[j].appendage != null){
+							segments[i].limbs[j].appendage.PlayAnimation("run");
+						}
 					}
 				}
 			}
@@ -258,6 +261,9 @@ public class Creature : NetworkBehaviour{
 				for(int j=0;j<segments[i].limbs.Count;j++){
 					if(segments[i].limbs[j].isReady){
 						segments[i].limbs[j].PlayAnimation("idle");
+						if(segments[i].limbs[j].appendage != null){
+							segments[i].limbs[j].appendage.PlayAnimation("idle");
+						}
 					}
 				}
 			}
@@ -294,25 +300,26 @@ public class Creature : NetworkBehaviour{
 
 	void CombatAction(){
 		bool attackSuccessful = false;
-		if(stances[stanceId].componentList.Count > 0 && !isAttacking){
-			for(int i=0;i<stances[stanceId].componentList.Count;i++){
-				CombatStanceComponent component = stances[stanceId].componentList[i];
-				int actionIndex = 0;
-				if (component.limb.hitpoints > 0 && !component.limb.isParalyzed && component.limb.isReady){
-					for(int j=0;j<4;j++){
-						if(control.actionModifier[j]){
-							actionIndex = j+1;
-							break;
-						}
+		if(!isAttacking){
+			int actionIndex = 0;
+			for(int i=0;i<4;i++){
+				if(control.actionModifier[i]){
+					actionIndex = i+1;
+					break;
+				}
+			}
+			if(control.shift){
+				actionIndex += 5;
+			}
+
+			CombatMoveSet moveSet = stances[stanceId].combatMoveSets[actionIndex];
+			if(moveSet != null){
+				for(int i=0;i<moveSet.moves.Count;i++){
+					CombatAction act = moveSet.moves[i];
+					if (act != null && act.limb.hitpoints > 0 && !act.limb.isParalyzed && act.limb.isReady){
+						StartCoroutine(act.limb.Attack(act));
+						attackSuccessful = true;
 					}
-					if(control.shift){
-						actionIndex += 5;
-					}
-					CombatAction act = component.actions[actionIndex];
-					if(act != null){
-						StartCoroutine(component.limb.Attack(act));
-					}
-					attackSuccessful = true;
 				}
 			}
 		}

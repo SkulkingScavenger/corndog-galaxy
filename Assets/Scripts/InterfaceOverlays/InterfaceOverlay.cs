@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class InterfaceOverlay : MonoBehaviour{
-	InteractiveInstallation installation = null;
+	public InteractiveInstallation installation = null;
+	public CreatureControl control = null;
+	public Creature user = null;
+	public Transform cam;
 	
 }

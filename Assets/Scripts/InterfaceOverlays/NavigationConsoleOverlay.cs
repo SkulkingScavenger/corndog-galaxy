@@ -4,19 +4,24 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class NavigationConsoleOverlay : InterfaceOverlay{
-	InteractiveInstallation installation = null;
-	CreatureControl control = null;
-	Creature user = null;
-	Transform cam;
+
+	
+
+	public GameObject starmap;
+	public int selectionCoordinateX;
+	public int selectionCoordinateY;
+	public int shipCoordinateX;
+	public int shipCoordinateY;
 
 	void Awake(){
 		Player localPlayer = GameObject.FindGameObjectWithTag("Control").GetComponent<Control>().GetPlayer();
 		cam = localPlayer.mainCamera.transform;
+		transform.position = new Vector3(cam.position.x, cam.position.y+1.5f, transform.position.z);
 		control = localPlayer.inputControl;
-		Debug.Log(control);
 		user = localPlayer.creature;
 		user.control = null;
-		Debug.Log(user.control);
+		installation = user.interactionInstallation;
+		NavigationConsoleAwake();
 	}
 
 	void Update(){
@@ -25,12 +30,7 @@ public class NavigationConsoleOverlay : InterfaceOverlay{
 			return;
 		}
 		transform.position = new Vector3(cam.position.x, cam.position.y+1.5f, transform.position.z);
-
-
-	}
-
-	private bool ShouldClose(){
-		return control.ctrl;
+		NavigationConsoleUpdate();
 	}
 
 	void Destroy(){
@@ -39,5 +39,34 @@ public class NavigationConsoleOverlay : InterfaceOverlay{
 		}
 	}
 
-	
+	private bool ShouldClose(){
+		return control.ctrl;
+	}
+
+	public void NavigationConsoleAwake(){
+		//starmap = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/InterfaceOverlays/NavigationConsoleDisplay"), Vector3.zero, Quaternion.identity);
+		starmap = transform.Find("StarMap").gameObject;
+	}
+
+	public void NavigationConsoleUpdate(){
+		float starmapWidth = 368;
+		float starmapHeight = 320f;
+		Vector2 mousepos = new Vector2(control.commandX,control.commandY);
+		Rect mapBounds = new Rect(
+			starmap.transform.position.x-starmapWidth/256f,
+			starmap.transform.position.y-starmapHeight/256f,
+			starmapWidth/128f,
+			starmapHeight/128f);
+		if(mapBounds.Contains(mousepos)){
+			if(control.moveCommand){
+
+			}
+			if(control.attackCommand){
+				selectionCoordinateX = (int)Mathf.Round(((mousepos.x-mapBounds.x)/mapBounds.width)*368);
+				selectionCoordinateY = (int)Mathf.Round((mapBounds.y-mousepos.y/mapBounds.height)*320f);
+				transform.Find("indicatorX").position = new Vector3(mapBounds.x+selectionCoordinateX/128f, mapBounds.y,-1);
+				transform.Find("indicatorY").position = new Vector3(mapBounds.x, mapBounds.y+selectionCoordinateY/128f,-1);
+			}
+		}
+	}
 }
