@@ -2,15 +2,11 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-
-/*
-Organ Presets
-*/
-
 public class OrganPrototypes : MonoBehaviour {
 	public List<CreatureBodySegment> segmentPrototypes = new List<CreatureBodySegment>();
 	public List<CreatureLimb> limbPrototypes = new List<CreatureLimb>();
 	public List<CreatureAppendage> appendagePrototypes = new List<CreatureAppendage>();
+	public static bool isInitialized = false;
 	
 	public static OrganPrototypes Instance { get; private set; }
 
@@ -22,6 +18,7 @@ public class OrganPrototypes : MonoBehaviour {
 		DontDestroyOnLoad(transform.gameObject);
 
 		RegisterOrgans();
+		isInitialized = true;
 	}
 
 	public CreatureBodySegment LoadSegment(int index){
@@ -29,6 +26,7 @@ public class OrganPrototypes : MonoBehaviour {
 		CreatureBodySegment source = segmentPrototypes[index];
 
 		segment.name = source.name;
+		segment.prototypeIndex = source.prototypeIndex;
 		segment.segmentType = source.segmentType;
 		segment.animationControllerName = source.animationControllerName;
 		segment.animations = source.animations;
@@ -41,10 +39,10 @@ public class OrganPrototypes : MonoBehaviour {
 		Transform parentTransform;
 		GameObject obj;
 		parentTransform = root.display;
-		obj = Instantiate(Resources.Load<GameObject>("Prefabs/Characters/LimbObject"));
+		obj = Instantiate(Resources.Load<GameObject>("Prefabs/Characters/CreatureDisplayNode"));
 		obj.transform.parent = parentTransform.transform;
 		segment.basePosition = offset;
-		obj.GetComponent<CreatureLimbObject>().rootSegment = segment;
+		obj.GetComponent<CreatureDisplayNode>().rootSegment = segment;
 		obj.GetComponent<SpriteRenderer>().transform.localPosition = segment.basePosition;
 		obj.GetComponent<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>(segment.animationControllerName);
 		if(root.segments.Count > 0){
@@ -65,6 +63,7 @@ public class OrganPrototypes : MonoBehaviour {
 		CombatAction act;
 
 		organ.name = source.name;
+		organ.prototypeIndex = source.prototypeIndex;
 		organ.limbType = source.limbType;
 		organ.animationControllerName = source.animationControllerName;
 		organ.appendageOffsets = source.appendageOffsets;
@@ -90,9 +89,9 @@ public class OrganPrototypes : MonoBehaviour {
 
 	public void AttachLimb(CreatureBodySegment segment, CreatureLimb limb, Vector3 offset){
 		limb.offset = offset;
-		GameObject limbObject = Instantiate(Resources.Load<GameObject>("Prefabs/Characters/LimbObject"));
+		GameObject limbObject = Instantiate(Resources.Load<GameObject>("Prefabs/Characters/CreatureDisplayNode"));
 		limbObject.transform.parent = segment.obj.transform;
-		limbObject.GetComponent<CreatureLimbObject>().root = limb;
+		limbObject.GetComponent<CreatureDisplayNode>().root = limb;
 		limbObject.GetComponent<SpriteRenderer>().transform.localPosition = offset;
 		limbObject.GetComponent<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>(limb.animationControllerName);
 		limb.obj = limbObject;
@@ -106,6 +105,7 @@ public class OrganPrototypes : MonoBehaviour {
 		CombatAction act;
 
 		appendage.name = source.name;
+		appendage.prototypeIndex = source.prototypeIndex;
 		appendage.animationControllerName = source.animationControllerName;
 		appendage.animations = source.animations;
 		
@@ -130,7 +130,7 @@ public class OrganPrototypes : MonoBehaviour {
 	public void AttachAppendage(CreatureLimb organ, CreatureAppendage appendage){
 		GameObject obj;
 		Transform display = organ.root.display;
-		obj = Instantiate(Resources.Load<GameObject>("Prefabs/Characters/LimbObject"));
+		obj = Instantiate(Resources.Load<GameObject>("Prefabs/Characters/CreatureDisplayNode"));
 		obj.transform.parent = organ.obj.transform;
 		obj.GetComponent<SpriteRenderer>().transform.position = new Vector3(display.transform.position.x + organ.offset.x, display.transform.position.y + organ.offset.y, organ.offset.z);
 		obj.GetComponent<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>(appendage.animationControllerName);
@@ -144,21 +144,19 @@ public class OrganPrototypes : MonoBehaviour {
 	}
 
 	private void RegisterOrgans(){
-		TextAsset file = Resources.Load("Text/OrganList") as TextAsset;
-		string text = file.text;
+		XmlProcessor xml = new XmlProcessor("Text/OrganList");
 		string node;
-		int i=0;
-		while(i < text.Length){
-			node = getNextNode(text, ref i);
+		while(!xml.IsDone()){
+			node = xml.getNextNode();
 			switch(node){
 			case "OrganSegmentNode":
-				readOrganSegmentNode(text,ref i);
+				readOrganSegmentNode(xml);
 				break;
 			case "OrganLimbNode":
-				readOrganLimbNode(text,ref i);
+				readOrganLimbNode(xml);
 				break;
 			case "OrganAppendageNode":
-				readOrganAppendageNode(text,ref i);
+				readOrganAppendageNode(xml);
 				break;
 			default:
 				break;
@@ -166,155 +164,121 @@ public class OrganPrototypes : MonoBehaviour {
 		}
 	}
 
-	private bool isWhiteSpace(char c){
-		return c == ' ' || c == '	' || c == '\n' || c == '\r';
-	}
-
-	private string getNextNode(string text,ref int i){
-		string buffer = "";
-		while(text[i] != '<'){
-			i++;
-		}
-		i++;
-		while(!isWhiteSpace(text[i]) && text[i]!='>'){
-			buffer = buffer + text[i];
-			i++;
-		}
-		i++;
-		return buffer;
-	}
-
-	private string getNextAttribute(string text,ref int i){
-		//string key = "";
-		string attributeValue = "";
-		while(text[i]!='"' && text[i]!='/'){
-			i++;
-		}
-		if(text[i] == '"'){
-			i++;
-			while(text[i]!='"'){
-				attributeValue = attributeValue + text[i];
-				i++;
-			}
-			i++;
-		}else{
-			i+=2;
-		}
-		return attributeValue;
-	}
-
-	private void readOrganSegmentNode(string text,ref int i){
+	private void readOrganSegmentNode(XmlProcessor xml){
 		string node;
 		CreatureBodySegment segment = new CreatureBodySegment();
 		//Get Tags
-		segment.name = getNextAttribute(text,ref i);
-		segment.segmentType = getNextAttribute(text,ref i);
-		segment.animationControllerName = getNextAttribute(text,ref i);
+		segment.name = xml.getNextAttribute();
+		segment.segmentType = xml.getNextAttribute();
+		segment.animationControllerName = xml.getNextAttribute();
 		//Get Subnodes
-		node = getNextNode(text, ref i);
+		node = xml.getNextNode();
 		while(node != "/OrganSegmentNode"){
 			switch(node){
 			case "OffsetNode":
-				segment.segmentOffsets.Add(readOffsetNode(text, ref i));
+				segment.segmentOffsets.Add(readOffsetNode(xml));
 				break;
 			case "AnimationNode":
-				segment.animations.Add(readAnimationNode(text, ref i));
+				segment.animations.Add(readAnimationNode(xml));
 				break;
 			}
-			node = getNextNode(text, ref i);
+			node = xml.getNextNode();
 		}
+		segment.prototypeIndex = segmentPrototypes.Count;
 		segmentPrototypes.Add(segment);
 	}
 
-	private void readOrganLimbNode(string text,ref int i){
+	private void readOrganLimbNode(XmlProcessor xml){
 		string node;
 		CreatureLimb limb = new CreatureLimb();
 		//Get Tags
-		limb.name = getNextAttribute(text,ref i);
-		limb.limbType = getNextAttribute(text,ref i);
-		limb.animationControllerName = getNextAttribute(text,ref i);
+		limb.name = xml.getNextAttribute();
+		limb.limbType = xml.getNextAttribute();
+		limb.animationControllerName = xml.getNextAttribute();
 		//Get Subnodes
-		node = getNextNode(text, ref i);
+		node = xml.getNextNode();
 		while(node != "/OrganLimbNode"){
 			switch(node){
 			case "OffsetNode":
-				limb.appendageOffsets.Add(readOffsetNode(text, ref i));
+				limb.appendageOffsets.Add(readOffsetNode(xml));
 				break;
 			case "AnimationNode":
-				limb.animations.Add(readAnimationNode(text, ref i));
+				limb.animations.Add(readAnimationNode(xml));
 				break;
 			case "ActionNode":
-				limb.combatActions.Add(readActionNode(text, ref i));
+				limb.combatActions.Add(readActionNode(xml));
 				break;
 			}
-			node = getNextNode(text, ref i);
+			node = xml.getNextNode();
 		}
+		limb.prototypeIndex = limbPrototypes.Count;
 		limbPrototypes.Add(limb);
 	}
 
-	private void readOrganAppendageNode(string text,ref int i){
+	private void readOrganAppendageNode(XmlProcessor xml){
 		string node;
 		CreatureAppendage appendage = new CreatureAppendage();
 		//Get Tags
-		appendage.name = getNextAttribute(text,ref i);
-		appendage.animationControllerName = getNextAttribute(text,ref i);
+		appendage.name = xml.getNextAttribute();
+		appendage.animationControllerName = xml.getNextAttribute();
 		//Get Subnodes
-		node = getNextNode(text, ref i);
+		node = xml.getNextNode();
 		while(node != "/OrganAppendageNode"){
 			switch(node){
 			case "AnimationNode":
-				appendage.animations.Add(readAnimationNode(text, ref i));
+				appendage.animations.Add(readAnimationNode(xml));
 				break;
 			case "ActionNode":
-				appendage.combatActions.Add(readActionNode(text, ref i));
+				appendage.combatActions.Add(readActionNode(xml));
 				break;
 			}
-			node = getNextNode(text, ref i);
+			node = xml.getNextNode();
 		}
+		appendage.prototypeIndex = appendagePrototypes.Count;
 		appendagePrototypes.Add(appendage);
 	}
 
-	private Vector3 readOffsetNode(string text, ref int i){
+	private Vector3 readOffsetNode(XmlProcessor xml){
 		float x;
 		float y; 
 		float z;
-		x = float.Parse(getNextAttribute(text,ref i))/128;
-		y = float.Parse(getNextAttribute(text,ref i))/128;
-		z = float.Parse(getNextAttribute(text,ref i));
+		x = float.Parse(xml.getNextAttribute())/128;
+		y = float.Parse(xml.getNextAttribute())/128;
+		z = float.Parse(xml.getNextAttribute());
 		return new Vector3(x,y,z);
 	}
 
-	private OrganAnimation readAnimationNode(string text, ref int i){
+	private OrganAnimation readAnimationNode(XmlProcessor xml){
 		string node;
 		OrganAnimation anim = new OrganAnimation();
-		anim.name = getNextAttribute(text,ref i);
-		node = getNextNode(text, ref i);
+		anim.name = xml.getNextAttribute();
+		node = xml.getNextNode();
 		while(node != "/AnimationNode"){
 			switch(node){
 			case "TagNode":
-				anim.tags.Add(readTagNode(text, ref i));
+				anim.tags.Add(readTagNode(xml));
 				break;
 			}
-			node = getNextNode(text, ref i);
+			node = xml.getNextNode();
 		}
 		return anim;
 	}
 
-	private string readTagNode(string text, ref int i){
-		return getNextAttribute(text,ref i);
+	private string readTagNode(XmlProcessor xml){
+		return xml.getNextAttribute();
 	}
 
-	private CombatAction readActionNode(string text, ref int i){
+	private CombatAction readActionNode(XmlProcessor xml){
 		CombatAction act = new CombatAction();
-		act.name = getNextAttribute(text,ref i);
-		act.range = float.Parse(getNextAttribute(text,ref i));
-		act.damage = int.Parse(getNextAttribute(text,ref i));
-		act.windupDuration = float.Parse(getNextAttribute(text,ref i));
-		act.attackDuration = float.Parse(getNextAttribute(text,ref i));
-		act.cooldownDuration = float.Parse(getNextAttribute(text,ref i));
-		act.windupAnimation = getNextAttribute(text,ref i);
-		act.attackAnimation = getNextAttribute(text,ref i);
-		act.backswingAnimation = getNextAttribute(text,ref i);
+		act.name = xml.getNextAttribute();
+		act.range = float.Parse(xml.getNextAttribute());
+		act.damage = int.Parse(xml.getNextAttribute());
+		act.windupDuration = float.Parse(xml.getNextAttribute());
+		act.attackDuration = float.Parse(xml.getNextAttribute());
+		act.cooldownDuration = float.Parse(xml.getNextAttribute());
+		act.windupAnimation = xml.getNextAttribute();
+		act.attackAnimation = xml.getNextAttribute();
+		act.backswingAnimation = xml.getNextAttribute();
 		return act;
 	}
 }

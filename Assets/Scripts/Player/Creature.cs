@@ -17,7 +17,6 @@ public class Creature : NetworkBehaviour{
 	public GameObject shadow;
 	public int shadowIndex = 1;
 	public GameObject healthBar;
-	[SyncVar] public int stanceId = 0;
 
 	//Biology
 	public List<CreatureOrgan> organs = new List<CreatureOrgan>();
@@ -38,9 +37,9 @@ public class Creature : NetworkBehaviour{
 	private float frictionForceX = 20f;		// rate of change per second in x velocity due to friction
 	private float frictionForceY = 10f;		// rate of change per second in y velocity due to friction
 
-	//Combat
+	//Combat	
+	[SyncVar] public int stanceId = 0;
 	public List<CombatStance> stances = new List<CombatStance>();
-	[SyncVar] public bool isAttacking = false;
 	[SyncVar] public float health = 100f;					// The player's health.
 	public float repeatDamagePeriod = 2f;		// How frequently the player can be damaged.
 
@@ -72,6 +71,7 @@ public class Creature : NetworkBehaviour{
 			control = ClientScene.FindLocalObject(new NetworkInstanceId(controlID)).GetComponent<CreatureControl>();
 			return;
 		}
+		if(control.isHudCommand){return;}
 		MouseMovement();
 		Jump();
 
@@ -106,7 +106,6 @@ public class Creature : NetworkBehaviour{
 	}
 
 	void OnTriggerEnter2D(Collider2D other){
-		Debug.Log(other.name);
 		if(other.gameObject.GetComponent("InteractiveInstallation") != null){
 			contactedInstallation = other.gameObject;
 		}
@@ -124,63 +123,22 @@ public class Creature : NetworkBehaviour{
 		CreatureBodySegment segment;
 		CreatureLimb limb;
 		CreatureAppendage appendage;
-		//Abdomen
-		segment = OrganPrototypes.Instance.LoadSegment(0);
-		segment.hitpoints = 20;
-		OrganPrototypes.Instance.AttachSegment(this, segment, new Vector3(-12f/128f,21f/128f,0f));
-
-		//Right Leg
-		limb = OrganPrototypes.Instance.LoadLimb(2);
-		limb.hitpoints = 4;
-		OrganPrototypes.Instance.AttachLimb(segment, limb, new Vector3(-9f/128f,-66f/128f,-0.001f));
-
-		appendage = OrganPrototypes.Instance.LoadAppendage(3);
-		appendage.hitpoints = 4;
-		OrganPrototypes.Instance.AttachAppendage(limb, appendage);
-
-		//Left Leg
-		limb = OrganPrototypes.Instance.LoadLimb(3);
-		limb.hitpoints = 4;
-		OrganPrototypes.Instance.AttachLimb(segment, limb, new Vector3(-9f/128f,-66f/128f,0.001f));
-
-		//Tail
-		limb = OrganPrototypes.Instance.LoadLimb(5);
-		limb.hitpoints = 4;
-		OrganPrototypes.Instance.AttachLimb(segment, limb, new Vector3(-111f/128f,-95f/128f,0.001f));
-
-		//Thorax
-		segment = OrganPrototypes.Instance.LoadSegment(1);
-		segment.hitpoints = 30;
-		OrganPrototypes.Instance.AttachSegment(this, segment, new Vector3(-12f/128f,21f/128f,-0.0001f));
-
-		//Right Major Tentacle
-		limb = OrganPrototypes.Instance.LoadLimb(0);
-		limb.hitpoints = 4;
-		OrganPrototypes.Instance.AttachLimb(segment, limb, new Vector3(58f/128f,90f/128f,-0.001f));
-
-		appendage = OrganPrototypes.Instance.LoadAppendage(0);
-		appendage.hitpoints = 2;
-		OrganPrototypes.Instance.AttachAppendage(limb, appendage);
-
-		//Left Major Tentacle
-		limb = OrganPrototypes.Instance.LoadLimb(1);
-		limb.hitpoints = 4;
-		OrganPrototypes.Instance.AttachLimb(segment, limb, new Vector3(23f/128f,99f/128f,0.001f));
-
-		appendage = OrganPrototypes.Instance.LoadAppendage(1);
-		appendage.hitpoints = 2;
-		OrganPrototypes.Instance.AttachAppendage(limb, appendage);
-
-		//Head
-		limb = OrganPrototypes.Instance.LoadLimb(4);
-		limb.hitpoints = 10;
-		OrganPrototypes.Instance.AttachLimb(segment, limb, new Vector3(87f/128f,34f/128f,0.0000f));
-
-		appendage = OrganPrototypes.Instance.LoadAppendage(2);
-		appendage.hitpoints = 2;
-		OrganPrototypes.Instance.AttachAppendage(limb, appendage);
-
-
+		Species species = SpeciesManager.Instance.GetSpeciesById(0);
+		foreach(CreatureBodySegment abstractSegment in species.physiology.segments){
+			segment = OrganPrototypes.Instance.LoadSegment(abstractSegment.prototypeIndex);
+			segment.hitpoints = abstractSegment.hitpoints;
+			OrganPrototypes.Instance.AttachSegment(this, segment, abstractSegment.basePosition);
+			foreach(CreatureLimb abstractLimb in abstractSegment.limbs){
+				limb = OrganPrototypes.Instance.LoadLimb(abstractLimb.prototypeIndex);
+				limb.hitpoints = abstractLimb.hitpoints;
+				OrganPrototypes.Instance.AttachLimb(segment, limb, abstractLimb.basePosition);
+				if(abstractLimb.appendage != null){
+					appendage = OrganPrototypes.Instance.LoadAppendage(abstractLimb.appendage.prototypeIndex);
+					appendage.hitpoints = abstractLimb.appendage.hitpoints;
+					OrganPrototypes.Instance.AttachAppendage(limb, appendage);
+				}
+			}
+		}
 	}
 
 	void SetShadow(){
@@ -204,11 +162,13 @@ public class Creature : NetworkBehaviour{
 		CombatStance stance1 = new CombatStance();
 
 		cms = new CombatMoveSet();
+		cms.iconIndex = 0;
 		cms.moves.Add(segments[1].limbs[0].combatActions[0]);//right major tentacle
 		cms.moves.Add(segments[1].limbs[1].combatActions[0]);//left major tentacle
 		stance1.combatMoveSets[0] = cms;
 		
 		cms = new CombatMoveSet();
+		cms.iconIndex = 1;
 		cms.moves.Add(segments[1].limbs[2].combatActions[0]);//bite
 		stance1.combatMoveSets[1] = cms;
 		
@@ -294,38 +254,50 @@ public class Creature : NetworkBehaviour{
 
 	void CombatMain(){
 		if(control.attackCommand){
-			CombatAction();
+			Attack();
+			// if(IsAttacking()){
+			// 	TODO: playAttackAnimation
+			// }
 		}
 	}
 
-	void CombatAction(){
-		bool attackSuccessful = false;
-		if(!isAttacking){
-			int actionIndex = 0;
-			for(int i=0;i<4;i++){
-				if(control.actionModifier[i]){
-					actionIndex = i+1;
-					break;
+	void Attack(){
+		CombatMoveSet moveSet;
+		moveSet = GetSelectedMoveSet();
+		if(moveSet != null){
+			for(int i=0;i<moveSet.moves.Count;i++){
+				CombatAction act = moveSet.moves[i];
+				if (act != null && act.limb.CanAttack()){
+					StartCoroutine(act.limb.Attack(act));
 				}
 			}
-			if(control.shift){
-				actionIndex += 5;
-			}
+		}
+	}
 
-			CombatMoveSet moveSet = stances[stanceId].combatMoveSets[actionIndex];
-			if(moveSet != null){
-				for(int i=0;i<moveSet.moves.Count;i++){
-					CombatAction act = moveSet.moves[i];
-					if (act != null && act.limb.hitpoints > 0 && !act.limb.isParalyzed && act.limb.isReady){
-						StartCoroutine(act.limb.Attack(act));
-						attackSuccessful = true;
-					}
+	private CombatMoveSet GetSelectedMoveSet(){
+		CombatMoveSet moveSet = null;
+		int actionIndex = 0;
+		for(int i=0;i<4;i++){
+			if(control.actionModifier[i]){
+				actionIndex = i+1;
+				break;
+			}
+		}
+		if(control.shift){
+			actionIndex += 5;
+		}
+		moveSet = stances[stanceId].combatMoveSets[actionIndex];
+		return moveSet;
+	}
+
+	public bool IsAttacking(){
+		foreach(CreatureBodySegment segment in segments){
+			foreach(CreatureLimb limb in segment.limbs){
+				if(limb.IsExecutingAttack()){
+					return true;
 				}
 			}
 		}
-		if(attackSuccessful){
-			//isAttacking = true;
-			//anim.Play("attack");
-		}
+		return false;
 	}
 }

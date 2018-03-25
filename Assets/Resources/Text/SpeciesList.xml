@@ -1,0 +1,106 @@
+<SpeciesTemplateNode
+	name = "Skirriashi"
+>
+	<SegmentNode
+		name="Abdomen"
+		prototypeID="0"
+		hitpoints="20"
+		x="-12"
+		y="21"
+		z="0"
+	>
+		<LimbNode 
+			name="Right Leg"
+			prototypeID="2"
+			hitpoints="8"
+			x="-9"
+			y="-66"
+			z="-0.001"
+		>
+			<AppendageNode
+				name="Right Foot"
+				prototypeID="3"
+				hitpoints="4"
+			>
+			</AppendageNode>
+		</LimbNode>
+		<LimbNode 
+			name="Left Leg"
+			prototypeID="3"
+			hitpoints="8"
+			x="-9"
+			y="-66"
+			z="0.001"
+		>
+			<AppendageNode
+				name="Left Foot"
+				prototypeID="4"
+				hitpoints="4"
+			>
+			</AppendageNode>
+		</LimbNode>
+		<LimbNode 
+			name="Tail"
+			prototypeID="5"
+			hitpoints="8"
+			x="-111"
+			y="-95"
+			z="-0.0001"
+		>
+		</LimbNode>
+	</SegmentNode>
+	<SegmentNode
+		name="Thorax"
+		prototypeID="1"
+		hitpoints="30"
+		x="-12"
+		y="21"
+		z="-0.0001"
+	>
+		<LimbNode 
+			name="Right Major Tentacle"
+			prototypeID="0"
+			hitpoints="4"
+			x="58"
+			y="90"
+			z="-0.001"
+		>
+			<AppendageNode
+				name="Right Claw"
+				prototypeID="0"
+				hitpoints="2"
+			>
+			</AppendageNode>
+		</LimbNode>
+		<LimbNode 
+			name="Left Major Tentacle"
+			prototypeID="1"
+			hitpoints="4"
+			x="23"
+			y="99"
+			z="0.001"
+		>
+			<AppendageNode
+				name="Left Claw"
+				prototypeID="1"
+				hitpoints="2"
+			>
+			</AppendageNode>
+		</LimbNode>
+		<LimbNode 
+			name="Neck"
+			prototypeID="4"
+			hitpoints="10"
+			x="87"
+			y="34"
+			z="0.0000"
+		>
+			<AppendageNode
+				name="Head"
+				prototypeID="2"
+				hitpoints="6"
+			>
+			</AppendageNode>
+		</LimbNode>
+	</SegmentNode>
+</SpeciesTemplateNode>

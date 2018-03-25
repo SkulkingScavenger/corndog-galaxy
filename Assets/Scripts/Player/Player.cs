@@ -43,6 +43,9 @@ public class Player : NetworkBehaviour{
 			transform.position = creature.transform.position;
 		}
 
+		Rect r = new Rect(mainCamera.transform.position.x - 512/128f,mainCamera.transform.position.y - 256/128f,1024,128);
+		inputControl.isHudCommand = !r.Contains(mainCamera.GetComponent<Camera>().ScreenToWorldPoint(Input.mousePosition));
+
 		inputControl.interfaceMode = interfaceMode;
 
 		inputControl.moveCommand = Input.GetAxis("MouseRight") != 0;
@@ -74,7 +77,6 @@ public class Player : NetworkBehaviour{
 		creatureObj.transform.position = new Vector3(startX,startY,0); 
 		NetworkServer.Spawn(creatureObj);
 	}
-
 
 	public void SetInterfaceMode(string mode){
 		Destroy(headsUpDisplay.gameObject);

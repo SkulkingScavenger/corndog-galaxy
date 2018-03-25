@@ -8,7 +8,18 @@ public class CombatStance{
 }
 
 public class CombatMoveSet{
+	public int iconIndex;
 	public List<CombatAction> moves = new List<CombatAction>();
+
+	public bool IsDisabled(){
+		for(int i=0;i<moves.Count;i++){
+			CombatAction act = moves[i];
+			if (act != null && act.limb.CanAttack()){
+				return false;
+			}
+		}
+		return true;
+	}
 }
 
 public class CombatAction{

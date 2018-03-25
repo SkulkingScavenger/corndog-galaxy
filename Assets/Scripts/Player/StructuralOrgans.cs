@@ -52,11 +52,20 @@ public class CreatureLimb : CreatureOrgan{
 	public short phase = 0;
 	public List<CombatAction> combatActions = new List<CombatAction>();
 	public CreatureAppendage appendage;
+	public Vector3 basePosition;
 	public List<Vector3> appendageOffsets = new List<Vector3>();
 
 	public CreatureLimb(){
 		type = "limb";
 		organLayer = "structural";
+	}
+
+	public bool CanAttack(){
+		return (hitpoints > 0 && !isParalyzed && isReady);
+	}
+
+	public bool IsExecutingAttack(){
+		return (isWindingUp || isAttacking || isBackswinging);
 	}
 
 	public IEnumerator Attack(CombatAction act){

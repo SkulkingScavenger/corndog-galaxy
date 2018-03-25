@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections;
-public class CreatureLimbObject : MonoBehaviour{
+public class CreatureDisplayNode : MonoBehaviour{
 	public CreatureLimb root = null;
 	public CreatureBodySegment rootSegment = null;
 	
