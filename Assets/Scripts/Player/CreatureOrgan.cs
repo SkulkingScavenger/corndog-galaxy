@@ -22,7 +22,7 @@ public class CreatureOrgan{
 		if(animationName != ""){
 			obj.GetComponent<Animator>().Play(animationName);
 		}else{
-			Debug.Log(name+" has no animation with tag: " + tag);
+			//Debug.Log(name+" has no animation with tag: " + tag);
 		}
 	}
 

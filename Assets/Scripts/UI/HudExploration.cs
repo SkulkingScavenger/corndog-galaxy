@@ -23,9 +23,9 @@ public class HudExploration : MonoBehaviour {
 		if(player.creature != null){
 			if(player.creature.contactedInstallation != null){
 					if(player.creature.interactionInstallation != null){
-						detailsBox.text = "Press Ctrl to stop using the " + player.creature.interactionInstallation.GetComponent<InteractiveInstallation>().name;
+						detailsBox.text = "Press Ctrl to stop using the " + player.creature.interactionInstallation.GetComponent<InteractiveInstallation>().installationName;
 					}else{
-						detailsBox.text = "Press Shift to use the " + player.creature.contactedInstallation.GetComponent<InteractiveInstallation>().name;
+						detailsBox.text = "Press Shift to use the " + player.creature.contactedInstallation.GetComponent<InteractiveInstallation>().installationName;
 					}
 				}else{
 					detailsBox.text = "All Systems Stable";

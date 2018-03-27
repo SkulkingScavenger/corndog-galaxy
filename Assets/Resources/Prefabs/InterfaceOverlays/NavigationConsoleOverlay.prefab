@@ -35,7 +35,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4369944125760128}
-  - component: {fileID: 212676976703607466}
   - component: {fileID: 114415838929892366}
   m_Layer: 0
   m_Name: NavigationConsoleOverlay
@@ -76,6 +75,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1986721921315002
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4585824781249074}
+  - component: {fileID: 212822081167851868}
+  m_Layer: 0
+  m_Name: StarshipIndicator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &4369944125760128
 Transform:
   m_ObjectHideFlags: 1
@@ -89,6 +104,7 @@ Transform:
   - {fileID: 4531178605787362}
   - {fileID: 4668904647731776}
   - {fileID: 4373546424893792}
+  - {fileID: 4585824781249074}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -99,7 +115,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1757344629653274}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.25, y: 0, z: 0}
+  m_LocalPosition: {x: -1.4375, y: 0, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4369944125760128}
@@ -118,6 +134,19 @@ Transform:
   m_Father: {fileID: 4369944125760128}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4585824781249074
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1986721921315002}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4369944125760128}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4668904647731776
 Transform:
   m_ObjectHideFlags: 1
@@ -125,7 +154,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1367159189408776}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.167, z: 0}
+  m_LocalPosition: {x: 0, y: -1.25, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4369944125760128}
@@ -142,6 +171,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11dfca6ab4714e040928fc33b5e7ecbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  installation: {fileID: 0}
+  isHudMenu: 0
+  control: {fileID: 0}
+  user: {fileID: 0}
+  cam: {fileID: 0}
+  InterfaceOverlayUI: {fileID: 0}
+  console: {fileID: 0}
+  starmap: {fileID: 0}
+  starshipIndicator: {fileID: 0}
+  starSystemIndicators: []
 --- !u!212 &212073392216023016
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -230,12 +269,12 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
---- !u!212 &212676976703607466
+--- !u!212 &212822081167851868
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1601603217661396}
+  m_GameObject: {fileID: 1986721921315002}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -261,15 +300,15 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -819437481
-  m_SortingLayer: -1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: d80449caadae8454abac6f3cfed8a05f, type: 3}
+  m_Sprite: {fileID: 21300030, guid: 57a67eeca4d60644ebb2deb8554b12c2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 10.24, y: 3.84}
+  m_Size: {x: 0.5, y: 0.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

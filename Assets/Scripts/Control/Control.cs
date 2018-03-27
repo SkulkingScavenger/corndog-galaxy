@@ -13,6 +13,7 @@ public class Control : NetworkBehaviour{
 	public NetworkManager networkControl;
 	public GameObject currentMenu;
 	public bool isDedicatedServer = false;
+	public Galaxy galaxy;
 
 	public static Control Instance { get; private set; }
 
@@ -35,17 +36,31 @@ public class Control : NetworkBehaviour{
 
 	}
 
-	public void StartGame(){
+	public void StartServer(){
 		GameObject networkObj = GameObject.FindGameObjectWithTag("NetworkControl");
 		networkControl = networkObj.GetComponent<NetworkControl>();
 		networkControl.StartHost();
-
 	}
 
-	public void EnterGame(){
+	public void JoinServer(){
 		GameObject networkObj = GameObject.FindGameObjectWithTag("NetworkControl");
 		networkControl = networkObj.GetComponent<NetworkControl>();
 		networkControl.StartClient();
+	}
+
+	public void StartGame(){
+		galaxy = new Galaxy();
+		//TODO sync multiplayer
+		Starship starship = new Starship();
+		starship.currentSector = galaxy.sectors[0,0];
+		starship.coordinateX = 150;
+		starship.coordinateY = 100;
+		starship.name = "Kirrikash Virr";
+		starship.classification = "Zakasi Starcrawler";
+		starship.hitpoints = 4500;
+		GameObject area = Instantiate(Resources.Load<GameObject>("Prefabs/Environment/Starcrawler"), Vector3.zero, Quaternion.identity);
+		area.GetComponent<Area>().starship = starship;
+
 	}
 
 	public Player GetPlayer(int id = -1){

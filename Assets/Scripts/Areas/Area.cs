@@ -1,27 +1,26 @@
 using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Area : MonoBehaviour
-{
+public class Area : NetworkBehaviour {
 	public string areaName = "starcrawler";
 	public string tileset = "starcrawler";
 	public string exteriorTileset = "starcrawler";
 	public bool isStructure = true;
 	public bool isVehicle = true;
 	public List<Corridor> corridors; 
+	public Starship starship = null;
 
-	void Awake ()
-	{
-
-	}
-
-	void Update ()
-	{
+	void Awake (){
 
 	}
 
-	public int getAreaLength(){
+	void Update (){
+
+	}
+
+	public int GetAreaLength(){
 		int output = 0;
 		if(corridors.Count > 0){
 			int min = corridors[0].x;
@@ -40,7 +39,7 @@ public class Area : MonoBehaviour
 		return output;
 	}
 
-	public Corridor mergeCorridors(Corridor a,Corridor b){
+	public Corridor MergeCorridors(Corridor a,Corridor b){
 		return a;
 	}
 }

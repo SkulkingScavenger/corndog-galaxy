@@ -30,7 +30,8 @@ public class Player : NetworkBehaviour{
 		headsUpDisplay = Instantiate(Resources.Load<GameObject>("Prefabs/UI/HudCombat"));
 		headsUpDisplay.transform.SetParent(mainCanvas.transform,false);
 
-		mainCamera = Instantiate(Resources.Load<GameObject>("Prefabs/Control/mainCamera"));
+		mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+		//mainCamera = Instantiate(Resources.Load<GameObject>("Prefabs/Control/mainCamera"));
 		mainCamera.GetComponent<CameraControl>().root = transform;
 	}
 	

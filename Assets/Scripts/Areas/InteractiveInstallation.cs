@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class InteractiveInstallation : NetworkBehaviour{
-	public string name = "Navigation Console";
+	public string installationName = "Navigation Console";
 	public string interfaceOverlayName = "NavigationConsoleOverlay";
 	public GameObject interfaceOverlay = null;
 	[SyncVar] public bool inUse = false;
@@ -21,6 +21,7 @@ public class InteractiveInstallation : NetworkBehaviour{
 	}
 
 	public void Update(){
+		//TODO
 		//check if installation is destroyed
 		//check if user is still alive;
 		//check if should close

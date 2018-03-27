@@ -37,7 +37,6 @@ public class SpeciesManager : MonoBehaviour {
 
 	private void RegisterDefaultSpecies(){
 		XmlProcessor xml = new XmlProcessor("Text/SpeciesList");
-		string node;
 		while(!xml.IsDone()){
 			xml.getNextNode();
 			ReadSpeciesNode(xml);
