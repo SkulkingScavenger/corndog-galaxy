@@ -54,7 +54,7 @@ MonoBehaviour:
   players: []
   currentPlayerId: 0
   areas: []
-  mainCamera: {fileID: 0}
   mainCanvas: {fileID: 0}
   networkControl: {fileID: 0}
   currentMenu: {fileID: 0}
+  isDedicatedServer: 0

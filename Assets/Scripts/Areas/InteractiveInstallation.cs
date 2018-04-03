@@ -16,7 +16,6 @@ public class InteractiveInstallation : NetworkBehaviour{
 	public int hitpoints = 40;
 
 	public void Awake(){
-		attachedWall = transform.parent.Find("wallN").gameObject;
 		
 	}
 

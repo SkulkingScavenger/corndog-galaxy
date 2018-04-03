@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Networking;
+
 
 public class CreatureBodySegment : CreatureOrgan{
 	public List<CreatureLimb> limbs = new List<CreatureLimb>();
@@ -49,6 +51,7 @@ public class CreatureLimb : CreatureOrgan{
 	public bool isWindingUp = false;
 	public bool isAttacking = false;
 	public bool isBackswinging = false;
+	public int currentOffsetId = 0;
 	public short phase = 0;
 	public List<CombatAction> combatActions = new List<CombatAction>();
 	public CreatureAppendage appendage;
@@ -80,7 +83,9 @@ public class CreatureLimb : CreatureOrgan{
 			isAttacking = true;
 			phase = 2;
 			PlayAttackAnimation(act,phase);
+			CmdAttack();
 			yield return new WaitForSeconds(act.attackDuration);
+			
 			root.StartCoroutine(Attack(act));
 		}else if(act.backswingDuration > 0 && phase < 3){
 			phase = 3;
@@ -94,6 +99,26 @@ public class CreatureLimb : CreatureOrgan{
 			yield return new WaitForSeconds(act.cooldownDuration);
 			isReady = true;
 		}
+	}
+
+	[Command] public void CmdAttack(){
+		GameObject bullet = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Characters/Projectile"), root.transform.position, Quaternion.identity);
+		
+		//adjust display
+		GameObject display = bullet.transform.Find("Display").gameObject;
+		//display.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/Thing");
+
+		//adjust position
+		int dir = (int)root.transform.localScale.x;
+		display.transform.position = obj.transform.position + appendageOffsets[currentOffsetId] + new Vector3(dir*0.5f,0,0);
+		display.transform.localScale = root.transform.localScale;
+
+		// make the bullet move away in front of the player
+		bullet.GetComponent<Rigidbody2D>().velocity = new Vector2(dir*2f,0);
+		NetworkServer.Spawn(bullet);
+
+		// make bullet disappear after 2 seconds
+		GameObject.Destroy(bullet, 4.0f); 
 	}
 
 	public void PlayAttackAnimation(CombatAction act, int animPhase){
@@ -119,6 +144,7 @@ public class CreatureLimb : CreatureOrgan{
 	}
 
 	public void AnimationEventCallback(int id){
+		currentOffsetId = id;
 		if(appendage != null){
 			appendage.offset = appendageOffsets[id];
 			appendage.obj.transform.localPosition = appendage.offset;

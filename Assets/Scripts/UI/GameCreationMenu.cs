@@ -49,7 +49,7 @@ public class GameCreationMenu : NetworkBehaviour {
 		netCtrl.networkAddress = Network.player.ipAddress;
 		netCtrl.networkPort = int.Parse(PortInput.text);
 		ctrl.isDedicatedServer = DedicatedServerToggle.isOn;
-		ctrl.StartServer();
+		netCtrl.StartHost();
 	}
 
 	public void ReturnToTitle(){

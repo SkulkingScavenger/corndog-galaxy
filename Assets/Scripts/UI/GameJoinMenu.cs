@@ -32,7 +32,7 @@ public class GameJoinMenu : MonoBehaviour {
 		NetworkControl nc = GameObject.FindGameObjectWithTag("NetworkControl").GetComponent<NetworkControl>();
 		nc.networkAddress = IpInput.text;
 		nc.networkPort = int.Parse(PortInput.text);
-		GameObject.FindGameObjectWithTag("Control").GetComponent<Control>().JoinServer();
+		nc.StartClient();
 	}
 
 	public void ReturnToTitle(){

@@ -4,19 +4,23 @@ using System.Collections.Generic;
 
 public class Starship {
 	public Sector currentSector;
-	public int coordinateX;
-	public int coordinateY;
+	public Coordinates coordinates;
+	public int x {get {return coordinates.x;} set{coordinates.x = value;}}
+	public int y {get {return coordinates.y;} set{coordinates.y = value;}}
+
 	public string name;
 	public string classification;
 	public int hitpoints;
 	public bool isTraveling = false;
 	public bool isWarping = false;
-	public int destinationCoordinateX;
-	public int destinationCoordinateY;
-	public int warpDestinationCoordinateX;
-	public int warpDestinationCoordinateY;
+	public Coordinates destinationCoordinates = new Coordinates();
+	public Coordinates warpDestinationCoordinates = new Coordinates();
 
-	public Starship(){
-		
+	public Area area;
+	public Tileset tileset = new Tileset("starcrawler");
+
+
+	public Starship(int x=0, int y=0){
+		coordinates = new Coordinates();
 	}
 }

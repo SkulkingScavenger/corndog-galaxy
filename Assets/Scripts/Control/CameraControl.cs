@@ -13,6 +13,7 @@ public class CameraControl : MonoBehaviour {
 	private float currentframe = 0f;
 	private float myDelta = 0f;
 
+
 	public Transform root = null;		// Reference to the player's transform.
 
 
@@ -35,6 +36,9 @@ public class CameraControl : MonoBehaviour {
 		}else{
 			transform.position = new Vector3(0, 0, transform.position.z);
 		}
+		if(Control.Instance.currentArea != null){
+			Control.Instance.currentArea.transform.Find("Sky").transform.position = transform.position + new Vector3(0,0,20);
+		}
 	}
 
 	private bool CheckXMargin(){
@@ -45,13 +49,13 @@ public class CameraControl : MonoBehaviour {
 	private void TrackPlayer (){
 		// By default the target x and y coordinates of the camera are it's current x and y coordinates.
 		float targetX = transform.position.x;
-		float targetY = 0;
+		float targetY = Mathf.Round((root.position.y*128)/768) * 6 ;
 
 		// If the player has moved beyond the x margin...
-		if(CheckXMargin())
+		if(CheckXMargin()){
 			// ... the target x coordinate should be a Lerp between the camera's current x position and the player's current x position.
 			targetX = Mathf.Lerp(transform.position.x, root.position.x, avg);
-
+		}
 
 		// The target x and y coordinates should not be larger than the maximum or smaller than the minimum.
 		//targetX = Mathf.Clamp(targetX, minXAndY.x, maxXAndY.x);

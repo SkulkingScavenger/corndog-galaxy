@@ -6,12 +6,11 @@ using System.Collections.Generic;
 public class Creature : NetworkBehaviour{
 	
 	//Control
-	public int playerId;
+	public int playerId = -1;
 	public CreatureControl control = null;
 	[SyncVar] public uint controlID = 0;
 
 	//Display
-	[SyncVar] public bool facingRight = true;			// For determining which way the player is currently facing.
 	private Animator anim;		// Reference to the player's animator component.
 	public Transform display;
 	public GameObject shadow;
@@ -32,8 +31,8 @@ public class Creature : NetworkBehaviour{
 	public float accelerationY = 50f;		// rate of change per second in Y velocity while moving
 	public float speedX = 0f;				// The current velocity in the x axis.
 	public float speedY = 0f;				// The current velocity in the y axis.
-	public float maxSpeedX = 3f;			// The fastest the player can travel in the x axis.
-	public float maxSpeedY = 1.5f;			// The fastest the player can travel in the x axis.
+	public float maxSpeedX = 6f;			// The fastest the player can travel in the x axis.
+	public float maxSpeedY = 3f;			// The fastest the player can travel in the x axis.
 	private float frictionForceX = 20f;		// rate of change per second in x velocity due to friction
 	private float frictionForceY = 10f;		// rate of change per second in y velocity due to friction
 
@@ -47,7 +46,7 @@ public class Creature : NetworkBehaviour{
 	public bool isInteracting = false;
 	public InteractiveInstallation interactionInstallation = null;
 	public GameObject contactedInstallation = null;
-
+	public GameObject contactedDoor = null;
 
 	void Awake(){
 		display = transform.Find("Display");
@@ -109,12 +108,21 @@ public class Creature : NetworkBehaviour{
 		if(other.gameObject.GetComponent("InteractiveInstallation") != null){
 			contactedInstallation = other.gameObject;
 		}
+		if(other.gameObject.GetComponent("DoorInstallation") != null){
+			contactedDoor = other.gameObject;
+			StartCoroutine(contactedDoor.GetComponent<DoorInstallation>().Traverse(this));
+		}
 	}
 
 	void OnTriggerExit2D(Collider2D other){
 		if(other.gameObject.GetComponent("InteractiveInstallation") != null && contactedInstallation != null){
 			if(other.gameObject.GetInstanceID() == contactedInstallation.gameObject.GetInstanceID()){
 				contactedInstallation = null;
+			}
+		}
+		if(other.gameObject.GetComponent("DoorInstallation") != null && contactedDoor != null){
+			if(other.gameObject.GetInstanceID() == contactedDoor.gameObject.GetInstanceID()){
+				contactedDoor = null;
 			}
 		}
 	}
