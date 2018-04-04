@@ -30,7 +30,7 @@ public class NavigationConsoleOverlay : InterfaceOverlay{
 		currentSector = Galaxy.Instance.starmap.sectors[0,0];
 		starmap = transform.Find("StarMap").gameObject;
 		starmap.GetComponent<SpriteRenderer>().sprite = sectorSprites[currentSector.spriteIndex];
-		starship = installation.transform.root.gameObject.GetComponent<Area>().starship;
+		starship = AreaManager.Instance.currentArea.starship;
 
 		GameObject starSystemIndicator = console.transform.Find("SectorDisplay").transform.Find("StarSystemIndicator").gameObject;
 		GameObject temp;

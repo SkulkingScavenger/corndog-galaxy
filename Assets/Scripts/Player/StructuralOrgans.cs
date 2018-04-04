@@ -83,7 +83,12 @@ public class CreatureLimb : CreatureOrgan{
 			isAttacking = true;
 			phase = 2;
 			PlayAttackAnimation(act,phase);
-			CmdAttack();
+			if(root.isServer){
+				SpawnProjectile();
+			}else{
+				//CmdAttack();
+			}
+			
 			yield return new WaitForSeconds(act.attackDuration);
 			
 			root.StartCoroutine(Attack(act));
@@ -102,6 +107,10 @@ public class CreatureLimb : CreatureOrgan{
 	}
 
 	[Command] public void CmdAttack(){
+		SpawnProjectile();
+	}
+
+	public void SpawnProjectile(){
 		GameObject bullet = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Characters/Projectile"), root.transform.position, Quaternion.identity);
 		
 		//adjust display

@@ -56,6 +56,7 @@ public class Control : MonoBehaviour{
 
 		
 		GameObject areaManager = Instantiate(Resources.Load<GameObject>("Prefabs/Control/AreaManager"), Vector3.zero, Quaternion.identity);
+		NetworkServer.Spawn(areaManager);
 		AreaManager.Instance.Init();
 		
 	}

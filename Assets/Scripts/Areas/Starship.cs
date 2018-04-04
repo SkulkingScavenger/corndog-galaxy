@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Starship {
+	public int index;
+
 	public Sector currentSector;
 	public Coordinates coordinates;
 	public int x {get {return coordinates.x;} set{coordinates.x = value;}}
@@ -22,5 +24,7 @@ public class Starship {
 
 	public Starship(int x=0, int y=0){
 		coordinates = new Coordinates();
+		index = Galaxy.Instance.starships.Count;
+		Galaxy.Instance.starships.Add(this);
 	}
 }

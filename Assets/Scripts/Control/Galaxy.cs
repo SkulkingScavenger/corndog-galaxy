@@ -69,23 +69,43 @@ public class Galaxy : NetworkBehaviour {
 
 	public void SyncGalaxy(){
 		Sector sec;
-		if(isServer){
-			RpcSpawnGalaxy(starmap.width, starmap.height);
-		}
+		RpcSpawnGalaxy(starmap.width, starmap.height);
 		for(int i=0;i<starmap.width;i++){
 			for(int j=0;j<starmap.height;j++){
 				sec = starmap.sectors[i,j];
 				foreach(Planet p in sec.planets){
-					if(isServer){
-						RpcAddPlanet(p.name,p.spriteIndex,p.starSystemSpriteIndex,p.shortDescription,p.sector.x,p.sector.y,p.x,p.y);
-					}
+					RpcAddPlanet(p.name, p.spriteIndex, p.starSystemSpriteIndex, p.shortDescription, p.sector.x, p.sector.y, p.x, p.y);
 				}
 			}
 		}
+		for(int i=0;i<starships.Count;i++){
+			SpawnStarship(starships[i]);
+		}
+	}
+
+	private void SpawnStarship(Starship starship){
+		int secX = starship.currentSector.x;
+		int secY = starship.currentSector.y;
+		int x = starship.x;
+		int y = starship.y;
+		string name = starship.name;
+		string classification = starship.classification;
+		int hp = starship.hitpoints;
+		RpcSpawnStarship(secX,secY,x,y,name,classification,hp);
+	}
+
+	[ClientRpc] private void RpcSpawnStarship(int sectorX, int sectorY, int x, int y, string name, string classification, int hp){
+		Starship starship = new Starship();
+		starship.currentSector = Galaxy.Instance.starmap.sectors[sectorX,sectorY];
+		starship.coordinates.x = x;
+		starship.coordinates.y = y;
+		starship.name = name;
+		starship.classification = classification;
+		starship.hitpoints = hp;
 	}
 
 	[ClientRpc] public void RpcSpawnGalaxy(int gw, int gh){
-		if (starmap != null){
+		if (starmap == null){
 			starmap = new Starmap(gw, gh);
 		}
 	}

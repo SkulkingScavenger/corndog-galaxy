@@ -26,6 +26,11 @@ public class NetworkControl : NetworkManager {
 		GameObject player = (GameObject)Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
 		NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
 		player.GetComponent<Player>().Init();
+		if(!player.GetComponent<Player>().isLocalPlayer){
+			Galaxy.Instance.SyncGalaxy();
+			AreaManager.Instance.SpawnArea();
+			AreaManager.Instance.SpawnAreaObject();
+		}
 	}
 
 	

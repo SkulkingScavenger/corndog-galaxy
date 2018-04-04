@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Networking;
 
 public class Area {
 	public string name = "starcrawler";
@@ -56,12 +57,14 @@ public class Area {
 			}
 			cor.segments.Add(segment);
 		}
+		cor.index = corridors.Count;
 		corridors.Add(cor);
 		return cor;
 	}
 }
 
 public class AreaCorridor {
+	public int index;
 	public Area area;
 	public List<AreaSegment> segments = new List<AreaSegment>(); 
 
@@ -73,6 +76,7 @@ public class AreaCorridor {
 public class AreaSegment{
 	public AreaCorridor corridor;
 	public int index;
+	public NetworkIdentity netId = null;
 	public Area area {get {return corridor.area;} private set{}}
 	public Coordinates coordinates {get {return new Coordinates(corridor.x+index,corridor.y);} private set{}}
 	public int x {get {return coordinates.x;} private set{}}
@@ -130,6 +134,7 @@ public class AreaSegmentWall{
 }
 
 public class AreaSegmentInstallation{
+	public NetworkIdentity netId = null;
 	public string type = "";
 	public string name = "";
 	public string overlayName = "";
