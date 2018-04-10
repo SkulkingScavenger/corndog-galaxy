@@ -47,18 +47,18 @@ Examples of unacceptable behavior by participants include:
 
 SkulkingScavenger is responsible for making up the standards of acceptable behavior and can be expected to take arbitrary and exaggerated action in response to any instances of unacceptable behavior.
 
-Project maintainers have the right and responsibility to remove, edit, vandalize, insult, joke-at-the-expense-of, and/or reject comments, commits, code, wiki edits, issues, opinions, and other contributions that are not aligned to this Code of Conduct, or to ban temporarily or permanently any contributor for other behaviors that they deem inappropriate, heretical, repetitive, or stupid.
+Project maintainers have the right and responsibility to remove, edit, reject, vandalize, insult, and/or joke at the expense of comments, commits, code, wiki edits, issues, opinions, and other contributions that are not aligned to this Code of Conduct, or to whine at, demote, bite their fingers at, or permaban any contributor for behaviors that they deem inappropriate, stupid, repetitive, or heretical.
 
 ## Scope
 
 This Code of Conduct applies everywhere and at all times forever and ever but especially while representing the project or community. 
-Examples of representing the project or community include impersonations of SkulkingScavenger, waving a flag that says "I am the cool tapes galaxy project incarnate", or wearing the Official The-Cool-Tapes-Galaxy Ultra-Hat in public. 
+Examples of representing the project or community include impersonating SkulkingScavenger, announcing "I am the cool tapes galaxy project incarnate" over loudspeaker, or wearing the Official The-Cool-Tapes-Galaxy Ultra-Hat in public. 
 Representation of a project may be further defined and clarified at the sole and arbitrary discretion of SkulkingScavenger.
 
 ## Enforcement
 
-Instances of embarrassing, stupid, heretical, or otherwise unacceptable behavior may be reported by contacting the chief of secret police at SkulkingScavenger@gmail.com. The secret police will review and investigate everything they can get their hands on, and will crack down in a way that they feel like at the time. 
-The secret police value their informers and promise to **never** sell them out or leak their information unless they really, really want to.
+Instances of embarrassing, stupid, heretical, or otherwise unacceptable behavior should be immediately reported to the chief of secret police at SkulkingScavenger@gmail.com. We will review and investigate everything we can get our hands on, and retaliate in a way that we feel like at the time. <br>
+The secret police value their informers and promise to **never** sell them out or leak their information unless we really, really want to.
 
 Project maintainers who fail in their duties may face dire consequences as determined by SkulkingScavenger.
 
