@@ -9,13 +9,13 @@ To denounce the evils of truth and love<br>
 To extend our reach to the stars above<br>
 One Galaxy, Under Partygeist,<br>
 Indivisible,<br>
-the end<br>
+and fun for the whole family<br>
+The End.
 
+## The Overmind's Pledge (cooler than ours)
 
-## The Overmind's Pledge
-
-Know that I am the Overmind, the eternal will of the Swarm, and that you have been created to serve me. Behold that I shall set you amongst the greatest of my Cerebrates, that you might benefit from their wisdom and experience. 
-If ever your flesh should fail, that flesh shall be made anew. that is my covenant with all Cerebrates.<br>
+Know that I am the Overmind, the eternal will of the Swarm, and that you have been created to serve me. Behold that I shall set you amongst the greatest of my Cerebrates, that you might benefit from their wisdom and experience.<br>
+If ever your flesh should fail, that flesh shall be made anew. That is my covenant with all Cerebrates.<br>
 
 ## Our Standards
 
@@ -27,19 +27,21 @@ Examples of behavior that contributes to creating a positive environment include
 * Praising the Sun
 * Showing empathy towards cool things like aliens and gorillas
 * Making references to Star Control 2 or Starcraft 1
+* Clarifying your tone by gratuitous use of ciccione emojis
 
 Examples of unacceptable behavior by participants include:
 
-* Using the word "Powah!"
+* Using the word "Powah!", ever
 * Using the wiki to peddle counterfeit novelty items 
 * Leaving "clever" or "cute" comments in the code
+* Worshipping Chaos
 * Ordering pineapple on pizza
 * Thinking Consoles are better than PCs for videogames
 * Disagreeing with SkulkingScavenger's taste in videogames
 * Disagreeing with SkulkingScavenger, ever
 * Questioning the Fairness of this Code of Conduct
 * Whining
-* Other conduct SkulkingScavenger deems annoying
+* Other conduct SkulkingScavenger deems annoying or heretical
 
 ## Our Responsibilities
 
@@ -55,7 +57,7 @@ Representation of a project may be further defined and clarified at the sole and
 
 ## Enforcement
 
-Instances of embarrassing, stupid, normal, or otherwise unacceptable behavior may be reported by contacting the chief of secret police at SkulkingScavenger@gmail.com. The secret police will review and investigate everything they can get their hands on, and will crack down in a way that they feel like at the time. 
+Instances of embarrassing, stupid, heretical, or otherwise unacceptable behavior may be reported by contacting the chief of secret police at SkulkingScavenger@gmail.com. The secret police will review and investigate everything they can get their hands on, and will crack down in a way that they feel like at the time. 
 The secret police value their informers and promise to **never** sell them out or leak their information unless they really, really want to.
 
 Project maintainers who fail in their duties may face dire consequences as determined by SkulkingScavenger.
