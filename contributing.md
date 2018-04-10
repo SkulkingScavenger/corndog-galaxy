@@ -1,4 +1,4 @@
-#Contributing to The Cool Tapes Galaxy
+# Contributing to The Cool Tapes Galaxy
 The Cool Tapes Galaxy is an open-source community project and we welcome volunteer contributions. 
 If you can create assets, develop features, fix bugs, or write lore, we can use your help.
 Depending on your familiarity with git and/or unity (or lack thereof) its possible to get overwhelmed just diving into a big project.<br>
