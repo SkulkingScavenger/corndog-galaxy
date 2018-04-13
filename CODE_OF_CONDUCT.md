@@ -8,7 +8,7 @@ To unite all people within our nation<br>
 To denounce the evils of truth and love<br>
 To extend our reach to the stars above<br>
 One Galaxy, Under Partygeist,<br>
-Indivisible,<br>
+Indivisible by zero,<br>
 and fun for the whole family<br>
 The End.
 
