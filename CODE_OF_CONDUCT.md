@@ -27,7 +27,7 @@ Examples of behavior that contributes to creating a positive environment include
 * Praising the Sun
 * Showing empathy towards cool things like aliens and gorillas
 * Making references to Star Control 2 or Starcraft 1
-* Clarifying your tone by gratuitous use of ciccione emojis
+* Duly clarifying your tone by gratuitous and excessive use of ciccione emojis
 
 Examples of unacceptable behavior by participants include:
 
@@ -39,9 +39,8 @@ Examples of unacceptable behavior by participants include:
 * Thinking Consoles are better than PCs for videogames
 * Disagreeing with SkulkingScavenger's taste in videogames
 * Disagreeing with SkulkingScavenger, ever
-* Questioning the Fairness of this Code of Conduct
-* Whining
 * Other conduct SkulkingScavenger deems annoying or heretical
+* Questioning the Fairness of this Code of Conduct
 
 ## Our Responsibilities
 
@@ -57,8 +56,8 @@ Representation of a project may be further defined and clarified at the sole and
 
 ## Enforcement
 
-Instances of embarrassing, stupid, heretical, or otherwise unacceptable behavior should be immediately reported to the chief of secret police at SkulkingScavenger@gmail.com. We will review and investigate everything we can get our hands on, and retaliate in a way that we feel like at the time. <br>
-The secret police value their informers and promise to **never** sell them out or leak their information unless we really, really want to.
+Instances of embarrassing, stupid, heretical, or otherwise unacceptable behavior should be immediately reported to the chief of fashion police at SkulkingScavenger@gmail.com. We will review and investigate everything we can get our hands on, and retaliate in a way that we feel like at the time. <br>
+The fashion police value their informers and promise to **never** sell them out or leak their information unless we really, really want to.
 
 Project maintainers who fail in their duties may face dire consequences as determined by SkulkingScavenger.
 
