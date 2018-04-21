@@ -115,7 +115,7 @@ public class CreatureLimb : CreatureOrgan{
 		
 		//adjust display
 		GameObject display = bullet.transform.Find("Display").gameObject;
-		//display.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/Thing");
+		display.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/Projectiles/Bullet");
 
 		//adjust position
 		int dir = (int)root.transform.localScale.x;
@@ -127,7 +127,7 @@ public class CreatureLimb : CreatureOrgan{
 		NetworkServer.Spawn(bullet);
 
 		// make bullet disappear after 2 seconds
-		GameObject.Destroy(bullet, 4.0f); 
+		GameObject.Destroy(bullet, 5.0f); 
 	}
 
 	public void PlayAttackAnimation(CombatAction act, int animPhase){

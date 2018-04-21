@@ -23,17 +23,17 @@ public class Projectile : NetworkBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D other){
-		if(other.gameObject.GetComponent("Creature") != null){
-			Creature c = other.gameObject.GetComponent<Creature>();
-			if(other.gameObject.GetComponent<NetworkIdentity>().netId.Value != creatorId){
-				damageCreature(c);
-				if(!canHitMultiple){
-					Destroy(gameObject);
-				}
-			}
-		}else if(other.gameObject.GetComponent("wall") != null){
-			Destroy(gameObject);
-		}
+		// if(other.gameObject.GetComponent("Creature") != null){
+		// 	Creature c = other.gameObject.GetComponent<Creature>();
+		// 	if(other.gameObject.GetComponent<NetworkIdentity>().netId.Value != creatorId){
+		// 		damageCreature(c);
+		// 		if(!canHitMultiple){
+		// 			Destroy(gameObject);
+		// 		}
+		// 	}
+		// }else if(other.gameObject.GetComponent("wall") != null){
+		// 	Destroy(gameObject);
+		// }
 	}
 
 

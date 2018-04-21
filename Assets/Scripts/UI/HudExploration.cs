@@ -41,6 +41,7 @@ public class HudExploration : MonoBehaviour {
 	}
 
 	public void SetInterfaceModeCombat(){
+		player.mainCamera.transform.Find("music").GetComponent<AudioSource>().Play();
 		player.SetInterfaceMode("combat");
 	}
 }

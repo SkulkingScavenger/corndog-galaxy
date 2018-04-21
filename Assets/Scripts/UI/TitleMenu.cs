@@ -8,6 +8,8 @@ public class TitleMenu : MonoBehaviour {
 	public void Awake(){
 		transform.Find("Panel").transform.Find("Button").GetComponent<Button>().onClick.AddListener(delegate { JoinAsHost(); });
 		transform.Find("Panel").transform.Find("Button1").GetComponent<Button>().onClick.AddListener(delegate { JoinAsClient(); });
+		transform.Find("Panel").transform.Find("Button2").GetComponent<Button>().onClick.AddListener(delegate { CreateSpecies(); });
+		transform.Find("Panel").transform.Find("Button3").GetComponent<Button>().onClick.AddListener(delegate { Quit(); });
 	}
 
 	public void JoinAsHost(){
@@ -24,12 +26,15 @@ public class TitleMenu : MonoBehaviour {
 		Destroy(transform.gameObject);
 	}
 
-	public void StartSandbox(){
-		SceneManager.LoadScene("Level");
+	public void CreateSpecies(){
+		Transform mainCanvas = transform.parent;
+		GameObject currentMenu = Instantiate(Resources.Load<GameObject>("Prefabs/UI/SpeciesCreationMenu"));
+		currentMenu.transform.SetParent(mainCanvas,false);
+		Destroy(transform.gameObject);
 	}
 
-	public void Quit(){}
 
-	
-
+	public void Quit(){
+		Application.Quit();
+	}
 }

@@ -49,9 +49,11 @@ public class HudCombat : MonoBehaviour {
 	}
 
 	public void SetInterfaceModeExploration(){
+		player.mainCamera.transform.Find("music").GetComponent<AudioSource>().Stop();
 		player.SetInterfaceMode("exploration");
 	}
 	public void SetInterfaceModeIndustry(){
+		player.mainCamera.transform.Find("music").GetComponent<AudioSource>().Stop();
 		player.SetInterfaceMode("industry");
 	}
 
