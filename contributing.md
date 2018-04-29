@@ -17,7 +17,7 @@ For anything besides editing the wiki, you will need **git**, a **github account
 Then consult the following helpful guides:
 * <a href="https://github.com/SkulkingScavenger/the-cool-tapes-galaxy/wiki/Getting-and-Uploading-the-Project-Using-Git">Getting and Uploading the Project Using Git (guide for non-programmers)</a>
 * <dt><a href="https://github.com/SkulkingScavenger/the-cool-tapes-galaxy/wiki/Building-and-Running-the-Game">Building and Running the Game</a></dt>
-
+* <a href="https://github.com/SkulkingScavenger/the-cool-tapes-galaxy/wiki/Making-a-Pull-Request">Pull Request Guidelines</a>
 # Submitting a Bug Report
   Submit Bugs to SkulkingScavenger@gmail.com or open an issue on github. Alternatively, complain on discord.
 
@@ -25,8 +25,7 @@ Then consult the following helpful guides:
 The Cool Tapes Galaxy is written in C# using the Unity3D game engine. If you know how to use these things, thats great. 
 If not, watch out. All the guides online are pretty useless imo, but good luck. Hit me up on discord for a crash course if you want.
 
-Be sure to read our <a href="https://github.com/SkulkingScavenger/the-cool-tapes-galaxy/wiki/Coding-Standards">Coding Standards</a> 
-and our <a href="https://github.com/SkulkingScavenger/the-cool-tapes-galaxy/wiki/Making-a-Pull-Request">Pull Request Guidelines</a>.
+Be sure to read our <a href="https://github.com/SkulkingScavenger/the-cool-tapes-galaxy/wiki/Coding-Standards">Coding Standards</a>.
 
 # Help Develop the World
 <a href="https://github.com/SkulkingScavenger/the-cool-tapes-galaxy/wiki">Visit The Wiki</a>. This is where we keep our most official lore.
@@ -44,3 +43,5 @@ Further details depend specifically on what kind of asset you want to contribute
 
 Refer to the following helpful guides for details:
 * <dt><a href="https://github.com/SkulkingScavenger/the-cool-tapes-galaxy/wiki/Loading-Sprites-and-Creating-Animations">Loading Sprites and Creating Animations</a></dt>
+
+If anything doesn't make sense, tell me using the resources given above and also be sure to have a look at the <a href="https://github.com/SkulkingScavenger/the-cool-tapes-galaxy/wiki/Guides">Guides Page on the Wiki</a>
