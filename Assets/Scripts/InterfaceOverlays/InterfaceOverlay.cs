@@ -21,7 +21,8 @@ public class InterfaceOverlay : MonoBehaviour{
 		user.control = null;
 		installation = user.interactionInstallation;
 		InterfaceOverlayUI = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/InterfaceOverlays/InterfaceOverlayUI"), Vector3.zero, Quaternion.identity);
-		InterfaceOverlayUI.transform.SetParent(localPlayer.mainCanvas.transform,false);		
+		InterfaceOverlayUI.transform.SetParent(localPlayer.mainCanvas.transform,false);
+		InterfaceOverlayUI.transform.localPosition = new Vector3(0f,192f,0f);
 		InterfaceOverlayAwake();
 	}
 

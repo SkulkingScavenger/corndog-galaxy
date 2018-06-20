@@ -26,7 +26,7 @@ public class NavigationConsoleOverlay : InterfaceOverlay{
 		starSprites = Resources.LoadAll<Sprite>("Sprites/_InterfaceOverlays/star_systems");
 		sectorSprites = Resources.LoadAll<Sprite>("Sprites/_InterfaceOverlays/sectors");
 		console = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/InterfaceOverlays/NavigationConsoleUI"), Vector3.zero, Quaternion.identity, InterfaceOverlayUI.transform);
-		
+		console.transform.localPosition = Vector3.zero;
 		currentSector = Galaxy.Instance.starmap.sectors[0,0];
 		starmap = transform.Find("StarMap").gameObject;
 		starmap.GetComponent<SpriteRenderer>().sprite = sectorSprites[currentSector.spriteIndex];
