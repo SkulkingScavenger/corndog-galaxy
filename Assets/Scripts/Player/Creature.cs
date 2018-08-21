@@ -16,6 +16,7 @@ public class Creature : NetworkBehaviour{
 	public GameObject shadow;
 	public int shadowIndex = 1;
 	public GameObject healthBar;
+	public int speciesId;
 
 	//Biology
 	public List<CreatureOrgan> organs = new List<CreatureOrgan>();
@@ -53,11 +54,11 @@ public class Creature : NetworkBehaviour{
 		if(isLocalPlayer){
 			//mainCamera.GetComponent<CameraObject>().root = getPlayer().creatureObj.transform;
 		}
-		Init();
 	}
 
-	public void Init(){
-		SetLimbs();
+	public void Init(int speciesPrototypeId){
+		speciesId = speciesPrototypeId;
+		SetLimbs(speciesPrototypeId);
 		SetShadow();
 		SetHealthBar();
 		SetStance();
@@ -127,11 +128,11 @@ public class Creature : NetworkBehaviour{
 		}
 	}
 
-	void SetLimbs(){
+	void SetLimbs(int speciesId){
 		CreatureBodySegment segment;
 		CreatureLimb limb;
 		CreatureAppendage appendage;
-		Species species = SpeciesManager.Instance.GetSpeciesById(0);
+		Species species = SpeciesManager.Instance.GetSpeciesById(speciesId);
 		foreach(CreatureBodySegment abstractSegment in species.physiology.segments){
 			segment = OrganPrototypes.Instance.LoadSegment(abstractSegment.prototypeIndex);
 			segment.hitpoints = abstractSegment.hitpoints;
@@ -169,16 +170,19 @@ public class Creature : NetworkBehaviour{
 		CombatMoveSet cms;
 		CombatStance stance1 = new CombatStance();
 
-		cms = new CombatMoveSet();
-		cms.iconIndex = 0;
-		cms.moves.Add(segments[1].limbs[0].combatActions[0]);//right major tentacle
-		cms.moves.Add(segments[1].limbs[1].combatActions[0]);//left major tentacle
-		stance1.combatMoveSets[0] = cms;
-		
-		cms = new CombatMoveSet();
-		cms.iconIndex = 1;
-		cms.moves.Add(segments[1].limbs[2].combatActions[0]);//bite
-		stance1.combatMoveSets[1] = cms;
+		if (speciesId == 0){ //TO DO
+			 //get rid of this check and just handle it correctly
+			cms = new CombatMoveSet();
+			cms.iconIndex = 0;
+			cms.moves.Add(segments[1].limbs[0].combatActions[0]);//right major tentacle
+			cms.moves.Add(segments[1].limbs[1].combatActions[0]);//left major tentacle
+			stance1.combatMoveSets[0] = cms;
+			
+			cms = new CombatMoveSet();
+			cms.iconIndex = 1;
+			cms.moves.Add(segments[1].limbs[2].combatActions[0]);//bite
+			stance1.combatMoveSets[1] = cms;
+		}
 		
 		stances.Add(stance1);
 	}
@@ -192,6 +196,7 @@ public class Creature : NetworkBehaviour{
 			for(int i=0; i<segments.Count;i++){
 				segments[i].PlayAnimation("run");
 				for(int j=0;j<segments[i].limbs.Count;j++){
+					Debug.Log(segments[i].limbs[j].isReady);
 					if(segments[i].limbs[j].isReady){
 						segments[i].limbs[j].PlayAnimation("run");
 						if(segments[i].limbs[j].appendage != null){

@@ -167,10 +167,28 @@ public class OrganPrototypes : MonoBehaviour {
 	private void readOrganSegmentNode(XmlProcessor xml){
 		string node;
 		CreatureBodySegment segment = new CreatureBodySegment();
-		//Get Tags
-		segment.name = xml.getNextAttribute();
-		segment.segmentType = xml.getNextAttribute();
-		segment.animationControllerName = xml.getNextAttribute();
+		//Get Attributes
+		segment.name = "default";
+		segment.segmentType = "none";
+		segment.animationControllerName = "none";
+
+		XmlAttribute attribute = xml.getNextAttribute();
+
+		while(attribute.name != ""){
+			switch(attribute.name){
+				case "name":
+					segment.name = attribute.value;
+					break;
+				case "segmentType":
+					segment.segmentType = attribute.value;
+					break;
+				case "animationControllerName":
+					segment.animationControllerName = attribute.value;
+					break;
+			}
+			attribute = xml.getNextAttribute();
+		}
+
 		//Get Subnodes
 		node = xml.getNextNode();
 		while(node != "/OrganSegmentNode"){
@@ -191,10 +209,28 @@ public class OrganPrototypes : MonoBehaviour {
 	private void readOrganLimbNode(XmlProcessor xml){
 		string node;
 		CreatureLimb limb = new CreatureLimb();
-		//Get Tags
-		limb.name = xml.getNextAttribute();
-		limb.limbType = xml.getNextAttribute();
-		limb.animationControllerName = xml.getNextAttribute();
+		//Get Attributes
+		limb.name = "default";
+		limb.limbType = "none";
+		limb.animationControllerName = "none";
+
+		XmlAttribute attribute = xml.getNextAttribute();
+
+		while(attribute.name != ""){
+			switch(attribute.name){
+				case "name":
+					limb.name = attribute.value;
+					break;
+				case "limbType":
+					limb.limbType = attribute.value;
+					break;
+				case "animationControllerName":
+					limb.animationControllerName = attribute.value;
+					break;
+			}
+			attribute = xml.getNextAttribute();
+		}
+
 		//Get Subnodes
 		node = xml.getNextNode();
 		while(node != "/OrganLimbNode"){
@@ -219,8 +255,23 @@ public class OrganPrototypes : MonoBehaviour {
 		string node;
 		CreatureAppendage appendage = new CreatureAppendage();
 		//Get Tags
-		appendage.name = xml.getNextAttribute();
-		appendage.animationControllerName = xml.getNextAttribute();
+		appendage.name = "default";
+		appendage.animationControllerName = "none";
+
+		XmlAttribute attribute = xml.getNextAttribute();
+
+		while(attribute.name != ""){
+			switch(attribute.name){
+				case "name":
+					appendage.name = attribute.value;
+					break;
+				case "animationControllerName":
+					appendage.animationControllerName = attribute.value;
+					break;
+			}
+			attribute = xml.getNextAttribute();
+		}
+
 		//Get Subnodes
 		node = xml.getNextNode();
 		while(node != "/OrganAppendageNode"){
@@ -239,19 +290,44 @@ public class OrganPrototypes : MonoBehaviour {
 	}
 
 	private Vector3 readOffsetNode(XmlProcessor xml){
-		float x;
-		float y; 
-		float z;
-		x = float.Parse(xml.getNextAttribute())/128;
-		y = float.Parse(xml.getNextAttribute())/128;
-		z = float.Parse(xml.getNextAttribute());
+		float x = 0f;
+		float y = 0f; 
+		float z = 0f;
+
+		XmlAttribute attribute = xml.getNextAttribute();
+
+		while(attribute.name != ""){
+			switch(attribute.name){
+				case "x":
+					x = float.Parse(attribute.value)/128;
+					break;
+				case "y":
+					y = float.Parse(attribute.value)/128;
+					break;
+				case "z":
+					z = float.Parse(attribute.value)/128;
+					break;
+			}
+			attribute = xml.getNextAttribute();
+		}
+
 		return new Vector3(x,y,z);
 	}
 
 	private OrganAnimation readAnimationNode(XmlProcessor xml){
 		string node;
 		OrganAnimation anim = new OrganAnimation();
-		anim.name = xml.getNextAttribute();
+		XmlAttribute attribute = xml.getNextAttribute();
+
+		while(attribute.name != ""){
+			switch(attribute.name){
+				case "name":
+					anim.name = attribute.value;
+					break;
+			}
+			attribute = xml.getNextAttribute();
+		}
+
 		node = xml.getNextNode();
 		while(node != "/AnimationNode"){
 			switch(node){
@@ -265,20 +341,46 @@ public class OrganPrototypes : MonoBehaviour {
 	}
 
 	private string readTagNode(XmlProcessor xml){
-		return xml.getNextAttribute();
+		return xml.getNextAttribute().value;
 	}
 
 	private CombatAction readActionNode(XmlProcessor xml){
 		CombatAction act = new CombatAction();
-		act.name = xml.getNextAttribute();
-		act.range = float.Parse(xml.getNextAttribute());
-		act.damage = int.Parse(xml.getNextAttribute());
-		act.windupDuration = float.Parse(xml.getNextAttribute());
-		act.attackDuration = float.Parse(xml.getNextAttribute());
-		act.cooldownDuration = float.Parse(xml.getNextAttribute());
-		act.windupAnimation = xml.getNextAttribute();
-		act.attackAnimation = xml.getNextAttribute();
-		act.backswingAnimation = xml.getNextAttribute();
+		XmlAttribute attribute = xml.getNextAttribute();
+
+		while(attribute.name != ""){
+			switch(attribute.name){
+				case "name":
+					act.name = attribute.value;
+					break;
+				case "range":
+					act.range = float.Parse(attribute.value);
+					break;
+				case "damage":
+					act.damage = int.Parse(attribute.value);
+					break;
+				case "windupDuration":
+					act.windupDuration = float.Parse(attribute.value);
+					break;
+				case "attackDuration":
+					act.attackDuration = float.Parse(attribute.value);
+					break;
+				case "cooldownDuration":
+					act.cooldownDuration = float.Parse(attribute.value);
+					break;
+				case "windupAnimation":
+					act.windupAnimation = attribute.value;
+					break;
+				case "attackAnimation":
+					act.attackAnimation = attribute.value;
+					break;
+				case "backswingAnimation":
+					act.backswingAnimation = attribute.value;
+					break;
+			}
+			attribute = xml.getNextAttribute();
+		}
 		return act;
 	}
+
 }

@@ -46,7 +46,19 @@ public class SpeciesManager : MonoBehaviour {
 	private void ReadSpeciesNode(XmlProcessor xml){
 		string node;
 		Species species = new Species();
-		species.name = xml.getNextAttribute();
+
+		XmlAttribute attribute = xml.getNextAttribute();
+		while(attribute.name != ""){
+			switch(attribute.name){
+				case "name":
+					species.name = attribute.value;
+					break;
+				case "prototypeID":
+					species.id = int.Parse(attribute.value);
+					break;
+			}
+			attribute = xml.getNextAttribute();
+		}
 
 		node = xml.getNextNode();
 		while(node != "/SpeciesTemplateNode"){
@@ -64,17 +76,42 @@ public class SpeciesManager : MonoBehaviour {
 		string node;
 		CreatureBodySegment segment;
 
-		string name = xml.getNextAttribute();
-		int id = int.Parse(xml.getNextAttribute());
-		int hitpoints = int.Parse(xml.getNextAttribute());
-		float x = float.Parse(xml.getNextAttribute())/128f;
-		float y = float.Parse(xml.getNextAttribute())/128f;
-		float z = float.Parse(xml.getNextAttribute());
-		Vector3 basePosition = new Vector3(x,y,z);
+		string name = "default";
+		int id = -1;
+		int hitpoints = 0;
+		float x = 0f;
+		float y = 0f;
+		float z = 0f;
+
+		XmlAttribute attribute = xml.getNextAttribute();
+
+		while(attribute.name != ""){
+			switch(attribute.name){
+				case "name":
+					name = attribute.value;
+					break;
+				case "prototypeID":
+					id = int.Parse(attribute.value);
+					break;
+				case "hitpoints":
+					hitpoints = int.Parse(attribute.value);
+					break;
+				case "x":
+					x = float.Parse(attribute.value)/128f;
+					break;
+				case "y":
+					y = float.Parse(attribute.value)/128f;
+					break;
+				case "z":
+					z = float.Parse(attribute.value)/128f;
+					break;
+			}
+			attribute = xml.getNextAttribute();
+		}
 
 		segment = OrganPrototypes.Instance.LoadSegment(id);
 		segment.hitpoints = hitpoints;
-		segment.basePosition = basePosition;
+		segment.basePosition = new Vector3(x,y,z);
 
 		node = xml.getNextNode();
 		while(node != "/SegmentNode"){
@@ -91,18 +128,43 @@ public class SpeciesManager : MonoBehaviour {
 	private CreatureLimb ReadLimbNode(XmlProcessor xml){
 		string node;
 		CreatureLimb limb;
+		
+		string name = "default";
+		int id = -1;
+		int hitpoints = 0;
+		float x = 0f;
+		float y = 0f;
+		float z = 0f;
 
-		string name = xml.getNextAttribute();
-		int id = int.Parse(xml.getNextAttribute());
-		int hitpoints = int.Parse(xml.getNextAttribute());
-		float x = float.Parse(xml.getNextAttribute())/128f;
-		float y = float.Parse(xml.getNextAttribute())/128f;
-		float z = float.Parse(xml.getNextAttribute());
-		Vector3 basePosition = new Vector3(x,y,z);
+		XmlAttribute attribute = xml.getNextAttribute();
+
+		while(attribute.name != ""){
+			switch(attribute.name){
+				case "name":
+					name = attribute.value;
+					break;
+				case "prototypeID":
+					id = int.Parse(attribute.value);
+					break;
+				case "hitpoints":
+					hitpoints = int.Parse(attribute.value);
+					break;
+				case "x":
+					x = float.Parse(attribute.value)/128f;
+					break;
+				case "y":
+					y = float.Parse(attribute.value)/128f;
+					break;
+				case "z":
+					z = float.Parse(attribute.value)/128f;
+					break;
+			}
+			attribute = xml.getNextAttribute();
+		}
 
 		limb = OrganPrototypes.Instance.LoadLimb(id);
 		limb.hitpoints = hitpoints;
-		limb.basePosition = basePosition;
+		limb.basePosition = new Vector3(x,y,z);
 
 		node = xml.getNextNode();
 		while(node != "/LimbNode"){
@@ -120,9 +182,38 @@ public class SpeciesManager : MonoBehaviour {
 		string node;
 		CreatureAppendage appendage;
 
-		string name = xml.getNextAttribute();
-		int id = int.Parse(xml.getNextAttribute());
-		int hitpoints = int.Parse(xml.getNextAttribute());
+		string name = "default";
+		int id = 0;
+		int hitpoints = 0;
+		float x = 0f;
+		float y = 0f;
+		float z = 0f;
+
+		XmlAttribute attribute = xml.getNextAttribute();
+
+		while(attribute.name != ""){
+			switch(attribute.name){
+				case "name":
+					name = attribute.value;
+					break;
+				case "prototypeID":
+					id = int.Parse(attribute.value);
+					break;
+				case "hitpoints":
+					hitpoints = int.Parse(attribute.value);
+					break;
+				case "x":
+					x = float.Parse(attribute.value)/128f;
+					break;
+				case "y":
+					y = float.Parse(attribute.value)/128f;
+					break;
+				case "z":
+					z = float.Parse(attribute.value)/128f;
+					break;
+			}
+			attribute = xml.getNextAttribute();
+		}
 
 		appendage = OrganPrototypes.Instance.LoadAppendage(id);
 		appendage.hitpoints = hitpoints;

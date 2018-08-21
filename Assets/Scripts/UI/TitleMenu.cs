@@ -10,6 +10,7 @@ public class TitleMenu : MonoBehaviour {
 		transform.Find("Panel").transform.Find("Button1").GetComponent<Button>().onClick.AddListener(delegate { JoinAsClient(); });
 		transform.Find("Panel").transform.Find("Button2").GetComponent<Button>().onClick.AddListener(delegate { CreateSpecies(); });
 		transform.Find("Panel").transform.Find("Button3").GetComponent<Button>().onClick.AddListener(delegate { Quit(); });
+		transform.Find("Panel").transform.Find("Button4").GetComponent<Button>().onClick.AddListener(delegate { CreateShip(); });
 	}
 
 	public void JoinAsHost(){
@@ -29,6 +30,13 @@ public class TitleMenu : MonoBehaviour {
 	public void CreateSpecies(){
 		Transform mainCanvas = transform.parent;
 		GameObject currentMenu = Instantiate(Resources.Load<GameObject>("Prefabs/UI/SpeciesCreationMenu"));
+		currentMenu.transform.SetParent(mainCanvas,false);
+		Destroy(transform.gameObject);
+	}
+
+	public void CreateShip(){
+		Transform mainCanvas = transform.parent;
+		GameObject currentMenu = Instantiate(Resources.Load<GameObject>("Prefabs/UI/ShipCreationMenu"));
 		currentMenu.transform.SetParent(mainCanvas,false);
 		Destroy(transform.gameObject);
 	}

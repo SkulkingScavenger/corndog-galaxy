@@ -72,11 +72,14 @@ public class Player : NetworkBehaviour{
 	}
 
 	public void Init(){
-		creatureObj = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/Characters/Creature"), Vector3.zero, Quaternion.identity);
-		creature = creatureObj.GetComponent<Creature>();
-		creature.controlID = GetComponent<NetworkIdentity>().netId.Value;
-		creatureObj.transform.position = new Vector3(startX,startY,0); 
-		NetworkServer.Spawn(creatureObj);
+		GameObject speciesSelector = Instantiate(Resources.Load<GameObject>("Prefabs/UI/SpeciesSelectionMenu"));
+		speciesSelector.GetComponent<SpeciesSelectionMenu>().player = this;
+		speciesSelector.transform.SetParent(mainCanvas.transform,false);
+		// creatureObj = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/Characters/Creature"), Vector3.zero, Quaternion.identity);
+		// creature = creatureObj.GetComponent<Creature>();
+		// creature.controlID = GetComponent<NetworkIdentity>().netId.Value;
+		// creatureObj.transform.position = new Vector3(startX,startY,0); 
+		// NetworkServer.Spawn(creatureObj);
 	}
 
 	public void SetInterfaceMode(string mode){

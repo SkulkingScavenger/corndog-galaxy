@@ -104,3 +104,77 @@
 		</LimbNode>
 	</SegmentNode>
 </SpeciesTemplateNode>
+
+<SpeciesTemplateNode
+	name = "Zakasi"
+>
+	<SegmentNode
+		name="Torso"
+		prototypeID="2"
+		hitpoints="20"
+		x="-12"
+		y="21"
+		z="0"
+	>
+		<LimbNode 
+			name="Right Leg"
+			prototypeID="8"
+			hitpoints="8"
+			x="-0"
+			y="-51"
+			z="-0.001"
+		>
+		</LimbNode>
+		<LimbNode 
+			name="Left Leg"
+			prototypeID="7"
+			hitpoints="8"
+			x="-0"
+			y="-51"
+			z="0.001"
+		>
+		</LimbNode>
+		<LimbNode 
+			name="Right Arm"
+			prototypeID="10"
+			hitpoints="8"
+			x="11"
+			y="3"
+			z="-0.001"
+		>
+		</LimbNode>
+		<LimbNode 
+			name="Left Arm"
+			prototypeID="9"
+			hitpoints="8"
+			x="11"
+			y="3"
+			z="0.001"
+		>
+		</LimbNode>
+		<LimbNode 
+			name="Tail"
+			prototypeID="6"
+			hitpoints="8"
+			x="-53"
+			y="-46"
+			z="-0.0001"
+		>
+		</LimbNode>
+		<LimbNode 
+			name="Neck"
+			prototypeID="11"
+			hitpoints="10"
+			x="44"
+			y="24"
+			z="0.0000"
+		>
+			<AppendageNode
+				name="Head"
+				prototypeID="5"
+				hitpoints="6"
+			>
+			</AppendageNode>
+		</LimbNode>
+	</SegmentNode>
+</SpeciesTemplateNode>
