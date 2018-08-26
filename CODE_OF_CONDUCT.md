@@ -34,7 +34,7 @@ Examples of unacceptable behavior by participants include:
 * Using the word "Powah!", ever
 * Using the wiki to peddle counterfeit novelty items 
 * Leaving "clever" or "cute" comments in the code
-* Worshipping Chaos
+* Worshipping Chaos (other than tzeentch-worship of course, which is cool)
 * Ordering pineapple on pizza
 * Thinking Consoles are better than PCs for videogames
 * Disagreeing with SkulkingScavenger's taste in videogames
