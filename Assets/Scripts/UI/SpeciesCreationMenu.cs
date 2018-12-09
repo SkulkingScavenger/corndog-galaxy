@@ -16,11 +16,15 @@ public class SpeciesCreationMenu : MonoBehaviour {
 	public GameObject structureRoot;
 	public GameObject selectedOrgan;
 
-	Sprite[] hudSprites;
+	public Species species = new Species();
+
+	public Sprite[] hudSprites;
+	public Sprite[] buttonSprites;
 
 	public void Awake(){
 		mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
 		hudSprites = Resources.LoadAll<Sprite>("Sprites/_UI/hud_elements_01");
+		buttonSprites = Resources.LoadAll<Sprite>("Sprites/_UI/ui_buttons_zakasi");
 
 		transform.Find("ControlPanel").transform.Find("LoadButton").GetComponent<Button>().onClick.AddListener(delegate { LoadSpecies(); });
 		transform.Find("ControlPanel").transform.Find("SaveButton").GetComponent<Button>().onClick.AddListener(delegate { SaveSpecies(); });
@@ -39,6 +43,7 @@ public class SpeciesCreationMenu : MonoBehaviour {
 
 		structurePanel = transform.Find("TreePanel").transform.Find("ScrollView").transform.Find("Viewport").transform.Find("Content").gameObject;
 		structureRoot = structurePanel.transform.Find("OrganItem").gameObject;
+		structureRoot.GetComponent<SpeciesMenuOrganItem>().preview = previewRoot;
 
 		selectedOrgan = structureRoot;
 	}
@@ -65,7 +70,7 @@ public class SpeciesCreationMenu : MonoBehaviour {
 	}
 
 	public void LoadSpecies(){
-
+		species = new Species();
 	}
 
 	public void SaveSpecies(){

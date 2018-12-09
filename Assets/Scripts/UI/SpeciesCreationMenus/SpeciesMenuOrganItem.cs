@@ -26,8 +26,7 @@ public class SpeciesMenuOrganItem : MonoBehaviour {
 		transform.Find("ExpandButton").GetComponent<Button>().onClick.AddListener(delegate { Expand(); });
 
 		transform.Find("ExpandButton").GetComponent<Button>().interactable = false;
-		root = transform.root.Find("SpeciesCreationMenu").gameObject.GetComponent<SpeciesCreationMenu>();
-		preview = root.transform.Find("PreviewPanel").Find("PreviewNode").gameObject;
+		root = transform.root.gameObject.GetComponent<SpeciesCreationMenu>();
 		hudSprites = Resources.LoadAll<Sprite>("Sprites/_UI/hud_elements_01");
 	}
 	
@@ -59,6 +58,9 @@ public class SpeciesMenuOrganItem : MonoBehaviour {
 		root.childPanel = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/UI/SpeciesCreationMenus/StructuralOrganPanel"),Vector3.zero,Quaternion.identity,root.transform);
 		root.childPanel.GetComponent<StructuralOrganMenu>().menuOrganItem = this;
 		root.childPanel.GetComponent<StructuralOrganMenu>().root = root.GetComponent<SpeciesCreationMenu>();
+		root.childPanel.GetComponent<StructuralOrganMenu>().purpose = "create";
+		root.childPanel.GetComponent<StructuralOrganMenu>().parentType = "form";
+		root.childPanel.GetComponent<StructuralOrganMenu>().Init();
 	}
 
 }
