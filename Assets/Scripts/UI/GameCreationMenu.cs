@@ -46,7 +46,7 @@ public class GameCreationMenu : NetworkBehaviour {
 	public void StartServer(){
 		Control ctrl = GameObject.FindGameObjectWithTag("Control").GetComponent<Control>();
 		NetworkControl netCtrl = GameObject.FindGameObjectWithTag("NetworkControl").GetComponent<NetworkControl>();
-		netCtrl.networkAddress = Network.player.ipAddress;
+		netCtrl.networkAddress = netCtrl.networkAddress;
 		netCtrl.networkPort = int.Parse(PortInput.text);
 		ctrl.isDedicatedServer = DedicatedServerToggle.isOn;
 		netCtrl.StartHost();

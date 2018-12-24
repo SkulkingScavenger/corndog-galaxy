@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
@@ -196,7 +196,6 @@ public class Creature : NetworkBehaviour{
 			for(int i=0; i<segments.Count;i++){
 				segments[i].PlayAnimation("run");
 				for(int j=0;j<segments[i].limbs.Count;j++){
-					Debug.Log(segments[i].limbs[j].isReady);
 					if(segments[i].limbs[j].isReady){
 						segments[i].limbs[j].PlayAnimation("run");
 						if(segments[i].limbs[j].appendage != null){

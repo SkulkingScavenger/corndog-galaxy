@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEditor;
 
 using UnityEditor.Animations;
@@ -37,6 +37,11 @@ public class SAEditor : EditorSplitWindowVertical{
 	public Texture2D SpriteSheet;
 
 	private string spriteName = "";
+
+	private string organName = "";
+	private string organTag = "";
+	private string organType = "";
+	private string organSubtype = "";
 	
 	//attachment stuff
 	int selectedAttachmentIndex = 0;
@@ -117,7 +122,7 @@ public class SAEditor : EditorSplitWindowVertical{
 			GUILayout.Space(30);
 			if (popup == null){popupActive = false;}
 			if (GUILayout.Button("Finalize Import")){
-				SaveChanges();
+				SaveAs();
 			}
 			DrawAttachmentPointMenu();
 			DrawFrameMenu();
@@ -319,17 +324,19 @@ public class SAEditor : EditorSplitWindowVertical{
 			GUILayout.EndHorizontal();
 		}
 	}
-	private void GetAnimator(string animationName){
+	private bool GetAnimator(string animationName){
+		bool alreadyExists;
 		string controllerPath = "";
 		string[] temp = AssetDatabase.FindAssets(string.Concat("t:AnimatorController ",animationName));
+		controllerPath = string.Concat("Assets/Resources/Animation/Controllers/"+animationName+".controller");
 		if(temp.Length > 0){
-			controllerPath = string.Concat("Assets/Resources/Animation/Controllers/"+animationName+".controller");
 			animationControl = (AnimatorController)AssetDatabase.LoadAssetAtPath(controllerPath, typeof(AnimatorController));
+			alreadyExists = true;
 		}else{
-			controllerPath = string.Concat("Assets/Resources/Animation/Controllers/"+animationName+".controller");
 			AssetDatabase.CreateAsset(new AnimatorController(), controllerPath);
 			animationControl = (AnimatorController)AssetDatabase.LoadAssetAtPath(controllerPath, typeof(AnimatorController));
 			animationControl.AddLayer("New Layer");
+			alreadyExists = false;
 		}
 
 		for(int i=0;i<animationControl.layers.Length;i++){
@@ -339,6 +346,7 @@ public class SAEditor : EditorSplitWindowVertical{
 				
 			}
 		}
+		return alreadyExists;
 	}
 
 
@@ -365,7 +373,6 @@ public class SAEditor : EditorSplitWindowVertical{
 			gridSpriteNames.Add(vf.name);
 		}
 
-		GetAnimator(spriteName);
 		attachmentPoints.Clear();
 		Repaint();
 	}
@@ -404,10 +411,6 @@ public class SAEditor : EditorSplitWindowVertical{
 		}
 	}
 
-	private void createVirtualClip(string name){
-		
-	}
-
 	private AnimationClip GenerateClip(VirtualClip vc){
 		AnimationClip ac = new AnimationClip();
 		ac.name = vc.name;
@@ -423,29 +426,86 @@ public class SAEditor : EditorSplitWindowVertical{
 		curveBinding.type = typeof(SpriteRenderer);
 		curveBinding.propertyName = "m_Sprite";
 		ObjectReferenceKeyframe[] keyFrames = new ObjectReferenceKeyframe[l];
+		AnimationEvent[] events = new AnimationEvent[l];
 		for(int i=0;i<l;i++){
-			/*
+
 			//event hooks for animations
 			evt = new AnimationEvent();
+			evt.time = i * timeIncrement;
 			evt.functionName = "AnimationEventCallback";
 			evt.intParameter = i + vc.startFrame;
-			ac.AddEvent(evt);
-			*/
+			events[i] = evt;//ac.AddEvent(evt);
 
 			keyFrames[i] = new ObjectReferenceKeyframe();
 			keyFrames[i].time = i * timeIncrement;
 			keyFrames[i].value = sprites[i + vc.startFrame];
 		}
 		AnimationUtility.SetObjectReferenceCurve(ac, curveBinding, keyFrames);
+		AnimationUtility.SetAnimationEvents(ac, events);
 
 		return ac;
 	}
 
+	private void SaveAs(){
+		if (SpriteSheet != null && !popupActive){
+			EditorPopupEnterOrganData organPopup;
+			popupActive = true;
+			organPopup = GetWindow<EditorPopupEnterOrganData>();
+			organPopup.m_DemandInput = true;
+			organPopup.Focus();
+			organPopup.OnConfirm += (string name, string tag, string type, string subtype) => {
+				organName = name;
+				organTag = tag;
+				organType = type;
+				organSubtype = subtype;
+				popupActive = false;
+				SaveChanges();
+			};
+		}
+	}
+
+	private void WriteOrganToXml(){
+		XmlWriter xml = new XmlWriter();
+		XmlNode node = new XmlNode();
+		XmlNode subNode;
+		node.name = "Organ" + organType + "Node";
+		node.attributes.Add(new XmlAttribute("name",organName));
+		node.attributes.Add(new XmlAttribute(organType.ToLower()+"Type",organSubtype));
+		node.attributes.Add(new XmlAttribute("animationControllerName","Animation/Controllers/"+organTag));
+		for(int i=0; i<virtualClips.Count;i++){
+			subNode = new XmlNode();
+			subNode.name = "AnimationNode";
+			subNode.attributes.Add(new XmlAttribute("name",organTag + "_" + virtualClips[i].name));
+			subNode.subnodes.Add(new XmlNode());
+			subNode.subnodes[0].name = "TagNode";
+			subNode.subnodes[0].attributes.Add(new XmlAttribute("value", virtualClips[i].name));
+			node.subnodes.Add(subNode);
+		}
+		for(int i=0; i<attachmentPoints.Count;i++){
+			subNode = new XmlNode();
+			subNode.name = "AttachmentPointNode";
+			subNode.attributes.Add(new XmlAttribute("id", i.ToString()));
+			for(int j=0;j<attachmentPoints[i].x.Length;j++){
+				subNode.subnodes.Add(new XmlNode());
+				subNode.subnodes[j].name = "OffsetNode";
+				subNode.subnodes[j].attributes.Add(new XmlAttribute("x", attachmentPoints[i].x[j].ToString()));
+				subNode.subnodes[j].attributes.Add(new XmlAttribute("y", attachmentPoints[i].y[j].ToString()));
+				subNode.subnodes[j].attributes.Add(new XmlAttribute("z", "0"));
+				subNode.subnodes[j].attributes.Add(new XmlAttribute("rotation",  attachmentPoints[i].rotation[j].ToString()));
+			}
+			node.subnodes.Add(subNode);
+		}
+		string path = "Assets/Resources/Text/Organs/" + organTag + ".xml";
+		xml.writeToFile(path, node);
+	}
+
+
 	private void SaveChanges(){
-		if(SpriteSheet == null){return;}
 		string path;
 		VirtualClip vc;
 		AnimationClip ac;
+		bool AnimatorAlreadyExists;
+		AnimatorAlreadyExists = GetAnimator(organTag);
 		for(int i=0;i<virtualClips.Count;i++){
 			vc = virtualClips[i];
 			ac = GenerateClip(vc);
@@ -456,6 +516,6 @@ public class SAEditor : EditorSplitWindowVertical{
 		path = string.Concat("Assets/Resources/Animation/Controllers/"+spriteName+".controller");
 		AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
 
-		//TO DO: write out data to xml
+		WriteOrganToXml();
 	}
 }

@@ -74,6 +74,16 @@ public class XmlWriter{
 		output.Close();
 	}
 
+	public void writeToFile(string outputPath, XmlNode node){
+		outputPath = getLocalPath() + outputPath;
+		Debug.Log(outputPath);
+		FileStream output;
+		string text = node.toString();
+		output = File.OpenWrite(outputPath);
+		output.Write(new UTF8Encoding(true).GetBytes(text), 0, text.Length);
+		output.Close();
+	}
+
 	string getLocalPath(){
 		string path = Application.dataPath;
 		#if UNITY_STANDALONE_WIN
@@ -103,8 +113,16 @@ public class XmlWriter{
 }
 
 public class XmlAttribute {
-	public string name = "";
-	public string value = "";
+	public string name;
+	public string value;
+	public XmlAttribute(){
+		name = "";
+		value = "";
+	}
+	public XmlAttribute(string n, string v){
+		name = n;
+		value = v;
+	}
 }
 
 public class XmlNode {
