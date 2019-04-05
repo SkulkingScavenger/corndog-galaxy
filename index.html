@@ -10,7 +10,7 @@
 	
 	<body ng-app="app">
 		<div class="navbar-container" ng-controller="navbar-ctrl" ng-include="'partials/global/navbar.html'"></div>
-		<view></view>
+		<ng-view class=view-container></ng-view>
 		<div class="footer-container" ng-controller="footer-ctrl" ng-include="'partials/global/footer.html'"></div>
 
 		<!-- libraries -->
