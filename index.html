@@ -4,13 +4,27 @@
 		<title>Wiki Content Hosting</title>
 		<meta charset="utf-8"/>
 		<!--<link rel="icon" href="content/images/favicon.ico?" type="image/x-icon">-->
-		<!--<link rel="stylesheet" href="clanstyle.css" type="text/css" media="all"/>-->
+
+		<link rel="stylesheet" href="styles/styles.css"/>
 	</head>
 	
-	<body>
-		<h1>TEST</h1>
-		<div>
-			Testing it
-		</div>
+	<body ng-app="app">
+		<div class="navbar-container" ng-controller="navbarCtrl" ng-include="'partials/global/navbar.html'"></div>
+		<view></view>
+		<div class="footer-container" ng-controller="footerCtrl" ng-include="'partials/global/footer.html'"></div>
+
+		<!-- libraries -->
+		<script src="scripts/lib/angular.min.js"></script>
+		<script src="scripts/lib/angular-route.js"></script>
+		<script src="scripts/lib/ng-table.min.js"></script>
+		<!-- core scripts -->
+		<script src="scripts/app.js"></script>
+		<script src="scripts/app-routes.js"></script>
+		<!-- controllers -->
+		<script src="scripts/controllers/navbar-controller.js"></script>
+		<script src="scripts/controllers/footer-controller.js"></script>
+		<script src="scripts/controllers/homepage-controller.js"></script>
+		<!-- services -->
+		<!-- directives -->
 	</body>
 </html>

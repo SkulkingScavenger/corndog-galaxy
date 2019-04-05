@@ -1,0 +1,33 @@
+/*Typography*/
+
+.body{
+	font-family: $font-main;
+}
+
+.text-sm{
+	font-size: 10px;
+}
+
+.text-md{
+	font-size: 12px;
+}
+
+.text-lg{
+	font-size: 14px;
+}
+
+.text-xlg{
+	font-size: 16px;
+}
+
+.text-bold{
+	font-weight: 700;
+}
+
+.text-italic{
+	font-style: italic;
+}
+
+.text-error{
+	color: red;
+}
