@@ -1,26 +1,26 @@
 angular.module('app').controller('navbar-ctrl', 
 	function ($scope, $timeout, $window, $filter, $route, $routeParams, $rootScope){
 	$scope.tabs = [{
-		name: "Home"
-		destination: "/"
+		name: "Home",
+		destination: "/",
 	},{
-		name: "Locations"
-		destination: "/locations"
+		name: "Locations",
+		destination: "/locations",
 	},{
-		name: "Characters"
-		destination: "/characters"
+		name: "Characters",
+		destination: "/characters",
 	},{
-		name: "Species"
-		destination: "/species"
+		name: "Species",
+		destination: "/species",
 	},{
-		name: "Civilizations"
-		destination: "/civilizations"
+		name: "Civilizations",
+		destination: "/civilizations",
 	},{
-		name: "Technologies"
-		destination: "/technologies"
+		name: "Technologies",
+		destination: "/technologies",
 	},{
-		name: "Mechanics"
-		destination: "/mechanics"
+		name: "Mechanics",
+		destination: "/mechanics",
 	}];
 
 	$scope.currentTabIndex = 0;
@@ -30,6 +30,6 @@ angular.module('app').controller('navbar-ctrl',
 		if(!tab.disabled){
 			$scope.currentTabIndex = index;
 			$location.path(tab.destination);
-		}		
+		}
 	}
 });
