@@ -2,13 +2,15 @@
 
 var routeConfig;
 
-app.config(['$routeProvider'], function ($routeProvider){
+app.config(function ($routeProvider){
 	for (var paths in window.routes) {
-		var pathList = paths.split(";");
-		angular.forEach(pathList, function (path) {
-			routeConfig = window.routes[paths];
-			$routeProvider.when(path, routeConfig);
-		});
+		console.log(paths);
+		console.log(window.routes[paths]);
+		// var pathList = paths.split(";");
+		// angular.forEach(pathList, function (path) {
+		// 	routeConfig = window.routes[paths];
+		// 	$routeProvider.when(path, routeConfig);
+		// });
 	}
 	$routeProvider.otherwise({redirectTo: '/'});
 });
