@@ -27,6 +27,7 @@ angular.module('app').controller('navbar-ctrl',
 
 	$scope.navigate = function(index){
 		var tab = $scope.tabs[index];
+		console.log(tab);
 		if(!tab.disabled){
 			$scope.currentTabIndex = index;
 			$location.path(tab.destination);
