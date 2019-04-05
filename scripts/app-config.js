@@ -2,7 +2,7 @@
 
 var routeConfig;
 
-synapseWebApp.config(['$routeProvider'], function ($routeProvider){
+app.config(['$routeProvider'], function ($routeProvider){
 	for (var paths in window.routes) {
 		var pathList = paths.split(";");
 		angular.forEach(pathList, function (path) {
