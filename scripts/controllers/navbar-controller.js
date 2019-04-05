@@ -1,5 +1,5 @@
 angular.module('app').controller('navbar-ctrl', 
-	function ($scope, $timeout, $window, $filter, $route, $routeParams, $rootScope){
+	function ($scope, $timeout, $window, $filter, $route, $routeParams, $location, $rootScope){
 	$scope.tabs = [{
 		name: "Home",
 		destination: "/",
