@@ -2,7 +2,7 @@
 
 var routeConfig;
 
-synapseWebApp.config( ['$routeProvider'] function ($routeProvider){
+synapseWebApp.config(['$routeProvider'], function ($routeProvider){
 	for (var paths in window.routes) {
 		var pathList = paths.split(";");
 		angular.forEach(pathList, function (path) {
@@ -10,5 +10,5 @@ synapseWebApp.config( ['$routeProvider'] function ($routeProvider){
 			$routeProvider.when( path, routeConfig);
 		});
 	}
-	$routeProvider.otherwise({redirectTo: '/dashboard'});
-})
+	$routeProvider.otherwise({redirectTo: '/'});
+});
