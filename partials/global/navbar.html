@@ -2,7 +2,7 @@
 	<ul class="navbar-tab-holder">
 		<li ng-repeat="tab in tabs" 
 			class="navbar-tab" 
-			ng-class="{'disabled': tab.disabled, 'active':$index=currentTabIndex}">
+			ng-class="{'disabled': tab.disabled, 'active':$index == currentTabIndex}">
 			<a ng-click="navigate($index)">
 				{{tab.name}}
 			</a>
