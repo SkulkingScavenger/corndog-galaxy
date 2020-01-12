@@ -31,15 +31,15 @@ Examples of behavior that contributes to creating a positive environment include
 
 Examples of unacceptable behavior by participants include:
 
-* Using the word "Powah!", ever
-* Using the wiki to peddle counterfeit novelty items 
+* Using the word "Powah!", ever for any reason
+* Using the wiki to peddle counterfeit novelty items (without giving SkulkingScavenger a cut of the profits)
 * Leaving "clever" or "cute" comments in the code
 * Worshipping Chaos (other than tzeentch-worship of course, which is cool)
 * Ordering pineapple on pizza
 * Thinking Consoles are better than PCs for videogames
 * Disagreeing with SkulkingScavenger's taste in videogames
 * Disagreeing with SkulkingScavenger, ever
-* Other conduct SkulkingScavenger deems annoying or heretical
+* Other conduct SkulkingScavenger deems annoying
 * Questioning the Fairness of this Code of Conduct
 
 ## Our Responsibilities
@@ -63,7 +63,7 @@ Project maintainers who fail in their duties may face dire consequences as deter
 
 ## Attribution
 
-This Code of Conduct is an improved version of the [Contributor Covenant][homepage], version 1.4, available at [http://contributor-covenant.org/version/1/4][version]
+This Code of Conduct is a vastly improved version of the [Contributor Covenant][homepage], version 1.4, available at [http://contributor-covenant.org/version/1/4][version]
 
 [homepage]: http://contributor-covenant.org
 [version]: http://contributor-covenant.org/version/1/4/
